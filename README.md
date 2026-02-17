@@ -28,9 +28,9 @@ Enterprise OSは **Git + GitHub Enterprise** を全社的な統合知識管理�
 
 ## Presentation / プレゼンテーション資料
 
-📄 **[Enterprise_OS_Public_EN.pdf](./slides/Enterprise_OS_Public_EN.pdf)** — English (19 slides)
+📄 **[Enterprise_OS_Public_EN.pdf](./slides/Enterprise_OS_Public_EN.pdf)** — English (18 slides)
 
-📄 **[Enterprise_OS_Public_JP.pdf](./slides/Enterprise_OS_Public_JP.pdf)** — 日本語版 (19 slides)
+📄 **[Enterprise_OS_Public_JP.pdf](./slides/Enterprise_OS_Public_JP.pdf)** — 日本語版 (18 slides)
 
 ## Key Data Points / 主要データ
 
