@@ -64,7 +64,7 @@ Automation & Innovation Manager, 3M Japan
 
 30+ years at the intersection of marketing and technology — ASCII (MacPower) → Adobe → Apple → 3M. Currently building AI-powered enterprise tools from the inside. Not an outside consultant's theory; a practitioner's framework.
 
-- 🎬 [DAVE Channel (YouTube)](https://youtube.com/@dave_tanaka) — ミドル・シニア世代向けガジェット・AI・Digital DIY
+- 🎬 [DAVE Channel (YouTube)](https://youtube.com/@davetanaka) — ミドル・シニア世代向けガジェット・AI・Digital DIY
 - 📝 [note](https://note.com/davetanaka) — 日本語での詳細解説
 - 💼 [LinkedIn](https://linkedin.com/in/davetanaka)
 - 🐦 [X / Twitter](https://x.com/davetanaka)
