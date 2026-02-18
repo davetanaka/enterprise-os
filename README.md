@@ -8,9 +8,13 @@
 
 ## The Problem / 問題
 
+## The Problem / 問題
+
 88% of organizations use AI, but only 39% see measurable business impact (McKinsey, Nov 2025). The gap isn't the AI — it's the fragmented data infrastructure underneath.
 
 88%の企業がAIを導入しているが、実際の効果を実感しているのはわずか39%。AIの問題ではない。その下にあるデータ基盤の問題だ。
+
+📢 **[MANIFESTO.md](./MANIFESTO.md)** — **The Gold Rush Is Over.** 今度こそ、「ゴールドラッシュの時にジーンズを売る人」だけが勝つ時代にしてはいけない。
 
 ## The Concept / コンセプト
 
