@@ -62,7 +62,7 @@ Software engineers solved the knowledge management problem 20 years ago with Git
 ## About the Author / 著者
 
 **田中訓 / Dave Tanaka**
-Automation & Innovation Manager, 3M Japan
+Automation & Innovation Manager at a global manufacturing company
 
 30+ years at the intersection of marketing and technology — ASCII (MacPower) → Adobe → Apple → 3M. Currently building AI-powered enterprise tools from the inside. Not an outside consultant's theory; a practitioner's framework.
 

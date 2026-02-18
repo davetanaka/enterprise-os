@@ -15,6 +15,8 @@ AIは「答え」を教えてくれる先生ではない。
 AIは、あなたがあなたの大切な人たちとより深く関わるために、面倒な作業を引き受け、時間を生み出し、思考を整理するための「パートナー」だ。
 
 私たちが目指すのは、AIの使い方を覚えることではない。
+長年、現場で積み上げてきたあなたの経験と判断力こそが、AIと組み合わさったとき、最大の武器になる。
+
 AIを使って、人間らしい仕事と生活を取り戻すことだ。
 
 ---
@@ -33,5 +35,6 @@ AI is not a magic wand.
 AI is not a teacher giving you the answers.
 AI is a partner that takes over the drudgery, creates time, and organizes your thoughts so you can connect more deeply with the people who matter.
 
-Our goal is not to learn how to use AI.
-It is to use AI to reclaim our human work and life.
+Your years of experience and judgment, honed in the field — that is the ultimate weapon when combined with AI.
+
+Our goal is to use AI to reclaim our human work and life.
