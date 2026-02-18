@@ -20,17 +20,22 @@ Enterprise OSは **Git + GitHub Enterprise** を全社的な統合知識管理�
 
 ### Three Layers / 3つのレイヤー
 
-| Layer | Role | 役割 |
-|-------|------|------|
-| **Infrastructure** | Git as the versioned file system for ALL corporate knowledge | Gitを全社の知識のバージョン管理基盤に |
-| **Intelligence** | AI reads from a unified, structured knowledge base | 統一された知識基盤からAIが読み取る |
-| **Human Flourishing** | Time freed from routine → creative, human, innovative work | 定型業務からの解放 → 創造的で人間的な仕事へ |
+| Layer                 | Role                                                         | 役割                                        |
+| --------------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| **Infrastructure**    | Git as the versioned file system for ALL corporate knowledge | Gitを全社の知識のバージョン管理基盤に       |
+| **Intelligence**      | AI reads from a unified, structured knowledge base           | 統一された知識基盤からAIが読み取る          |
+| **Human Flourishing** | Time freed from routine → creative, human, innovative work   | 定型業務からの解放 → 創造的で人間的な仕事へ |
 
 ## Presentation / プレゼンテーション資料
 
 📄 **[Enterprise_OS_Public_EN.pdf](./slides/Enterprise_OS_Public_EN.pdf)** — English (18 slides)
 
 📄 **[Enterprise_OS_Public_JP.pdf](./slides/Enterprise_OS_Public_JP.pdf)** — 日本語版 (18 slides)
+
+### Practical Guide / 実践ガイド
+
+📘 **[AI_Utilization_Guide_v5.3_JP.pdf](./slides/AI_Utilization_Guide_v5.3_JP.pdf)** — **「ツールの活用だけでなく、AI活用の"型"と実践」**
+Enterprise OS上で、個人がどのようにAIを使いこなし、成果を上げるかのための実践的ハンドブック。「情報4分類」によるセキュリティガイドラインと、「逆算思考プランニングシート」による業務フロー改革。全社員必読の"Human Interface Guidelines"。
 
 ## Key Data Points / 主要データ
 
@@ -55,7 +60,7 @@ Software engineers solved the knowledge management problem 20 years ago with Git
 - CIOs, CTOs, and IT leaders evaluating enterprise knowledge management
 - Marketing & operations leaders frustrated with fragmented systems
 - Innovation teams looking for practical AI infrastructure frameworks
-- Anyone who's asked: *"Why is our enterprise AI so... stupid?"*
+- Anyone who's asked: _"Why is our enterprise AI so... stupid?"_
 
 ## About the Author / 著者
 
@@ -89,6 +94,6 @@ You are free to share and adapt this material for non-commercial purposes, with 
 
 ---
 
-*Enterprise OS is being developed as a live "Digital DIY" project — building, documenting, and sharing the journey in real time.*
+_Enterprise OS is being developed as a live "Digital DIY" project — building, documenting, and sharing the journey in real time._
 
-*Enterprise OSは「Digital DIY」のライブプロジェクトとして開発中 — 構築し、記録し、リアルタイムで共有しています。*
+_Enterprise OSは「Digital DIY」のライブプロジェクトとして開発中 — 構築し、記録し、リアルタイムで共有しています。_
