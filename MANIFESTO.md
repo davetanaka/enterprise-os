@@ -6,8 +6,7 @@
 インターネット、EC、マーケティングオートメーション……。
 そして今、AIという巨大な「ビッグウェンズデー」が来ている。
 
-しかし、AIの学習教材やプロンプト集を売る人が儲かるのは間違っている。
-それは本質ではないからだ。
+しかし、AIの学習教材やプロンプト集を売ることが「AIの本質」になってしまっているとしたら、それは本末転倒ではないか。
 
 **AIの一番効果的で、正しい使い方は、その人の中にある日々のお客様・家族・同僚・上司との関係の中にこそある。**
 
@@ -26,8 +25,7 @@ In every gold rush, the ones who made the real fortune were those selling shovel
 Internet, E-commerce, Marketing Automation... history repeats itself.
 Now, the AI "Big Wednesday" is here — a wave 30 meters high.
 
-But it is wrong for those selling "AI prompts" or "training courses" to be the only winners.
-That is not the essence of this revolution.
+But if selling "AI prompts" or "training courses" has become the "essence" of AI — isn't that missing the point entirely?
 
 **The most effective and correct way to use AI lies within your daily relationships with your customers, family, colleagues, and bosses.**
 
