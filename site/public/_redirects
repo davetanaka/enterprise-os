@@ -1,0 +1,5 @@
+# Cloudflare Pages リダイレクト
+/ /en/ 302
+
+# 言語ベースのリダイレクト（ブラウザ言語設定）
+# Accept-Language: ja* → /ja/

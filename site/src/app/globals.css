@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* Enterprise OS カラーパレット */
+/* ダークモード（デフォルト） */
+:root {
+  /* Backgrounds */
+  --bg-primary: #1e2235;
+  --bg-secondary: #1a1d2e;
+  --bg-card: #252a3d;
+  --bg-card-hover: #2d3348;
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* Accent Colors */
+  --accent-red: #e63946;
+  --accent-teal: #2a9d8f;
+  --accent-gold: #e9c46a;
+  --accent-blue: #4361ee;
+  --accent-pink: #f472b6;
+
+  /* Layer Colors */
+  --layer-1: #e63946;
+  --layer-2: #e9c46a;
+  --layer-3: #2a9d8f;
+}
+
+/* ライトモード */
+.light {
+  /* Backgrounds */
+  --bg-primary: #f8f9fc;
+  --bg-secondary: #eef1f6;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f3f4f6;
+
+  /* Text */
+  --text-primary: #1e2235;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+
+  /* Accent Colors（ライトモード用に若干調整） */
+  --accent-red: #dc2626;
+  --accent-teal: #0d9488;
+  --accent-gold: #d97706;
+  --accent-blue: #3b82f6;
+  --accent-pink: #ec4899;
+
+  /* Layer Colors */
+  --layer-1: #dc2626;
+  --layer-2: #d97706;
+  --layer-3: #0d9488;
+}
+
+@theme inline {
+  /* Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-red: var(--accent-red);
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-pink: var(--accent-pink);
+
+  --color-layer-1: var(--layer-1);
+  --color-layer-2: var(--layer-2);
+  --color-layer-3: var(--layer-3);
+
+  /* Fonts */
+  --font-sans: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+/* ライトモードでのセレクション */
+.light ::selection {
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-card-hover);
+}
+
+/* ライトモードのスクロールバー */
+.light::-webkit-scrollbar-track {
+  background: #e5e7eb;
+}
+
+.light::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+}
+
+.light::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-subtle {
+    box-shadow: 0 0 20px rgba(67, 97, 238, 0.15);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 30px rgba(67, 97, 238, 0.25);
+  }
+
+  .border-gradient {
+    border-image: linear-gradient(135deg, var(--accent-blue), var(--accent-teal)) 1;
+  }
+}
+
+/* Section Spacing */
+section {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  section {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}

@@ -1,0 +1,481 @@
+{
+  "meta": {
+    "title": "Enterprise OS - AI時代のナレッジマネジメント",
+    "description": "GitHub Enterpriseを活用した、AI時代のためのバージョン管理型ナレッジオペレーティングシステム"
+  },
+  "nav": {
+    "problem": "課題",
+    "concept": "コンセプト",
+    "howItWorks": "仕組み",
+    "whyNow": "なぜ今か",
+    "about": "著者"
+  },
+  "hero": {
+    "title": "Enterprise OS",
+    "subtitle": "なぜ企業のAIは失敗するのか",
+    "tagline": "足りないのはAIじゃない。OSだ。",
+    "author": "田中訓 / Dave Tanaka",
+    "date": "2026年2月",
+    "disclaimer": "本プレゼンテーションは個人的な見解であり、所属組織の見解を代表するものではありません。",
+    "scrollCta": "スクロールして探索"
+  },
+  "manifesto": {
+    "sectionTitle": "マニフェスト",
+    "headline": "ゴールドラッシュは終わった",
+    "subheadline": "今度こそ、「ゴールドラッシュの時にジーンズを売る人が一番儲かった」にしてはいけない。",
+    "body1": "かつて、新しい波が来るたびに、その波に乗るための「道具」を売る者だけが勝者となった。",
+    "body2": "インターネット、EC、マーケティングオートメーション……。そして今、AIという巨大な「ビッグウェンズデー」が来ている。",
+    "body3": "しかし、AIの学習教材やプロンプト集を売ることが「AIの本質」になってしまっているとしたら、それは本末転倒ではないか。",
+    "highlight": "AIの一番効果的で、正しい使い方は、その人の中にある日々のお客様・家族・同僚・上司との関係の中にこそある。",
+    "conclusion1": "AIは魔法の杖ではない。AIは「答え」を教えてくれる先生ではない。",
+    "conclusion2": "AIは、あなたがあなたの大切な人たちとより深く関わるために、面倒な作業を引き受け、時間を生み出し、思考を整理するための「パートナー」だ。",
+    "conclusion3": "長年、現場で積み上げてきたあなたの経験と判断力こそが、AIと組み合わさったとき、最大の武器になる。",
+    "finalMessage": "私たちが目指すのは、AIを使って、人間らしい仕事と生活を取り戻すことだ。"
+  },
+  "problem": {
+    "sectionTitle": "誰も語らない問題",
+    "quote": "以前、アクセス権限のあるドキュメントを社内アシスタントに要約させようとしたことがあります。ポリシーの制限により拒否されました。その瞬間、重要なことに気づきました。AIが「ブロックされた」ように見えるとき、問題はモデルではなく、知識の管理・構造化の仕方にあるのです。",
+    "insight": "AIは壊れていなかった。いわば栄養失調だったのだ——必要な構造が欠けていた。",
+    "stat1": {
+      "value": "88%",
+      "label": "の企業が少なくとも1つの機能でAIを使用",
+      "source": "McKinsey 2025"
+    },
+    "stat2": {
+      "value": "39%",
+      "label": "AIが全社的にスケールしていると回答した企業はわずか",
+      "source": "McKinsey 2025"
+    },
+    "stat3": {
+      "value": "1.8時間",
+      "label": "従業員が情報検索に費やす1日あたりの時間",
+      "source": "MGI"
+    }
+  },
+  "rootCause": {
+    "sectionTitle": "根本原因",
+    "subtitle": "問題はAIではない。表面下での知識の保存・接続方法にある。",
+    "systems": ["ERP / SAP", "CRM / Salesforce", "メールサーバー", "SharePoint", "社内Wiki", "製品DB", "レガシーシステム", "個人PC", "共有ドライブ", "翻訳管理", "Web CMS", "HRシステム"],
+    "insight": "多数の断絶されたシステム • 限定的なバージョン履歴 • 断片化された検索 • AIはそれらを横断して理解することが困難"
+  },
+  "postIt": {
+    "sectionTitle": "ポスト・イット®が教えるAI対応組織の設計",
+    "step1": {
+      "year": "1968年",
+      "description": "スペンサー・シルバーが「失敗した」接着剤を発明。くっつくが剥がれる。誰もその使い道を見出せなかった。"
+    },
+    "step2": {
+      "year": "12年後",
+      "description": "アート・フライは賛美歌集のしおりが必要だった。シルバーの「失敗作」を思い出す。"
+    },
+    "step3": {
+      "year": "Post-it®誕生",
+      "description": "「15%カルチャー」から生まれた——従業員が15%の時間を探索に使える方針。"
+    },
+    "question": "もしすべての組織が、従業員が自然に探索する余地を持てるように設計されていたら？——ポリシーとしてではなく、システムの一部として。"
+  },
+  "concept": {
+    "sectionTitle": "Enterprise OSのアイデア",
+    "subtitle": "Enterprise OSは、変更を追跡し、人・システム・AIを接続する共有ナレッジレイヤーです。",
+    "layer1": {
+      "title": "インフラストラクチャ",
+      "description": "企業知識のバージョン管理ファイルシステムとしてのGit。すべての変更を追跡。すべてのバージョンを復元可能。すべての部門を接続。"
+    },
+    "layer2": {
+      "title": "インテリジェンス",
+      "description": "AIは統一・構造化されたナレッジベースから読み取る。コンテキスト。履歴。関係性。企業AIがついにそれらを理解できるようになる。"
+    },
+    "layer3": {
+      "title": "人間の開花",
+      "description": "AIが定型的なナレッジワークを処理すると、すべての従業員が時間を取り戻す。より多くの仕事のためではなく、異なる仕事のために。創造的で、人間的で、革新的な仕事。"
+    }
+  },
+  "gitFoundation": {
+    "sectionTitle": "実践的な基盤：Gitベースのナレッジインフラ",
+    "subtitle": "ソフトウェアエンジニアリングは数十年にわたりこの問題に取り組んできた。今こそ全社的に適用するチャンス。",
+    "whatIsGit": {
+      "title": "Gitとは？",
+      "subtitle": "「変更履歴」に似ている——ただし、すべての企業知識に適用。",
+      "points": [
+        "すべての変更を記録：誰が、いつ、なぜ",
+        "何も失われない——完全なロールバック機能",
+        "チームは競合なしに並行作業",
+        "変更前にレビュー＆承認を組み込み"
+      ]
+    },
+    "proposal": {
+      "title": "提案",
+      "subtitle": "Gitを企業知識の管理に使う——コードだけでなく。",
+      "points": [
+        "コードを超えて → 企業知識を管理",
+        "AIがGitから読み取る → 企業AIが履歴・コンテキスト・トレーサビリティを獲得",
+        "既存の承認ワークフローが自然に統合",
+        "数十年のイノベーション、検索可能で接続済み"
+      ]
+    },
+    "stats": {
+      "line1": "Fortune 100企業の90%以上が使用",
+      "line2": "1億5000万人以上の開発者がGitベースのワークフローを使用",
+      "line3": "製造から金融、ヘルスケアまで業界横断で使用",
+      "source": "GitHub (2025); Forrester TEIレポート (2025年7月)"
+    }
+  },
+  "howItWorks": {
+    "sectionTitle": "仕組み",
+    "subtitle": "GitHub Enterpriseを中央ハブとして——データ、AI、ビジネス出力を接続",
+    "inputs": ["ERP / 財務", "製品システム", "ナレッジベース", "CRM / 営業データ"],
+    "center": {
+      "title": "GitHub Enterprise",
+      "subtitle": "エンタープライズファイルシステム",
+      "features": ["バージョン管理", "アクセス制御", "完全な監査証跡"]
+    },
+    "aiLayer": "AIレイヤー — 検索 • 生成 • 翻訳",
+    "outputs": ["Webサイト / CMS", "マーケティング自動化", "翻訳システム", "AIアシスタント"],
+    "review": "レビュー＆承認 — Git Pull Requestワークフローと統合",
+    "gitTerms": {
+      "commit": { "term": "commit", "description": "履歴と理由付きですべての変更を記録" },
+      "branch": { "term": "branch", "description": "ソースを壊さずに地域・部門バリアントを作成" },
+      "pullRequest": { "term": "pull request", "description": "公開前にレビュー＆承認" },
+      "merge": { "term": "merge", "description": "承認された変更がすべての場所に反映" },
+      "fork": { "term": "fork", "description": "パートナーのカスタマイズを可能に" }
+    }
+  },
+  "faq": {
+    "sectionTitle": "実現に向けて：よくある3つの質問",
+    "subtitle": "おそらくあなたが抱いている3つの質問——そして正直な回答",
+    "q1": {
+      "question": "既存システムはどう接続するの？",
+      "answer": "既存システムはそのまま。Enterprise OSがそれらを接続するだけです。GitHub ActionsがREST API経由でデータを同期。ERP、CRM、SharePoint——成熟したコネクタがすべてに存在します。カスタムミドルウェア不要。既存のレビューツールはwebhookとPRステータスチェックで統合。",
+      "phases": [
+        { "phase": "フェーズ1", "description": "PoC（単一ワークフロー）", "duration": "3ヶ月" },
+        { "phase": "フェーズ2", "description": "2-3システムコネクタ", "duration": "6ヶ月" },
+        { "phase": "フェーズ3", "description": "全社展開", "duration": "12-18ヶ月" }
+      ]
+    },
+    "q2": {
+      "question": "セキュリティは大丈夫？",
+      "answer": "世界で最も重要なソフトウェアを保護する同じインフラで守られています。",
+      "points": [
+        "データレジデンシーオプション付きEnterprise Cloud",
+        "ロールベースアクセス制御（RBAC）",
+        "自動シークレットスキャン付きAdvanced Security（GHAS）",
+        "SOC2 Type II / ISO 27001 / FedRAMP"
+      ]
+    },
+    "q3": {
+      "question": "ユーザーには何が見える？",
+      "answer": "ほとんどの人はGitHubを見ることはありません——ただ仕事がスムーズになることを体験するだけです。",
+      "examples": [
+        "マーケティング → いつも通りSharePointにアップロード / 承認者 → 既存のレビューツールを使用",
+        "エンジニア → GitHubで直接作業 / 経営層 → AIに聞くだけ"
+      ]
+    }
+  },
+  "comparison": {
+    "sectionTitle": "現状維持のコスト",
+    "today": {
+      "title": "今日のコスト",
+      "items": [
+        { "value": "1.8時間/日", "label": "従業員が情報検索に毎日費やす時間", "source": "McKinsey" },
+        { "value": "35%", "label": "の作業時間が知識の検索・再作成に消費", "source": "Bloomfire / HBR 2025" },
+        { "value": "30%", "label": "サイロ化による部門横断コラボレーションの遅延", "source": "HBR / Bloomfire" },
+        { "value": "315億ドル/年", "label": "Fortune 500企業がナレッジ失敗で失う金額", "source": "IDC" }
+      ]
+    },
+    "future": {
+      "title": "Enterprise OSで解放されるもの",
+      "items": [
+        { "value": "3.9時間/週", "label": "モダンなナレッジマネジメントで従業員あたり回復する時間", "source": "Bloomfire 2025" },
+        { "value": "20-25%", "label": "強固なナレッジ基盤による生産性向上", "source": "McKinsey Global Institute" },
+        { "value": "376% ROI", "label": "GitHub Enterprise Cloudの3年間ROI", "source": "Forrester TEI, 2025年7月" },
+        { "value": "35%", "label": "情報検索時間の削減", "source": "McKinsey" }
+      ]
+    },
+    "note": {
+      "title": "Fortune 500企業のほとんどはすでにGitHub Enterpriseを契約しています。",
+      "subtitle": "これは新規購入ではありません。すでに行った投資の価値を解放することです。本当のコストは統合と設定であり、ライセンスではありません。"
+    }
+  },
+  "useCases": {
+    "sectionTitle": "実践例：Before & After",
+    "case1": {
+      "title": "カスタマーサポート",
+      "before": {
+        "title": "現在",
+        "points": [
+          "エージェントが5つのシステムを手動で検索",
+          "関連ケースを見つけるのに約47分",
+          "回答が地域によって異なる"
+        ]
+      },
+      "after": {
+        "title": "Enterprise OS導入後",
+        "points": [
+          "エージェントがAIアシスタントに質問",
+          "関連ケース＋類似ケースを数秒で発見",
+          "世界中で一貫した回答"
+        ]
+      }
+    },
+    "case2": {
+      "title": "マーケティングキャンペーン",
+      "before": {
+        "title": "現在",
+        "points": [
+          "チームは毎回ゼロからスタート",
+          "過去のキャンペーンを見つけるのが困難",
+          "地域ごとに数週間の作業"
+        ]
+      },
+      "after": {
+        "title": "Enterprise OS導入後",
+        "points": [
+          "AIが12の類似過去キャンペーンを即座に発見",
+          "数時間でドラフトを生成",
+          "ローカル市場に自動適応"
+        ]
+      }
+    }
+  },
+  "everyoneBuilds": {
+    "sectionTitle": "すべての従業員がビルダーに",
+    "subtitle": "GitHub + AIはエンジニアだけをサポートするのではない——全員がビルドできるようになる。",
+    "before": {
+      "title": "従来：エンジニアがビルド、他は依頼",
+      "points": [
+        "マーケティングがページを必要 → チケット作成 → 3週間待ち",
+        "営業がレポートを必要 → IT部門に依頼 → 来期に届く",
+        "地域チームがコンテンツを必要 → メールチェーン → 翻訳で迷子"
+      ]
+    },
+    "after": {
+      "title": "これから：全員がビルド、AIがアシスト",
+      "points": [
+        "マーケティングがニーズを説明 → AIが生成 → PRレビュー → 公開",
+        "営業がAIに質問 → ソース付きの回答を取得 → 即行動",
+        "地域チームがフォーク → AIが翻訳＆適応 → 承認 → 完了"
+      ]
+    },
+    "skillStack": {
+      "title": "新しいスキルスタック",
+      "skills": [
+        { "name": "Describe", "description": "AIに必要なことを平易な言葉で伝える", "who": "全員" },
+        { "name": "Review", "description": "AI出力をチェックし、Pull Requestで承認または改良", "who": "全員" },
+        { "name": "Connect", "description": "ナレッジグラフを使って部門を超えてアイデアを繋ぐ", "who": "全員" },
+        { "name": "Build", "description": "AIでワークフローとツールを作成", "who": "仕事を改善したい人なら誰でも" }
+      ]
+    },
+    "quote": "「2026年に最も価値あるビルダーは、必要なものを説明できる人——コードを書ける人だけではない。」"
+  },
+  "efficiency": {
+    "sectionTitle": "効率化はゴールではない。",
+    "subtitle": "OpenAIの2025年Enterprise AIレポートによると、従業員は1日40-60分を節約。しかし誰も本当の質問をしない：その時間はどこに行くのか？",
+    "flow": {
+      "step1": { "title": "Enterprise OS", "description": "AIが定型的なナレッジワークを処理" },
+      "step2": { "title": "時間の解放", "description": "毎日40-60分がすべての従業員に返る" },
+      "step3": { "title": "3M「15%カルチャー」を内蔵", "description": "ポリシーではなく。能力として。全員に利用可能。" }
+    },
+    "humanConnection": {
+      "title": "Human ↔ Human",
+      "elements": ["同僚", "顧客", "パートナー", "家族"]
+    },
+    "quote": "AI時代に勝つ企業は、最高のAIを持つ企業ではない。AIを使ってより人間的になる企業だ。"
+  },
+  "virtuousCycle": {
+    "sectionTitle": "好循環",
+    "subtitle": "人が成長すれば、企業も成長する。Enterprise OSはその触媒。",
+    "employee": {
+      "title": "従業員の自己実現",
+      "items": [
+        { "label": "目的と成長", "description": "学習、実験、創造的な仕事のための15%の時間" },
+        { "label": "メンタルヘルス", "description": "反復作業からの燃え尽き減少。日々の仕事により多くの意味。" },
+        { "label": "人間的つながり", "description": "メンタリング、傾聴、有意義な関係構築の時間" },
+        { "label": "ワークライフ統合", "description": "仕事の効率化が家庭での存在を可能に" }
+      ]
+    },
+    "company": {
+      "title": "企業の成長",
+      "items": [
+        { "label": "人材定着", "description": "エンゲージした従業員は留まる。知識が蓄積される。" },
+        { "label": "人材獲得", "description": "「彼らは私の成長に投資してくれる」が最強の採用メッセージに" },
+        { "label": "イノベーション速度", "description": "15%タイム + Enterprise OS = アイデアが記録・共有・発展" },
+        { "label": "顧客ロイヤルティ", "description": "傾聴する時間のある従業員が、聞いてもらえたと感じる顧客を生む" }
+      ]
+    }
+  },
+  "gettingStarted": {
+    "sectionTitle": "始め方",
+    "subtitle": "海を沸かす必要はない。1つのワークフローから始めよう。",
+    "steps": [
+      {
+        "number": "01",
+        "title": "1つのペインポイントを選ぶ",
+        "description": "ナレッジの断片化が最も痛手となるワークフローを見つける。コンテンツローカライゼーション、カスタマーサポート、規制コンプライアンス——毎日不満が出るものを選ぶ。"
+      },
+      {
+        "number": "02",
+        "title": "GitHub上でPoCを構築",
+        "description": "そのワークフローのドキュメントをGitHubリポジトリに移動。バージョン管理をセットアップし、地域バリアント用にブランチを作成し、PRベースの承認を有効化。動作を示す。"
+      },
+      {
+        "number": "03",
+        "title": "AIレイヤーを追加",
+        "description": "AIアシスタントをリポジトリから読み取るように接続。これでAIはコンテキスト、履歴、構造を持つ。「汎用」から「本当に役立つ」への変化を見届ける。"
+      },
+      {
+        "number": "04",
+        "title": "オーガニックに拡大",
+        "description": "成功が採用を促進。1つのチームが結果を見れば、他のチームも参加を求める。接続されたワークフローごとにプラットフォームが賢くなる。"
+      }
+    ]
+  },
+  "whyNow": {
+    "sectionTitle": "なぜ今なのか？",
+    "reasons": [
+      {
+        "number": "01",
+        "title": "AIギャップは拡大している",
+        "description": "88%の企業がAIを使用しているが、測定可能な効果を見ているのは39%のみ（McKinsey、2025年11月）。違いはAIではない——データ基盤だ。これを最初に修正する企業が永続的にリードする。"
+      },
+      {
+        "number": "02",
+        "title": "知識が流出している",
+        "description": "米国では、ベビーブーマーが1日1万人以上退職している。知識キャプチャなしの退職はすべて永久的な損失。Enterprise OSはナレッジ移転を日常ワークフローの一部にする——副業プロジェクトではなく。"
+      },
+      {
+        "number": "03",
+        "title": "技術は準備完了",
+        "description": "Git、GitHub Enterprise、AI API——必要なものはすべて存在する。足りないピースは技術ではない。すでにあるものを接続するビジョンだ。"
+      }
+    ]
+  },
+  "author": {
+    "sectionTitle": "著者について",
+    "name": "田中訓 / Dave Tanaka",
+    "title": "デジタルマーケティング＆AIプラクティショナー",
+    "subtitle": "日本拠点のグローバル製造企業",
+    "timelineTitle": "マーケティングとテクノロジーの交差点で30年以上",
+    "timeline": [
+      { "years": "1991-97", "company": "ASCII", "role": "MacPowerマガジン — 編集者＆初代ウェブマスター" },
+      { "years": "1997-00", "company": "Adobe", "role": "adobe.com/jpを1.5万→900万PVに構築（600倍）" },
+      { "years": "2000-03", "company": "Apple", "role": "apple.com Japan — iMac/iPod/iBook時代のローンチ" },
+      { "years": "2003-11", "company": "Adobe", "role": "eCommerce Japan/APAC — 4%→16%の売上シェア" },
+      { "years": "2011-現在", "company": "", "role": "グローバル製造業でのデジタルマーケティング、AI駆動ツール＆自動化" }
+    ],
+    "commitLog": {
+      "title": "commit log",
+      "points": [
+        "メディア、クリエイティブツール、コンシューマーテック、グローバル製造業を横断する稀有なキャリア",
+        "AI駆動の企業ツールを構築（翻訳自動化、技術知識検索）——理論ではなく実践",
+        "AIとデジタルマーケティング導入のカントリーリーダー",
+        "Adobe ProofやON24などグローバルツールの日本展開をサポート",
+        "ノーコード / AI支援開発で社内ツールを構築・展開",
+        "GitHub: 13のアクティブリポジトリ",
+        "バイリンガル（日/英）——米国テックナラティブとアジア太平洋企業の現実を橋渡し",
+        "コンテンツクリエイター: youtube.com/@davetanaka"
+      ]
+    },
+    "disclaimer": "個人の見解です"
+  },
+  "references": {
+    "sectionTitle": "出典・参考文献",
+    "subtitle": "本プレゼンテーションで引用されたすべてのデータは、独立した第三者調査からのものです",
+    "categories": {
+      "aiAdoption": {
+        "title": "AI導入とインパクト",
+        "items": [
+          "McKinsey & Company, The State of AI (2025年11月) — 88%導入、39%がエンタープライズレベルで効果",
+          "OpenAI, Enterprise AIレポート (2025) — ユーザーあたり40-60分/日の節約",
+          "Deloitte, 企業におけるジェネレーティブAIの状況 (2026年Q1) — 34%がAIでビジネスを再設計中"
+        ]
+      },
+      "knowledgeManagement": {
+        "title": "ナレッジマネジメント",
+        "items": [
+          "McKinsey Global Institute — 1.8時間/日を検索に費やす; 強力なKMで生産性20-25%向上、検索時間35%削減",
+          "Bloomfire / Harvard Business Review (2025) — 21%が検索、14%が再作成; 週3.9時間節約",
+          "IDC — Fortune 500企業が知識共有不足で年間315億ドルを損失"
+        ]
+      },
+      "githubEnterprise": {
+        "title": "GitHub Enterprise",
+        "items": [
+          "Forrester Research, GitHub Enterprise Cloudの総経済効果 (2025年7月) — 3年間で376% ROI",
+          "GitHub (2025) — Fortune 100の92%; 7万7千以上の企業; 1億8千万以上のユーザー; ガートナーリーダー2年連続",
+          "企業顧客にはメルセデス・ベンツ、GM、アクセンチュア、アストラゼネカ、コストコ、キャセイパシフィック、ジェネラリ、カールスバーグが含まれる"
+        ]
+      },
+      "innovationCulture": {
+        "title": "イノベーション文化",
+        "items": [
+          "3M Post-it®の歴史 — 公開されたイノベーションストーリー",
+          "3M「15%カルチャー」— 公開された企業イノベーションポリシー"
+        ]
+      }
+    },
+    "github": {
+      "text": "このプレゼンテーションはGitHubで公開されています：",
+      "url": "github.com/davetanaka/enterprise-os",
+      "slideNote": "スライド資料（日英・PDF各18ページ）を公開中",
+      "cta": ["役立ったらStar ★", "あなたの組織用にフォーク", "IssueとPull Requestを歓迎"]
+    }
+  },
+  "speaking": {
+    "sectionTitle": "講演・コンサルティング",
+    "subtitle": "実践的なAIとナレッジマネジメントの知見をあなたの組織へ",
+    "award": {
+      "title": "🏆 3M Global Marketing Excellence Award 2025 受賞",
+      "description": "「AI Translations to Accelerate Speed to Market」— キャンペーン準備時間83%削減"
+    },
+    "topics": {
+      "title": "講演テーマ",
+      "items": [
+        { "title": "Enterprise OS", "description": "なぜ企業のAIは失敗するのか — そしてどう修正するか" },
+        { "title": "AI活用方法：型の習得と守破離", "description": "進化するAIツール。一方で社員に求められる基本の型は変わらない" },
+        { "title": "AI駆動ナレッジマネジメント", "description": "情報のカオスを競争優位に変える" },
+        { "title": "非エンジニアのためのVibe Coding", "description": "AIで企業アプリを構築 — 3,200万円相当を9,000円以下で" },
+        { "title": "デジタルトランスフォーメーション30年史", "description": "Web 1.0からAIまで：ASCII、Adobe、Apple、グローバル製造業での教訓" }
+      ]
+    },
+    "pastSpeaking": {
+      "title": "講演実績（一部）",
+      "items": [
+        { "event": "Blackmagic Design セミナー", "topic": "インハウス動画制作とライブ配信の最前線", "year": "2023" },
+        { "event": "SIMC Regional", "topic": "3Mの売上に貢献するデジタルマーケティングの4C", "year": "2023" },
+        { "event": "営業・マーケティングDXセミナー", "topic": "ニューノーマル時代のB2Bデジタルマーケティング", "year": "2021" },
+        { "event": "MarkeZine Day", "topic": "B2Bマーケティング＆営業チームがニューノーマルに適応する方法", "year": "2020" },
+        { "event": "MarkeZine Day セミナー", "topic": "デマンドジェネレーションを加速する4つのポイント", "year": "2018" },
+        { "event": "社内勉強会 Digital Marketing Hacks", "topic": "年4回開催・最新#24。マーケティング・営業・ラボ・スタッフ部門から毎回200名超が参加", "year": "2017–" }
+      ]
+    },
+    "credentials": {
+      "title": "資格・経歴",
+      "items": [
+        "Blackmagic Design認定トレーナー（DaVinci Resolve 20 / ATEM）",
+        "Google AI Essentials、データアナリティクス、サイバーセキュリティ認定",
+        "ASCII、Adobe、Apple、3Mで30年以上 — 米国テックとAPAC企業を橋渡し",
+        "バイリンガル講演者（日本語・英語）"
+      ]
+    },
+    "cta": {
+      "title": "講演その他のご依頼",
+      "description": "AIによるDX推進や、社員向けセミナー、またEnterprise OSのコンセプトがあなたの組織にどう役立つかなど、さまざまなニーズにお応えします。ぜひご相談ください。",
+      "button": "お問い合わせ",
+      "note": "2営業日以内に返信いたします"
+    }
+  },
+  "footer": {
+    "title": "Enterprise OS",
+    "tagline": "足りないのはAIじゃない。OSだ。",
+    "subtitle": "バージョン管理されたナレッジ。AI駆動のインテリジェンス。人間の開花。",
+    "links": {
+      "youtube": "YouTube",
+      "note": "note.com",
+      "linkedin": "LinkedIn",
+      "twitter": "X / Twitter",
+      "github": "GitHub"
+    },
+    "copyright": "© 2026 Dave Tanaka. All rights reserved.",
+    "license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) の下でライセンス"
+  }
+}

@@ -1,0 +1,481 @@
+{
+  "meta": {
+    "title": "Enterprise OS - AI-Powered Knowledge Management",
+    "description": "Using GitHub Enterprise as a version-controlled knowledge operating system for the AI era."
+  },
+  "nav": {
+    "problem": "The Problem",
+    "concept": "The Concept",
+    "howItWorks": "How It Works",
+    "whyNow": "Why Now",
+    "about": "About"
+  },
+  "hero": {
+    "title": "Enterprise OS",
+    "subtitle": "Why Your Enterprise AI Is Failing",
+    "tagline": "It's Not the AI You're Missing. It's the OS.",
+    "author": "Dave Tanaka / 田中訓",
+    "date": "February 2026",
+    "disclaimer": "This presentation reflects my personal views and does not represent the views of any employer or organization.",
+    "scrollCta": "Scroll to explore"
+  },
+  "manifesto": {
+    "sectionTitle": "Manifesto",
+    "headline": "The Gold Rush Is Over",
+    "subheadline": "Don't Let the \"Jeans Sellers\" Win This Time.",
+    "body1": "In every gold rush, the ones who made the real fortune were those selling shovels and jeans, not the miners.",
+    "body2": "Internet, E-commerce, Marketing Automation... history repeats itself. Now, the AI \"Big Wednesday\" is here — a wave 30 meters high.",
+    "body3": "But if selling \"AI prompts\" or \"training courses\" has become the \"essence\" of AI — isn't that missing the point entirely?",
+    "highlight": "The most effective and correct way to use AI lies within your daily relationships with your customers, family, colleagues, and bosses.",
+    "conclusion1": "AI is not a magic wand. AI is not a teacher giving you the answers.",
+    "conclusion2": "AI is a partner that takes over the drudgery, creates time, and organizes your thoughts so you can connect more deeply with the people who matter.",
+    "conclusion3": "Your years of experience and judgment, honed in the field — that is the ultimate weapon when combined with AI.",
+    "finalMessage": "Our goal is to use AI to reclaim our human work and life."
+  },
+  "problem": {
+    "sectionTitle": "The Problem No One Talks About",
+    "quote": "I once asked an internal assistant to summarize a document I had permission to access. It declined due to policy restrictions. That moment revealed something important: when AI appears \"blocked,\" the issue is often not the model — it's the way knowledge is governed and structured.",
+    "insight": "The AI wasn't broken. It was underfed — missing the structure it needed.",
+    "stat1": {
+      "value": "88%",
+      "label": "of organizations now use AI in at least one function",
+      "source": "McKinsey 2025"
+    },
+    "stat2": {
+      "value": "39%",
+      "label": "Only a small share say AI is fully scaled enterprise-wide",
+      "source": "McKinsey 2025"
+    },
+    "stat3": {
+      "value": "1.8 hrs",
+      "label": "Employees still spend a significant share of their time searching for information",
+      "source": "MGI"
+    }
+  },
+  "rootCause": {
+    "sectionTitle": "The Root Cause",
+    "subtitle": "It's not the AI. It's the way knowledge is stored and connected beneath the surface.",
+    "systems": ["ERP / SAP", "CRM / Salesforce", "Email Servers", "SharePoint", "Internal Wiki", "Product DBs", "Legacy Systems", "Personal PCs", "Shared Drives", "Translation Mgmt", "Web CMS", "HR Systems"],
+    "insight": "Many disconnected systems • Limited version history • Fragmented search • AI struggles to make sense across them"
+  },
+  "postIt": {
+    "sectionTitle": "What Post-it® Notes Teach Us About Designing AI-Ready Organizations",
+    "step1": {
+      "year": "1968",
+      "description": "Spencer Silver invents a 'failed' adhesive. It sticks but peels off. Nobody sees a use for it."
+    },
+    "step2": {
+      "year": "12 years later",
+      "description": "Art Fry needs a bookmark for his hymnal. He remembers Silver's 'failure.'"
+    },
+    "step3": {
+      "year": "Post-it® Notes",
+      "description": "Born from 15% Culture — the policy letting employees spend 15% of time exploring."
+    },
+    "question": "What if every organization were designed so employees naturally had space to explore — not as a policy, but as part of how the system works?"
+  },
+  "concept": {
+    "sectionTitle": "The Idea of an Enterprise OS",
+    "subtitle": "An Enterprise OS is a shared knowledge layer that keeps track of changes and connects people, systems, and AI.",
+    "layer1": {
+      "title": "Infrastructure",
+      "description": "Git as the versioned file system for corporate knowledge. Every change tracked. Every version recoverable. Every department connected."
+    },
+    "layer2": {
+      "title": "Intelligence",
+      "description": "AI reads from a unified, structured knowledge base. Context. History. Relationships. Your enterprise AI can finally make sense of them."
+    },
+    "layer3": {
+      "title": "Human Flourishing",
+      "description": "When AI handles routine knowledge work, every employee gets time back. Not for more work — for different work. Creative, human, innovative work."
+    }
+  },
+  "gitFoundation": {
+    "sectionTitle": "A Practical Foundation: Git-Based Knowledge Infrastructure",
+    "subtitle": "Software engineering has dealt with this problem for decades. The opportunity now is to apply it company-wide.",
+    "whatIsGit": {
+      "title": "What is Git?",
+      "subtitle": "Similar to \"Track Changes\" — but applied to all corporate knowledge.",
+      "points": [
+        "Every change recorded: who, when, and why",
+        "Nothing is ever lost — full rollback capability",
+        "Teams work in parallel without conflicts",
+        "Built-in review & approval before changes go live"
+      ]
+    },
+    "proposal": {
+      "title": "The Proposal",
+      "subtitle": "Use Git to manage company knowledge — not just code.",
+      "points": [
+        "Beyond code → manage company knowledge",
+        "AI reads from Git → enterprise AI gains history, context, and traceability",
+        "Existing approval workflows integrate naturally",
+        "Decades of innovation, searchable & connected"
+      ]
+    },
+    "stats": {
+      "line1": "Used by 90%+ of Fortune 100 companies",
+      "line2": "150M+ developers already use Git-based workflows",
+      "line3": "Used across industries — from manufacturing to finance to healthcare",
+      "source": "GitHub (2025); Forrester TEI Report (July 2025)"
+    }
+  },
+  "howItWorks": {
+    "sectionTitle": "How It Works",
+    "subtitle": "GitHub Enterprise as the central hub — connecting data, AI, and business outputs",
+    "inputs": ["ERP / Finance", "Product Systems", "Knowledge Base", "CRM / Sales Data"],
+    "center": {
+      "title": "GitHub Enterprise",
+      "subtitle": "Enterprise File System",
+      "features": ["Version control", "Access control", "Full audit trail"]
+    },
+    "aiLayer": "AI Layer — Search • Generate • Translate",
+    "outputs": ["Websites / CMS", "Marketing Automation", "Translation Systems", "AI Assistant"],
+    "review": "Review & Approval — integrated with Git Pull Request workflow",
+    "gitTerms": {
+      "commit": { "term": "commit", "description": "Every change recorded with history and rationale" },
+      "branch": { "term": "branch", "description": "Regional or departmental variants without breaking the source" },
+      "pullRequest": { "term": "pull request", "description": "Review & approval before going live" },
+      "merge": { "term": "merge", "description": "Approved changes go live everywhere" },
+      "fork": { "term": "fork", "description": "Enables partner customization" }
+    }
+  },
+  "faq": {
+    "sectionTitle": "Making It Real: Three Questions You're Probably Asking",
+    "subtitle": "Three questions you're probably asking — and honest answers",
+    "q1": {
+      "question": "How do existing systems connect?",
+      "answer": "Your systems stay exactly as they are. Enterprise OS just connects them. GitHub Actions syncs data through REST APIs. ERP, CRM, SharePoint — mature connectors already exist for all of them. No custom middleware required. Existing review tools integrate through webhooks and PR status checks.",
+      "phases": [
+        { "phase": "Phase 1", "description": "PoC (single workflow)", "duration": "3 months" },
+        { "phase": "Phase 2", "description": "2–3 system connectors", "duration": "6 months" },
+        { "phase": "Phase 3", "description": "Full enterprise rollout", "duration": "12–18 months" }
+      ]
+    },
+    "q2": {
+      "question": "What about security?",
+      "answer": "Protected by the same infrastructure that secures the world's most critical software.",
+      "points": [
+        "Enterprise Cloud with data residency options",
+        "Role-Based Access Control (RBAC)",
+        "Advanced Security (GHAS) with automatic secret scanning",
+        "SOC2 Type II / ISO 27001 / FedRAMP"
+      ]
+    },
+    "q3": {
+      "question": "What does it look like for users?",
+      "answer": "Most people never see GitHub — they just experience work running better.",
+      "examples": [
+        "Marketing → uploads through SharePoint as usual / Approvers → use existing review tools",
+        "Engineers → work directly in GitHub / Leadership → just ask the AI"
+      ]
+    }
+  },
+  "comparison": {
+    "sectionTitle": "The Cost of Standing Still",
+    "today": {
+      "title": "What It Costs Today",
+      "items": [
+        { "value": "1.8 hrs/day", "label": "Employees spend 1.8 hours every day searching for information", "source": "McKinsey" },
+        { "value": "35%", "label": "of work time lost to searching for and recreating knowledge", "source": "Bloomfire / HBR 2025" },
+        { "value": "30%", "label": "slower cross-functional collaboration due to silos", "source": "HBR / Bloomfire" },
+        { "value": "$31.5B/yr", "label": "Lost by Fortune 500 companies from knowledge failure", "source": "IDC" }
+      ]
+    },
+    "future": {
+      "title": "What Enterprise OS Unlocks",
+      "items": [
+        { "value": "3.9 hrs/wk", "label": "Time recovered per employee with modern Knowledge Management", "source": "Bloomfire 2025" },
+        { "value": "20–25%", "label": "productivity gain from strong knowledge foundations", "source": "McKinsey Global Institute" },
+        { "value": "376% ROI", "label": "GitHub Enterprise Cloud over three years", "source": "Forrester TEI, July 2025" },
+        { "value": "35%", "label": "less time spent searching for information", "source": "McKinsey" }
+      ]
+    },
+    "note": {
+      "title": "Most Fortune 500 companies already pay for GitHub Enterprise.",
+      "subtitle": "This isn't a new purchase. It's unlocking the value of an investment you already made. The real cost is integration and configuration — not licensing."
+    }
+  },
+  "useCases": {
+    "sectionTitle": "In Practice: Before & After",
+    "case1": {
+      "title": "Customer Support",
+      "before": {
+        "title": "TODAY",
+        "points": [
+          "Agent searches across 5 systems manually",
+          "~ 47 minutes to find relevant case",
+          "Answers vary by region"
+        ]
+      },
+      "after": {
+        "title": "WITH ENTERPRISE OS",
+        "points": [
+          "Agent asks the AI assistant",
+          "Finds the relevant case + similar ones in seconds",
+          "Consistent answers worldwide"
+        ]
+      }
+    },
+    "case2": {
+      "title": "Marketing Campaign",
+      "before": {
+        "title": "TODAY",
+        "points": [
+          "Teams start from scratch every time",
+          "Past campaigns are hard to find",
+          "Weeks of work per region"
+        ]
+      },
+      "after": {
+        "title": "WITH ENTERPRISE OS",
+        "points": [
+          "AI finds 12 similar past campaigns instantly",
+          "Generates draft in hours",
+          "Automatically adapts for local markets"
+        ]
+      }
+    }
+  },
+  "everyoneBuilds": {
+    "sectionTitle": "Every Employee Can Build",
+    "subtitle": "GitHub + AI doesn't just support engineers — it lets everyone build.",
+    "before": {
+      "title": "Before: Engineers Build, Others Request",
+      "points": [
+        "Marketing needs a page → files ticket → waits 3 weeks",
+        "Sales needs a report → asks IT → gets it next quarter",
+        "Regional team needs content → email chain → lost in translation"
+      ]
+    },
+    "after": {
+      "title": "After: Everyone Builds, AI Assists",
+      "points": [
+        "Marketing describes need → AI generates → PR review → live",
+        "Sales asks AI → gets answer with sources → acts now",
+        "Regional team forks → AI translates + adapts → approved → done"
+      ]
+    },
+    "skillStack": {
+      "title": "The New Skill Stack",
+      "skills": [
+        { "name": "Describe", "description": "Tell AI what you need in plain language", "who": "Everyone" },
+        { "name": "Review", "description": "Check AI output, approve or refine via Pull Request", "who": "Everyone" },
+        { "name": "Connect", "description": "Link ideas across departments using the knowledge graph", "who": "Everyone" },
+        { "name": "Build", "description": "Create workflows and tools with AI", "who": "Anyone who wants to improve work" }
+      ]
+    },
+    "quote": "\"The most valuable builders in 2026 will be those who can describe what they need — not just those who can code it.\""
+  },
+  "efficiency": {
+    "sectionTitle": "Efficiency isn't the destination.",
+    "subtitle": "OpenAI's 2025 Enterprise AI Report shows employees save 40–60 minutes a day. But no one asks the real question: where does that time go?",
+    "flow": {
+      "step1": { "title": "Enterprise OS", "description": "AI handles routine knowledge work" },
+      "step2": { "title": "Time Freed", "description": "40–60 minutes a day returned to every employee" },
+      "step3": { "title": "3M \"15% Culture\" Built In", "description": "Not a policy. A capability. Available to everyone." }
+    },
+    "humanConnection": {
+      "title": "Human ↔ Human",
+      "elements": ["Colleagues", "Customers", "Partners", "Family"]
+    },
+    "quote": "The companies that win in the AI era won't be the ones with the best AI. They'll be the ones that use AI to become more human."
+  },
+  "virtuousCycle": {
+    "sectionTitle": "The Virtuous Cycle",
+    "subtitle": "When people thrive, companies grow. Enterprise OS is the catalyst.",
+    "employee": {
+      "title": "Employee Self-Realization",
+      "items": [
+        { "label": "Purpose & Growth", "description": "15% time for learning, experimentation, and creative work" },
+        { "label": "Mental Health", "description": "Less burnout from repetitive work. More meaning in daily work." },
+        { "label": "Human Connection", "description": "Time to mentor, listen, and build meaningful relationships" },
+        { "label": "Work-Life Integration", "description": "Efficiency at work enables presence at home" }
+      ]
+    },
+    "company": {
+      "title": "Company Growth",
+      "items": [
+        { "label": "Retention", "description": "Engaged employees stay. Knowledge compounds." },
+        { "label": "Talent Attraction", "description": "\"They invest in my growth\" becomes your strongest recruiting message" },
+        { "label": "Innovation Velocity", "description": "15% time + Enterprise OS = ideas recorded, shared, and built upon" },
+        { "label": "Customer Loyalty", "description": "Employees who have time to listen create customers who feel heard" }
+      ]
+    }
+  },
+  "gettingStarted": {
+    "sectionTitle": "Getting Started",
+    "subtitle": "You don't have to boil the ocean. Start with one workflow.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Pick One Pain Point",
+        "description": "Find the workflow where knowledge fragmentation hurts the most. Content localization, customer support, regulatory compliance — choose the one people complain about every day."
+      },
+      {
+        "number": "02",
+        "title": "Build a PoC on GitHub",
+        "description": "Move that workflow's documents into a GitHub repository. Set up version control, branch for regional variants, and enable PR-based approval. Show that it works."
+      },
+      {
+        "number": "03",
+        "title": "Add the AI Layer",
+        "description": "Connect an AI assistant to read from the repository. Now the AI has context, history, and structure. Watch it go from \"generic\" to genuinely useful."
+      },
+      {
+        "number": "04",
+        "title": "Expand Organically",
+        "description": "Success drives adoption. Once one team sees results, others will ask to join. Each connected workflow makes the platform smarter."
+      }
+    ]
+  },
+  "whyNow": {
+    "sectionTitle": "Why Now?",
+    "reasons": [
+      {
+        "number": "01",
+        "title": "The AI Gap Is Widening",
+        "description": "88% of organizations use AI, but only 39% see measurable impact (McKinsey, Nov 2025). The difference isn't the AI — it's the data foundation. Companies that fix this first will pull ahead for good."
+      },
+      {
+        "number": "02",
+        "title": "Knowledge Is Walking Out the Door",
+        "description": "In the U.S., Baby Boomers are retiring at 10,000+ per day. Every departure without knowledge capture is permanent loss. Enterprise OS makes knowledge transfer part of daily workflows — not a side project."
+      },
+      {
+        "number": "03",
+        "title": "The Technology Is Ready",
+        "description": "Git, GitHub Enterprise, AI APIs — everything needed already exists. The missing piece isn't technology. It's the vision to connect what's already there."
+      }
+    ]
+  },
+  "author": {
+    "sectionTitle": "About the Author",
+    "name": "Dave Tanaka / 田中訓",
+    "title": "Digital Marketing & AI Practitioner",
+    "subtitle": "Japan-based Global Manufacturing Company",
+    "timelineTitle": "30+ Years at the Intersection of Marketing & Technology",
+    "timeline": [
+      { "years": "1991–97", "company": "ASCII", "role": "MacPower Magazine — Editor & First Webmaster" },
+      { "years": "1997–00", "company": "Adobe", "role": "Built adobe.com/jp from 15K to 9M PVs (600×)" },
+      { "years": "2000–03", "company": "Apple", "role": "apple.com Japan — iMac/iPod/iBook era launches" },
+      { "years": "2003–11", "company": "Adobe", "role": "eCommerce Japan/APAC — 4%→16% of total sales" },
+      { "years": "2011–Now", "company": "", "role": "Digital Marketing in Global Manufacturing, AI-powered tools & automation" }
+    ],
+    "commitLog": {
+      "title": "commit log",
+      "points": [
+        "A rare career spanning media, creative tools, consumer tech, and global manufacturing",
+        "Built AI-powered enterprise tools (translation automation, technical knowledge search) — practice, not theory",
+        "Country Leader for AI and digital marketing adoption",
+        "Supported Japan deployment of global tools including Adobe Proof and ON24",
+        "Built and deployed internal tools via No Code / AI-assisted development",
+        "GitHub: 13 active repositories",
+        "Bilingual (JP/EN) — bridging US tech narrative and Asia-Pacific enterprise reality",
+        "Content creator: youtube.com/@davetanaka"
+      ]
+    },
+    "disclaimer": "Views are my own"
+  },
+  "references": {
+    "sectionTitle": "Sources & References",
+    "subtitle": "All data cited in this presentation comes from independent third-party research",
+    "categories": {
+      "aiAdoption": {
+        "title": "AI Adoption & Impact",
+        "items": [
+          "McKinsey & Company, The State of AI (Nov 2025) — 88% adoption, 39% enterprise-level impact",
+          "OpenAI, Enterprise AI Report (2025) — 40–60 min/day saved per user",
+          "Deloitte, State of Generative AI in the Enterprise (Q1 2026) — 34% redesigning business with AI"
+        ]
+      },
+      "knowledgeManagement": {
+        "title": "Knowledge Management",
+        "items": [
+          "McKinsey Global Institute — 1.8 hrs/day spent searching; strong KM boosts productivity 20–25%, cuts search time 35%",
+          "Bloomfire / Harvard Business Review (2025) — 21% searching, 14% recreating; 3.9 hrs/week saved",
+          "IDC — $31.5B/year lost by Fortune 500 due to poor knowledge sharing"
+        ]
+      },
+      "githubEnterprise": {
+        "title": "GitHub Enterprise",
+        "items": [
+          "Forrester Research, Total Economic Impact of GitHub Enterprise Cloud (July 2025) — 376% ROI over 3 years",
+          "GitHub (2025) — 92% of Fortune 100; 77k+ enterprises; 180M+ users; Gartner Leader two years running",
+          "Enterprise customers include Mercedes-Benz, GM, Accenture, AstraZeneca, Costco, Cathay Pacific, Generali, Carlsberg"
+        ]
+      },
+      "innovationCulture": {
+        "title": "Innovation Culture",
+        "items": [
+          "3M Post-it® history — publicly documented innovation story",
+          "3M \"15% Culture\" — publicly documented corporate innovation policy"
+        ]
+      }
+    },
+    "github": {
+      "text": "This presentation is available on GitHub:",
+      "url": "github.com/davetanaka/enterprise-os",
+      "slideNote": "Full slide deck available: English & Japanese PDFs (18 pages each)",
+      "cta": ["Star ★ if you find it useful", "Fork to adapt for your organization", "Issues and pull requests are welcome"]
+    }
+  },
+  "speaking": {
+    "sectionTitle": "Speaking & Consulting",
+    "subtitle": "Bringing practical AI and knowledge management insights to your organization",
+    "award": {
+      "title": "🏆 3M Global Marketing Excellence Award 2025",
+      "description": "Winner for \"AI Translations to Accelerate Speed to Market\" — 83% reduction in campaign prep time"
+    },
+    "topics": {
+      "title": "Speaking Topics",
+      "items": [
+        { "title": "Enterprise OS", "description": "Why Your Enterprise AI Is Failing — and How to Fix It" },
+        { "title": "AI Mastery: Shu-Ha-Ri", "description": "AI tools evolve rapidly, but the foundational skills employees need remain constant" },
+        { "title": "AI-Powered Knowledge Management", "description": "Turning information chaos into competitive advantage" },
+        { "title": "Vibe Coding for Non-Engineers", "description": "Building enterprise apps with AI — ¥32M+ value for under ¥9,000" },
+        { "title": "30 Years of Digital Transformation", "description": "From Web 1.0 to AI: lessons from ASCII, Adobe, Apple, and global manufacturing" }
+      ]
+    },
+    "pastSpeaking": {
+      "title": "Selected Speaking Engagements",
+      "items": [
+        { "event": "Blackmagic Design Seminar", "topic": "The Frontline of In-house Video Production and Live Streaming", "year": "2023" },
+        { "event": "SIMC Regional", "topic": "The 4Cs of Revenue-Generating Digital Marketing", "year": "2023" },
+        { "event": "Sales & Marketing DX Seminar", "topic": "B2B Digital Marketing in the New Normal Era", "year": "2021" },
+        { "event": "MarkeZine Day", "topic": "How B2B Marketing And Sales Teams Can Adapt To A New Normal", "year": "2020" },
+        { "event": "MarkeZine Day Seminar", "topic": "4 Key Points to Accelerate Demand Generation", "year": "2018" },
+        { "event": "Internal: Digital Marketing Hacks", "topic": "Quarterly sessions (now #24). 200+ attendees from Marketing, Sales, Lab & Staff divisions", "year": "2017–" }
+      ]
+    },
+    "credentials": {
+      "title": "Certifications & Background",
+      "items": [
+        "Blackmagic Design Certified Trainer (DaVinci Resolve 20 / ATEM)",
+        "Google AI Essentials, Data Analytics, Cybersecurity Certified",
+        "30+ years at ASCII, Adobe, Apple, 3M — bridging US tech and APAC enterprise",
+        "Bilingual presenter (English & Japanese)"
+      ]
+    },
+    "cta": {
+      "title": "Speaking & Other Inquiries",
+      "description": "AI-driven DX initiatives, employee seminars, and how Enterprise OS concepts can benefit your organization — I'm here to help with various needs. Let's connect.",
+      "button": "Get in Touch",
+      "note": "Response within 2 business days"
+    }
+  },
+  "footer": {
+    "title": "Enterprise OS",
+    "tagline": "It's Not the AI You're Missing. It's the OS.",
+    "subtitle": "Version-controlled knowledge. AI-powered intelligence. Human flourishing.",
+    "links": {
+      "youtube": "YouTube",
+      "note": "note.com",
+      "linkedin": "LinkedIn",
+      "twitter": "X / Twitter",
+      "github": "GitHub"
+    },
+    "copyright": "© 2026 Dave Tanaka. All rights reserved.",
+    "license": "Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)"
+  }
+}
