@@ -2,11 +2,11 @@
   "meta": {
     "title": "モバイルバッテリー（USBパワーバンク）市場 エンティティグラフ",
     "title_en": "Mobile Battery (USB Power Bank) Market Entity Graph",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "created": "2026-06-17",
     "scope": "2025〜2026年 日本市場主要モデル＋世界的著名機",
-    "node_count": 62,
-    "edge_count": 111,
+    "node_count": 63,
+    "edge_count": 112,
     "node_types": [
       "Product",
       "Brand",
@@ -1360,6 +1360,19 @@
         "https://www.meti.go.jp/policy/consumer/seian/denan/mlb_faq.html",
         "https://www.owltech.co.jp/note/note-technology/mobilebattery-safety-pse-guide/"
       ]
+    },
+    {
+      "id": "reg_airline_100wh",
+      "type": "Regulation",
+      "label_ja": "航空機 100Wh 事前承認ライン（≤100Wh=承認不要 / 100–160Wh=航空会社の事前承認が必要）",
+      "label_en": "Airline 100Wh approval line (≤100Wh: no approval / 100–160Wh: airline approval required)",
+      "attrs": {
+        "effect": "100Whを境に、機内持込の事前承認要否が変わる。容量設計の隠れた最重要パラメータ",
+        "enforced": "2026-04-24（国土交通省）"
+      },
+      "sources": [
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
     }
   ],
   "edges": [
@@ -2486,6 +2499,16 @@
       "confidence": "high",
       "sources": [
         "https://03review.com/mobile-battery-plug/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "reg_airline_100wh",
+      "type": "limited_by",
+      "rationale_ja": "102.3Wh＝100Wh超のため航空機では事前承認が必要になり、旅行ユーザーから『出張に使えない』と評価が下がる非対称ペナルティ（insight_1の核心）",
+      "confidence": "high",
+      "sources": [
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
       ]
     }
   ],
