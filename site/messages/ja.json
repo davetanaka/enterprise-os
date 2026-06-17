@@ -110,7 +110,10 @@
         "href": "/demos/powerbank/"
       }
     ],
-    "note": "どちらもブラウザだけで動く、実際に公開しているEntity Graph。"
+    "note": "どちらもブラウザだけで動く、実際に公開しているEntity Graph。",
+    "governance": "そして、この意味は所有・統治されている。正本は GitHub にあり、commit が意味の変化を記録し、PR がそれをレビューする（AIが構造を作り、人が信頼性を守る）。借りるのはAI、所有するのは意味。",
+    "govOntology": "意味の統治モデル（ONTOLOGY.md）",
+    "govPr": "例：意味を統治した PR #1"
   },
   "gitFoundation": {
     "sectionTitle": "実践的な基盤：意味のグラフを育て・統治する「箱」（Git）",

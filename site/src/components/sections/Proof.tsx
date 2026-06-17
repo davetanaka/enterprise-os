@@ -92,6 +92,34 @@ export default function Proof() {
           >
             {t("note")}
           </motion.p>
+
+          {/* 所有・統治（pillar 2）：意味はGitHubで所有・統治されている */}
+          <motion.div
+            variants={staggerItem}
+            className="border-t border-text-muted/15 pt-8 space-y-4"
+          >
+            <p className="text-lg text-text-secondary leading-relaxed max-w-4xl">
+              {t("governance")}
+            </p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              <a
+                href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-teal font-semibold hover:underline"
+              >
+                ↗ {t("govOntology")}
+              </a>
+              <a
+                href="https://github.com/davetanaka/enterprise-os/pull/1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-teal font-semibold hover:underline"
+              >
+                ↗ {t("govPr")}
+              </a>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

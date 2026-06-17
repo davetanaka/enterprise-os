@@ -110,7 +110,10 @@
         "href": "/demos/powerbank/"
       }
     ],
-    "note": "Both are live Entity Graphs that run entirely in the browser."
+    "note": "Both are live Entity Graphs that run entirely in the browser.",
+    "governance": "And this meaning is owned and governed: its source of truth lives on GitHub, where commits record how meaning changes and pull requests review it (AI builds the structure; humans keep it trustworthy). Rent the AI — own the meaning.",
+    "govOntology": "Governance model (ONTOLOGY.md)",
+    "govPr": "Example: the governed-meaning PR #1"
   },
   "gitFoundation": {
     "sectionTitle": "A Practical Foundation: Git as the Box that Cultivates Meaning",
