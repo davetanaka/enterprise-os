@@ -6,8 +6,8 @@ export default function StructuredData({ locale }: { locale: string }) {
     "@type": "WebSite",
     name: "Enterprise OS",
     description: isJapanese
-      ? "GitHub Enterpriseを活用した、AI時代のためのバージョン管理型ナレッジオペレーティングシステム"
-      : "Using GitHub Enterprise as a version-controlled knowledge operating system for the AI era",
+      ? "会社のインテリジェンス（意味）をEntity Graphとして所有し、育て・統治するためのAI時代の知のOS"
+      : "Own your company's intelligence as an Entity Graph — cultivate and govern it in the AI era",
     url: "https://enterprise-os.davetanaka.net",
     author: {
       "@type": "Person",
@@ -33,8 +33,8 @@ export default function StructuredData({ locale }: { locale: string }) {
       ? "Enterprise OS - なぜ企業のAIは失敗するのか"
       : "Enterprise OS - Why Your Enterprise AI Is Failing",
     description: isJapanese
-      ? "足りないのはAIじゃない。OSだ。GitHub Enterpriseを活用したAI時代のナレッジマネジメント"
-      : "It's Not the AI You're Missing. It's the OS. Version-controlled knowledge for the AI era.",
+      ? "足りないのはAIじゃない。インテリジェンスを、所有せよ。会社のインテリジェンスをEntity Graphとして育て・統治する、AI時代の知のOS。"
+      : "It's Not the AI You're Missing. Own Your Intelligence. Cultivate and govern your company's intelligence as an Entity Graph.",
     author: {
       "@type": "Person",
       name: "Dave Tanaka / 田中訓",

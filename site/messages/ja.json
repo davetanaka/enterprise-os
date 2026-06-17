@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Enterprise OS - AI時代のナレッジマネジメント",
-    "description": "GitHub Enterpriseを活用した、AI時代のためのバージョン管理型ナレッジオペレーティングシステム"
+    "title": "Enterprise OS — 会社のインテリジェンスをEntity Graphとして所有する",
+    "description": "外注できるのは実行。所有すべきは意味・構造・関係＝オントロジー。会社のインテリジェンスをEntity Graphとして育て・統治する、AI時代の知のOS。"
   },
   "nav": {
     "problem": "課題",
@@ -13,7 +13,7 @@
   "hero": {
     "title": "Enterprise OS",
     "subtitle": "なぜ企業のAIは失敗するのか",
-    "tagline": "足りないのはAIじゃない。OSだ。",
+    "tagline": "足りないのはAIじゃない。インテリジェンスを、所有せよ。",
     "author": "田中訓 / Dave Tanaka",
     "date": "2026年2月",
     "disclaimer": "本プレゼンテーションは個人的な見解であり、所属組織の見解を代表するものではありません。",
@@ -35,7 +35,7 @@
   "problem": {
     "sectionTitle": "誰も語らない問題",
     "quote": "以前、アクセス権限のあるドキュメントを社内アシスタントに要約させようとしたことがあります。ポリシーの制限により拒否されました。その瞬間、重要なことに気づきました。AIが「ブロックされた」ように見えるとき、問題はモデルではなく、知識の管理・構造化の仕方にあるのです。",
-    "insight": "AIは壊れていなかった。いわば栄養失調だったのだ——必要な構造が欠けていた。",
+    "insight": "AIは壊れていなかった。いわば栄養失調だったのだ——欠けていたのは、意味の構造（オントロジー）だ。",
     "stat1": {
       "value": "88%",
       "label": "の企業が少なくとも1つの機能でAIを使用",
@@ -54,9 +54,9 @@
   },
   "rootCause": {
     "sectionTitle": "根本原因",
-    "subtitle": "問題はAIではない。表面下での知識の保存・接続方法にある。",
+    "subtitle": "問題はAIではない。意味——エンティティとその関係——がシステムごとに分断され、誰も会社全体のオントロジーを所有していないことにある。",
     "systems": ["ERP / SAP", "CRM / Salesforce", "メールサーバー", "SharePoint", "社内Wiki", "製品DB", "レガシーシステム", "個人PC", "共有ドライブ", "翻訳管理", "Web CMS", "HRシステム"],
-    "insight": "多数の断絶されたシステム • 限定的なバージョン履歴 • 断片化された検索 • AIはそれらを横断して理解することが困難"
+    "insight": "多数の断絶されたシステム • 共有された意味の地図（オントロジー）の不在 • 断片化された検索 • AIは横断して意味を繋げられない"
   },
   "postIt": {
     "sectionTitle": "ポスト・イット®が教えるAI対応組織の設計",
@@ -76,22 +76,43 @@
   },
   "concept": {
     "sectionTitle": "Enterprise OSのアイデア",
-    "subtitle": "Enterprise OSは、変更を追跡し、人・システム・AIを接続する共有ナレッジレイヤーです。",
+    "subtitle": "Enterprise OSは、会社のインテリジェンス（意味）をEntity Graphとして所有し、育て、統治するための共有レイヤーです。",
     "layer1": {
-      "title": "インフラストラクチャ",
-      "description": "企業知識のバージョン管理ファイルシステムとしてのGit。すべての変更を追跡。すべてのバージョンを復元可能。すべての部門を接続。"
+      "title": "Entity Graph（所有する意味）",
+      "description": "会社のインテリジェンス＝\"何を意味し、どう繋がるか\"を、エンティティと関係のグラフとして所有する。AIが本当に効くのは、この意味のグラフがあるとき。"
     },
     "layer2": {
-      "title": "インテリジェンス",
-      "description": "AIは統一・構造化されたナレッジベースから読み取る。コンテキスト。履歴。関係性。企業AIがついにそれらを理解できるようになる。"
+      "title": "育成と統治（GitHubという箱）",
+      "description": "意味のグラフは生きている。箱（GitHub）で育て、版を管理する。commit＝意味の変化の記録、branch＝地域・部門のバリアント、pull request＝意味への変更をレビュー承認、fork＝パートナーへ展開。箱は交換可能。主役は中身のグラフ。"
     },
     "layer3": {
       "title": "人間の開花",
-      "description": "AIが定型的なナレッジワークを処理すると、すべての従業員が時間を取り戻す。より多くの仕事のためではなく、異なる仕事のために。創造的で、人間的で、革新的な仕事。"
+      "description": "AIが定型を引き受けると、時間が戻る。より多くの仕事のためではなく、人間的な仕事のために。顧客・パートナー・同僚・家族と、もっと深く繋がるために。"
     }
   },
+  "proof": {
+    "sectionTitle": "理論じゃない。もう作っている。",
+    "subtitle": "Ankerの発表会に刺激を受けて、Entity Graphを2つ作った——「発表会そのもの」と「モバイルバッテリー市場」。同じ手法、違う対象。スペックや議事録ではなく、意味（誰に・どう繋がるか）を所有するとこうなる。",
+    "cards": [
+      {
+        "tag": "イベント / 人",
+        "title": "Anker Power Conference 2026",
+        "desc": "新製品・技術・登壇者・ブースを、ノードと関係で「歩ける地図」に。発表会の意味を所有する。",
+        "cta": "触ってみる",
+        "href": "/demos/anker/"
+      },
+      {
+        "tag": "製品 / 市場",
+        "title": "モバイルバッテリー市場 Entity Graph",
+        "desc": "30製品×ターゲット層×利用文脈×規制を横断。「出張向けを全部光らせて」がグラフだと一発。意味レンズ・絞り込み・ツアー付き。",
+        "cta": "触ってみる",
+        "href": "/demos/powerbank/"
+      }
+    ],
+    "note": "どちらもブラウザだけで動く、実際に公開しているEntity Graph。"
+  },
   "gitFoundation": {
-    "sectionTitle": "実践的な基盤：Gitベースのナレッジインフラ",
+    "sectionTitle": "実践的な基盤：意味のグラフを育て・統治する「箱」（Git）",
     "subtitle": "ソフトウェアエンジニアリングは数十年にわたりこの問題に取り組んできた。今こそ全社的に適用するチャンス。",
     "whatIsGit": {
       "title": "Gitとは？",
@@ -105,9 +126,9 @@
     },
     "proposal": {
       "title": "提案",
-      "subtitle": "Gitを企業知識の管理に使う——コードだけでなく。",
+      "subtitle": "Gitを、所有する意味のグラフを育て・統治する「箱」に使う——コードだけでなく。",
       "points": [
-        "コードを超えて → 企業知識を管理",
+        "コードを超えて → 所有する意味のグラフを育て・統治",
         "AIがGitから読み取る → 企業AIが履歴・コンテキスト・トレーサビリティを獲得",
         "既存の承認ワークフローが自然に統合",
         "数十年のイノベーション、検索可能で接続済み"
@@ -122,11 +143,11 @@
   },
   "howItWorks": {
     "sectionTitle": "仕組み",
-    "subtitle": "GitHub Enterpriseを中央ハブとして——データ、AI、ビジネス出力を接続",
+    "subtitle": "中心は、所有するEntity Graph。GitHubはそれを育て・統治する「箱」——データ・AI・出力をつなぐ。",
     "inputs": ["ERP / 財務", "製品システム", "ナレッジベース", "CRM / 営業データ"],
     "center": {
       "title": "GitHub Enterprise",
-      "subtitle": "エンタープライズファイルシステム",
+      "subtitle": "Entity Graphを育て・統治する箱",
       "features": ["バージョン管理", "アクセス制御", "完全な監査証跡"]
     },
     "aiLayer": "AIレイヤー — 検索 • 生成 • 翻訳",
@@ -331,11 +352,17 @@
   },
   "whyNow": {
     "sectionTitle": "なぜ今なのか？",
+    "foil": {
+      "quote": "この学習ループこそが、企業の新しいIP（知的財産）になる。",
+      "attribution": "— サティア・ナデラ（Microsoft CEO、2026年6月）",
+      "context": "MicrosoftのナデラCEOですら、差別化はモデルではなく学習ループの側にあると言う——汎用モデルを差し替えても、自社に積み上げた「company veteran（社の古参）」の知見は失わずに済む、と。",
+      "counter": "だが彼が引く線は「ループ＝プロセスの所有」まで。その先で価値は、結局Microsoftのプラットフォームへ吸い上げられていく。私たちはもう一段下に線を引く——所有すべきは、ループが回す対象そのもの。意味＝オントロジーだ。"
+    },
     "reasons": [
       {
         "number": "01",
         "title": "AIギャップは拡大している",
-        "description": "88%の企業がAIを使用しているが、測定可能な効果を見ているのは39%のみ（McKinsey、2025年11月）。違いはAIではない——データ基盤だ。これを最初に修正する企業が永続的にリードする。"
+        "description": "88%の企業がAIを使用しているが、測定可能な効果を見ているのは39%のみ（McKinsey、2025年11月）。違いはAIではない——所有する意味の基盤（オントロジー）だ。これを最初に手にした企業が永続的にリードする。"
       },
       {
         "number": "02",
@@ -395,6 +422,17 @@
           "McKinsey Global Institute — 1.8時間/日を検索に費やす; 強力なKMで生産性20-25%向上、検索時間35%削減",
           "Bloomfire / Harvard Business Review (2025) — 21%が検索、14%が再作成; 週3.9時間節約",
           "IDC — Fortune 500企業が知識共有不足で年間315億ドルを損失"
+        ]
+      },
+      "ontologyOwnership": {
+        "title": "意味の所有：オントロジーとナレッジグラフ",
+        "items": [
+          "Google「Introducing the Knowledge Graph: things, not strings」(2012) — 検索を「文字列」から「実体」へ転換した公式発表",
+          "Palantir Foundry Docs, Ontology Overview — オントロジーを「企業の意思決定を表現する operational layer」と定義",
+          "Zhamak Dehghani, Data Mesh — ドメインによるデータ所有 (martinfowler.com 2019 / O'Reilly 2022)",
+          "Andrew Jones, Driving Data Quality with Data Contracts (Packt 2023) — 意味と責任境界を明文化するデータ契約",
+          "MIT Sloan Management Review (2023) — AIモデル自体は持続的競争優位を生まない；優位は自社固有の意味構造の側にある",
+          "dbt Labs / AtScale — セマンティックレイヤー：指標の意味を全社で単一化する層"
         ]
       },
       "githubEnterprise": {
@@ -466,8 +504,8 @@
   },
   "footer": {
     "title": "Enterprise OS",
-    "tagline": "足りないのはAIじゃない。OSだ。",
-    "subtitle": "バージョン管理されたナレッジ。AI駆動のインテリジェンス。人間の開花。",
+    "tagline": "足りないのはAIじゃない。インテリジェンスを、所有せよ。",
+    "subtitle": "所有するのは、会社のインテリジェンス＝Entity Graph。箱（GitHub）で育て、統治する。AIは、人間の開花のために。",
     "links": {
       "youtube": "YouTube",
       "note": "note.com",

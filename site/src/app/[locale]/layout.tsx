@@ -22,16 +22,16 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://enterprise-os.davetanaka.net"),
-  title: "Enterprise OS - AI-Powered Knowledge Management",
+  title: "Enterprise OS - Own Your Company's Intelligence as an Entity Graph",
   description:
-    "Using GitHub Enterprise as a version-controlled knowledge operating system for the AI era. Why Your Enterprise AI Is Failing — and How to Fix It.",
-  keywords: ["Enterprise AI", "Knowledge Management", "GitHub Enterprise", "Digital Transformation", "AI Strategy", "Enterprise OS"],
+    "You can outsource execution; you must own the meaning. Cultivate and govern your company's intelligence as an Entity Graph. Why Your Enterprise AI Is Failing — and How to Fix It.",
+  keywords: ["Entity Graph", "Ontology", "Enterprise AI", "Knowledge Management", "GitHub", "Digital Transformation", "AI Strategy", "Enterprise OS"],
   authors: [{ name: "Dave Tanaka / 田中訓", url: "https://github.com/davetanaka" }],
   creator: "Dave Tanaka",
   openGraph: {
     title: "Enterprise OS",
     description:
-      "It's Not the AI You're Missing. It's the OS. Version-controlled knowledge for the AI era.",
+      "It's Not the AI You're Missing. Own Your Intelligence. Cultivate and govern your company's intelligence as an Entity Graph.",
     type: "website",
     locale: "en_US",
     alternateLocale: "ja_JP",
@@ -41,14 +41,14 @@ export const metadata: Metadata = {
         url: "/images/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Enterprise OS - The Operating System for Corporate Knowledge",
+        alt: "Enterprise OS — Own your company's intelligence as an Entity Graph",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Enterprise OS",
-    description: "It's Not the AI You're Missing. It's the OS.",
+    description: "It's Not the AI You're Missing. Own Your Intelligence.",
     creator: "@davetanaka",
     images: ["/images/og-image.png"],
   },

@@ -1,0 +1,2230 @@
+{
+  "schema_version": "0.2",
+  "generated_from": [
+    "APC2026Spring_比較表all.pdf",
+    "APC2026_新製品表all.pdf"
+  ],
+  "generated_note": "products.json の specs を横断集計したスペック軸マスター。全32製品(新製品17 + 前モデル/旧製品15)を対象。数値軸は min/max、全軸に products_with_value を付与。",
+  "value_format": "products.json の数値スペックは {value, unit, raw} 形式。質的スペックは string / boolean / list[str]。",
+  "axes": [
+    {
+      "key": "price_jpy_tax_in",
+      "label_ja": "価格(税込)",
+      "unit": "円",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "gadget_pouch",
+        "mobile_battery",
+        "open_ear_earbuds",
+        "pokemon_collab_charger",
+        "pokemon_collab_earbuds",
+        "pokemon_collab_travel_adapter",
+        "pokemon_collab_travel_pouch",
+        "portable_power_station",
+        "portable_speaker",
+        "power_strip",
+        "robot_vacuum",
+        "security_camera",
+        "tracker_card",
+        "true_wireless_earbuds",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_style_pouch",
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_solix_s2000",
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "soundcore_work_64gb",
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_eufycam_c37",
+        "eufy_smarttrack_card_e40",
+        "soundcore_c50i_pokemon",
+        "anker_usb_charger_70w_pikachu",
+        "anker_travel_adapter_pikachu",
+        "anker_travel_pouch_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2",
+        "anker_soundcore_2",
+        "soundcore_select_4_go",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10",
+        "eufy_smarttrack_card"
+      ],
+      "count": 32,
+      "min": 3990,
+      "max": 249900
+    },
+    {
+      "key": "size_mm",
+      "label_ja": "サイズ",
+      "unit": "mm",
+      "type": "text",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "gadget_pouch",
+        "mobile_battery",
+        "pokemon_collab_charger",
+        "pokemon_collab_travel_adapter",
+        "pokemon_collab_travel_pouch",
+        "portable_speaker",
+        "power_strip",
+        "security_camera",
+        "tracker_card",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_style_pouch",
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "soundcore_boom_go_3i",
+        "soundcore_work_64gb",
+        "eufy_eufycam_c37",
+        "eufy_smarttrack_card_e40",
+        "anker_usb_charger_70w_pikachu",
+        "anker_travel_adapter_pikachu",
+        "anker_travel_pouch_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w",
+        "anker_soundcore_2",
+        "soundcore_select_4_go",
+        "eufy_smarttrack_card"
+      ],
+      "count": 17
+    },
+    {
+      "key": "size_cm",
+      "label_ja": "サイズ",
+      "unit": "cm",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "portable_power_station",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_c50i_pokemon",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 11
+    },
+    {
+      "key": "size_robot_cm",
+      "label_ja": "サイズ(本体)",
+      "unit": "cm",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "size_station_cm",
+      "label_ja": "サイズ(ステーション)",
+      "unit": "cm",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "weight_g",
+      "label_ja": "重さ",
+      "unit": "g",
+      "type": "number",
+      "applies_to_categories": [
+        "gadget_pouch",
+        "mobile_battery",
+        "pokemon_collab_charger",
+        "pokemon_collab_travel_adapter",
+        "pokemon_collab_travel_pouch",
+        "portable_speaker",
+        "power_strip",
+        "security_camera",
+        "tracker_card",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_style_pouch",
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "soundcore_boom_go_3i",
+        "eufy_eufycam_c37",
+        "eufy_smarttrack_card_e40",
+        "anker_usb_charger_70w_pikachu",
+        "anker_travel_adapter_pikachu",
+        "anker_travel_pouch_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w",
+        "anker_soundcore_2",
+        "soundcore_select_4_go",
+        "eufy_smarttrack_card"
+      ],
+      "count": 16,
+      "min": 12.0,
+      "max": 698
+    },
+    {
+      "key": "weight_kg",
+      "label_ja": "重さ",
+      "unit": "kg",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 11.3,
+      "max": 18.9
+    },
+    {
+      "key": "weight_robot_kg",
+      "label_ja": "重さ(本体)",
+      "unit": "kg",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4,
+      "min": 2.5,
+      "max": 5.2
+    },
+    {
+      "key": "weight_station_kg",
+      "label_ja": "重さ(ステーション)",
+      "unit": "kg",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4,
+      "min": 1.8,
+      "max": 9.5
+    },
+    {
+      "key": "weight_earbud_g",
+      "label_ja": "重さ(イヤホン片耳)",
+      "unit": "g",
+      "type": "number",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 8,
+      "min": 5.2,
+      "max": 10.5
+    },
+    {
+      "key": "weight_case_g",
+      "label_ja": "重さ(充電ケース込み)",
+      "unit": "g",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_work_64gb",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 9,
+      "min": 44.5,
+      "max": 109
+    },
+    {
+      "key": "weight_mic_g",
+      "label_ja": "重さ(マイク本体)",
+      "unit": "g",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1,
+      "min": 10,
+      "max": 10
+    },
+    {
+      "key": "max_output_w",
+      "label_ja": "最大出力(単ポート)",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "mobile_battery",
+        "pokemon_collab_charger",
+        "power_strip",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_usb_charger_70w_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "count": 7,
+      "min": 7.5,
+      "max": 100
+    },
+    {
+      "key": "total_output_w",
+      "label_ja": "合計最大出力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "mobile_battery",
+        "pokemon_collab_travel_adapter",
+        "power_strip",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_travel_adapter_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "count": 7,
+      "min": 15,
+      "max": 100
+    },
+    {
+      "key": "max_input_w",
+      "label_ja": "最大入力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "mobile_battery",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "anker_nano_usb_c_hub_10in1_240hz_display"
+      ],
+      "count": 2,
+      "min": 30,
+      "max": 100
+    },
+    {
+      "key": "wireless_charge_w",
+      "label_ja": "ワイヤレス出力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "mobile_battery"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus"
+      ],
+      "count": 1,
+      "min": 15,
+      "max": 15
+    },
+    {
+      "key": "ac_rated_output_w",
+      "label_ja": "AC定格出力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 1500,
+      "max": 1500
+    },
+    {
+      "key": "audio_output_w",
+      "label_ja": "オーディオ出力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 3,
+      "min": 5,
+      "max": 15
+    },
+    {
+      "key": "battery_capacity_wh",
+      "label_ja": "バッテリー容量",
+      "unit": "Wh",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 1024,
+      "max": 2048
+    },
+    {
+      "key": "battery_capacity_mah",
+      "label_ja": "バッテリー容量",
+      "unit": "mAh",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_speaker",
+        "security_camera"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "eufy_eufycam_c37"
+      ],
+      "count": 2,
+      "min": 4800,
+      "max": 6700
+    },
+    {
+      "key": "storage_gb",
+      "label_ja": "内蔵ストレージ",
+      "unit": "GB",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1,
+      "min": 64,
+      "max": 64
+    },
+    {
+      "key": "port_count",
+      "label_ja": "ポート数",
+      "unit": "ports",
+      "type": "number",
+      "applies_to_categories": [
+        "pokemon_collab_charger",
+        "portable_power_station",
+        "power_strip",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_solix_s2000",
+        "anker_usb_charger_70w_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 9,
+      "min": 3,
+      "max": 10
+    },
+    {
+      "key": "ports_detail",
+      "label_ja": "ポート構成",
+      "type": "text",
+      "applies_to_categories": [
+        "pokemon_collab_charger",
+        "pokemon_collab_travel_adapter",
+        "portable_power_station",
+        "power_strip",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_solix_s2000",
+        "anker_usb_charger_70w_pikachu",
+        "anker_travel_adapter_pikachu",
+        "anker_usb_c_hub_10in1_dual_display",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "count": 8
+    },
+    {
+      "key": "min_charge_time_min",
+      "label_ja": "最短充電時間(超急速)",
+      "unit": "min",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 54,
+      "max": 108
+    },
+    {
+      "key": "battery_cycle_life",
+      "label_ja": "バッテリーセル寿命",
+      "unit": "cycles",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 4000,
+      "max": 6000
+    },
+    {
+      "key": "electronics_lifespan_h",
+      "label_ja": "電子部品寿命",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3,
+      "min": 50000,
+      "max": 50000
+    },
+    {
+      "key": "charge_time_min",
+      "label_ja": "充電時間",
+      "unit": "min",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4,
+      "min": 210,
+      "max": 260
+    },
+    {
+      "key": "noise_cancelling",
+      "label_ja": "ノイズキャンセリング",
+      "type": "enum",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4
+    },
+    {
+      "key": "mic_count",
+      "label_ja": "マイク数",
+      "unit": "mics",
+      "type": "number",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4,
+      "min": 4,
+      "max": 8
+    },
+    {
+      "key": "codecs",
+      "label_ja": "対応コーデック",
+      "type": "list",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "portable_speaker",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 11
+    },
+    {
+      "key": "hires_audio",
+      "label_ja": "ハイレゾ音源再生対応",
+      "type": "boolean",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 7
+    },
+    {
+      "key": "spatial_audio",
+      "label_ja": "3Dオーディオ",
+      "type": "enum",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4
+    },
+    {
+      "key": "driver",
+      "label_ja": "ドライバー",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 8
+    },
+    {
+      "key": "bluetooth",
+      "label_ja": "通信方式",
+      "type": "enum",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "portable_speaker",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 10
+    },
+    {
+      "key": "control",
+      "label_ja": "操作方法",
+      "type": "enum",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 8
+    },
+    {
+      "key": "multipoint",
+      "label_ja": "マルチポイント接続",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 7
+    },
+    {
+      "key": "ambient_sound",
+      "label_ja": "外音取り込み",
+      "type": "boolean",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4
+    },
+    {
+      "key": "display",
+      "label_ja": "ディスプレイ搭載",
+      "type": "boolean",
+      "applies_to_categories": [
+        "true_wireless_earbuds",
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "anker_usb_c_hub_10in1_dual_display",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 6
+    },
+    {
+      "key": "ai_voice_recorder",
+      "label_ja": "AIボイスレコーダー機能",
+      "type": "boolean",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4
+    },
+    {
+      "key": "quick_charge",
+      "label_ja": "短時間充電",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 7
+    },
+    {
+      "key": "frequency_range",
+      "label_ja": "周波数帯域",
+      "type": "text",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 3
+    },
+    {
+      "key": "bassup",
+      "label_ja": "BassUpテクノロジー",
+      "type": "enum",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2"
+      ],
+      "count": 2
+    },
+    {
+      "key": "equalizer",
+      "label_ja": "イコライザー機能",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 3
+    },
+    {
+      "key": "call_noise_reduction",
+      "label_ja": "通話ノイズリダクション",
+      "type": "enum",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 5
+    },
+    {
+      "key": "two_in_one_mode",
+      "label_ja": "2-in-1モード",
+      "type": "boolean",
+      "applies_to_categories": [
+        "open_ear_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro"
+      ],
+      "count": 1
+    },
+    {
+      "key": "dual_pairing",
+      "label_ja": "2台同時ペアリング",
+      "type": "boolean",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 3
+    },
+    {
+      "key": "power_bank_function",
+      "label_ja": "モバイルバッテリー機能",
+      "type": "boolean",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i"
+      ],
+      "count": 1
+    },
+    {
+      "key": "playtime_anc_on_h",
+      "label_ja": "再生時間(ANC ON,本体)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4,
+      "min": 6.5,
+      "max": 8
+    },
+    {
+      "key": "playtime_anc_off_h",
+      "label_ja": "再生時間(ANC OFF,本体)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4,
+      "min": 10,
+      "max": 12
+    },
+    {
+      "key": "playtime_case_anc_on_h",
+      "label_ja": "再生時間(ANC ON,ケース込み)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4,
+      "min": 28,
+      "max": 32
+    },
+    {
+      "key": "playtime_case_anc_off_h",
+      "label_ja": "再生時間(ANC OFF,ケース込み)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "count": 4,
+      "min": 40,
+      "max": 50
+    },
+    {
+      "key": "playtime_h",
+      "label_ja": "再生時間(本体)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_c50i_pokemon",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 3,
+      "min": 7,
+      "max": 10
+    },
+    {
+      "key": "playtime_case_h",
+      "label_ja": "再生時間(ケース込み)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_c50i_pokemon",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 4,
+      "min": 28,
+      "max": 42
+    },
+    {
+      "key": "playtime_normal_h",
+      "label_ja": "再生時間(通常)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 3,
+      "min": 20,
+      "max": 24
+    },
+    {
+      "key": "playtime_eco_h",
+      "label_ja": "再生時間(エコモード)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_speaker"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i"
+      ],
+      "count": 1,
+      "min": 40,
+      "max": 40
+    },
+    {
+      "key": "recording_time_h",
+      "label_ja": "連続録音時間",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1,
+      "min": 8,
+      "max": 8
+    },
+    {
+      "key": "water_resistance",
+      "label_ja": "防塵・防水規格",
+      "type": "enum",
+      "applies_to_categories": [
+        "open_ear_earbuds",
+        "pokemon_collab_earbuds",
+        "portable_speaker",
+        "security_camera",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "eufy_eufycam_c37",
+        "soundcore_c50i_pokemon",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "count": 12
+    },
+    {
+      "key": "colors",
+      "label_ja": "カラー",
+      "type": "list",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "open_ear_earbuds",
+        "portable_speaker",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "soundcore_work_64gb"
+      ],
+      "count": 5
+    },
+    {
+      "key": "color_count",
+      "label_ja": "カラー数",
+      "unit": "colors",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "open_ear_earbuds",
+        "portable_speaker",
+        "true_wireless_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_aerofit_2_pro",
+        "soundcore_boom_go_3i",
+        "soundcore_work_64gb"
+      ],
+      "count": 5,
+      "min": 2,
+      "max": 4
+    },
+    {
+      "key": "suction_pa",
+      "label_ja": "吸引力(最大)",
+      "unit": "Pa",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4,
+      "min": 4000,
+      "max": 30000
+    },
+    {
+      "key": "mop_type",
+      "label_ja": "モップタイプ",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "navigation",
+      "label_ja": "ナビゲーションシステム",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2"
+      ],
+      "count": 1
+    },
+    {
+      "key": "obstacle_avoidance",
+      "label_ja": "障害物回避",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2"
+      ],
+      "count": 1
+    },
+    {
+      "key": "matter_support",
+      "label_ja": "Matter対応",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "cleaning_time_min",
+      "label_ja": "掃除時間",
+      "unit": "min",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4,
+      "min": 120,
+      "max": 260
+    },
+    {
+      "key": "mop_lift_mm",
+      "label_ja": "モップリフト",
+      "unit": "mm",
+      "type": "number",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28"
+      ],
+      "count": 3,
+      "min": 10.5,
+      "max": 28.0
+    },
+    {
+      "key": "auto_dust_collection",
+      "label_ja": "自動ゴミ収集",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "auto_detergent",
+      "label_ja": "洗剤の自動投入",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "extendable_side_brush",
+      "label_ja": "伸縮サイドブラシ",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "ozone_water_sanitizing",
+      "label_ja": "オゾン水による除菌",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "anti_tangle",
+      "label_ja": "毛がらみ除去",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "count": 4
+    },
+    {
+      "key": "mop_auto_wash_dry",
+      "label_ja": "モップ自動洗浄乾燥",
+      "type": "text",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28"
+      ],
+      "count": 3
+    },
+    {
+      "key": "mop_wash_while_running",
+      "label_ja": "走行中のモップ洗浄",
+      "type": "boolean",
+      "applies_to_categories": [
+        "robot_vacuum"
+      ],
+      "products_with_value": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28"
+      ],
+      "count": 3
+    },
+    {
+      "key": "camera_resolution",
+      "label_ja": "カメラ画質",
+      "type": "enum",
+      "applies_to_categories": [
+        "security_camera"
+      ],
+      "products_with_value": [
+        "eufy_eufycam_c37"
+      ],
+      "count": 1
+    },
+    {
+      "key": "field_of_view_deg",
+      "label_ja": "視野角",
+      "unit": "deg",
+      "type": "number",
+      "applies_to_categories": [
+        "security_camera"
+      ],
+      "products_with_value": [
+        "eufy_eufycam_c37"
+      ],
+      "count": 1,
+      "min": 127,
+      "max": 127
+    },
+    {
+      "key": "pan_tilt",
+      "label_ja": "パンチルト",
+      "type": "text",
+      "applies_to_categories": [
+        "security_camera"
+      ],
+      "products_with_value": [
+        "eufy_eufycam_c37"
+      ],
+      "count": 1
+    },
+    {
+      "key": "solar_panel",
+      "label_ja": "ソーラーパネル搭載",
+      "type": "boolean",
+      "applies_to_categories": [
+        "security_camera"
+      ],
+      "products_with_value": [
+        "eufy_eufycam_c37"
+      ],
+      "count": 1
+    },
+    {
+      "key": "storage_media",
+      "label_ja": "記憶媒体",
+      "type": "text",
+      "applies_to_categories": [
+        "security_camera"
+      ],
+      "products_with_value": [
+        "eufy_eufycam_c37"
+      ],
+      "count": 1
+    },
+    {
+      "key": "supported_os",
+      "label_ja": "対応OS",
+      "type": "list",
+      "applies_to_categories": [
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 2
+    },
+    {
+      "key": "bluetooth_range_m",
+      "label_ja": "Bluetooth最大接続距離",
+      "unit": "m",
+      "type": "number",
+      "applies_to_categories": [
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 2,
+      "min": 80,
+      "max": 80
+    },
+    {
+      "key": "alarm_volume_db",
+      "label_ja": "アラーム音量",
+      "unit": "dB",
+      "type": "number",
+      "applies_to_categories": [
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 2,
+      "min": 80,
+      "max": 80
+    },
+    {
+      "key": "battery_life",
+      "label_ja": "バッテリー寿命",
+      "type": "text",
+      "applies_to_categories": [
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 2
+    },
+    {
+      "key": "charging",
+      "label_ja": "充電方式",
+      "type": "enum",
+      "applies_to_categories": [
+        "portable_speaker",
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "soundcore_boom_go_3i",
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 3
+    },
+    {
+      "key": "wireless_charging",
+      "label_ja": "ワイヤレス充電対応",
+      "type": "boolean",
+      "applies_to_categories": [
+        "mobile_battery",
+        "tracker_card"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "count": 3
+    },
+    {
+      "key": "ai_model",
+      "label_ja": "AIモデル",
+      "type": "enum",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1
+    },
+    {
+      "key": "multilingual",
+      "label_ja": "多言語対応",
+      "type": "text",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1
+    },
+    {
+      "key": "ai_features",
+      "label_ja": "AI機能",
+      "type": "list",
+      "applies_to_categories": [
+        "ai_voice_recorder",
+        "open_ear_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_work_64gb",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "count": 4
+    },
+    {
+      "key": "battery_chemistry",
+      "label_ja": "電池種別",
+      "type": "enum",
+      "applies_to_categories": [
+        "mobile_battery",
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "anker_solix_s2000"
+      ],
+      "count": 2
+    },
+    {
+      "key": "lfp_battery",
+      "label_ja": "リン酸鉄リチウムイオン電池搭載",
+      "type": "boolean",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3
+    },
+    {
+      "key": "technologies",
+      "label_ja": "搭載テクノロジー",
+      "type": "list",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3
+    },
+    {
+      "key": "expansion_battery",
+      "label_ja": "拡張バッテリー対応",
+      "type": "boolean",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3
+    },
+    {
+      "key": "app_support",
+      "label_ja": "アプリ対応",
+      "type": "boolean",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "count": 3
+    },
+    {
+      "key": "clamp_mount",
+      "label_ja": "クランプ式",
+      "type": "boolean",
+      "applies_to_categories": [
+        "power_strip"
+      ],
+      "products_with_value": [
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "count": 3
+    },
+    {
+      "key": "ac_input_rating",
+      "label_ja": "AC定格電圧・電流",
+      "type": "text",
+      "applies_to_categories": [
+        "power_strip"
+      ],
+      "products_with_value": [
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "count": 3
+    },
+    {
+      "key": "flame_retardant_standard",
+      "label_ja": "難燃性規格",
+      "type": "enum",
+      "applies_to_categories": [
+        "gadget_pouch"
+      ],
+      "products_with_value": [
+        "anker_style_pouch"
+      ],
+      "count": 1
+    },
+    {
+      "key": "ear_hook_adjustment",
+      "label_ja": "イヤーフック角度調整",
+      "type": "text",
+      "applies_to_categories": [
+        "open_ear_earbuds"
+      ],
+      "products_with_value": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_aerofit_2"
+      ],
+      "count": 2
+    },
+    {
+      "key": "video_output",
+      "label_ja": "映像出力",
+      "type": "text",
+      "applies_to_categories": [
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_usb_c_hub_10in1_dual_display"
+      ],
+      "count": 2
+    },
+    {
+      "key": "max_refresh_rate_hz",
+      "label_ja": "最大リフレッシュレート",
+      "unit": "Hz",
+      "type": "number",
+      "applies_to_categories": [
+        "usb_c_hub"
+      ],
+      "products_with_value": [
+        "anker_nano_usb_c_hub_10in1_240hz_display"
+      ],
+      "count": 1,
+      "min": 240,
+      "max": 240
+    },
+    {
+      "key": "standby_days",
+      "label_ja": "スタンバイ可能時間(マイク本体)",
+      "unit": "days",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1,
+      "min": 10,
+      "max": 10
+    },
+    {
+      "key": "recording_time_case_h",
+      "label_ja": "連続録音時間(ケース込み)",
+      "unit": "h",
+      "type": "number",
+      "applies_to_categories": [
+        "ai_voice_recorder"
+      ],
+      "products_with_value": [
+        "soundcore_work_64gb"
+      ],
+      "count": 1,
+      "min": 32,
+      "max": 32
+    },
+    {
+      "key": "input",
+      "label_ja": "入力",
+      "type": "text",
+      "applies_to_categories": [
+        "mobile_battery",
+        "pokemon_collab_charger",
+        "pokemon_collab_travel_adapter"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus",
+        "anker_usb_charger_70w_pikachu",
+        "anker_travel_adapter_pikachu"
+      ],
+      "count": 3
+    },
+    {
+      "key": "output",
+      "label_ja": "出力",
+      "type": "text",
+      "applies_to_categories": [
+        "mobile_battery"
+      ],
+      "products_with_value": [
+        "anker_nano_power_bank_maggo_plus"
+      ],
+      "count": 1
+    },
+    {
+      "key": "country_coverage",
+      "label_ja": "対応国・地域",
+      "type": "text",
+      "applies_to_categories": [
+        "pokemon_collab_travel_adapter"
+      ],
+      "products_with_value": [
+        "anker_travel_adapter_pikachu"
+      ],
+      "count": 1
+    },
+    {
+      "key": "single_port_max_w",
+      "label_ja": "単ポート最大出力",
+      "unit": "W",
+      "type": "number",
+      "applies_to_categories": [
+        "pokemon_collab_travel_adapter"
+      ],
+      "products_with_value": [
+        "anker_travel_adapter_pikachu"
+      ],
+      "count": 1,
+      "min": 20,
+      "max": 20
+    },
+    {
+      "key": "normal_charge_time_min",
+      "label_ja": "充電時間(通常)",
+      "unit": "min",
+      "type": "number",
+      "applies_to_categories": [
+        "portable_power_station"
+      ],
+      "products_with_value": [
+        "anker_solix_s2000"
+      ],
+      "count": 1,
+      "min": 132,
+      "max": 132
+    }
+  ],
+  "categories": [
+    {
+      "key": "gadget_pouch",
+      "label_ja": "ガジェットポーチ",
+      "product_ids": [
+        "anker_style_pouch"
+      ],
+      "new_product_ids": [
+        "anker_style_pouch"
+      ]
+    },
+    {
+      "key": "mobile_battery",
+      "label_ja": "モバイルバッテリー",
+      "product_ids": [
+        "anker_nano_power_bank_maggo_plus"
+      ],
+      "new_product_ids": [
+        "anker_nano_power_bank_maggo_plus"
+      ]
+    },
+    {
+      "key": "power_strip",
+      "label_ja": "電源タップ",
+      "product_ids": [
+        "anker_nano_power_strip_10in1_70w_clamp",
+        "anker_nano_charging_station_7in1_100w",
+        "anker_nano_charging_station_6in1_67w"
+      ],
+      "new_product_ids": [
+        "anker_nano_power_strip_10in1_70w_clamp"
+      ]
+    },
+    {
+      "key": "usb_c_hub",
+      "label_ja": "USB-Cハブ",
+      "product_ids": [
+        "anker_nano_usb_c_hub_10in1_240hz_display",
+        "anker_usb_c_hub_10in1_dual_display"
+      ],
+      "new_product_ids": [
+        "anker_nano_usb_c_hub_10in1_240hz_display"
+      ]
+    },
+    {
+      "key": "portable_power_station",
+      "label_ja": "ポータブル電源",
+      "product_ids": [
+        "anker_solix_s2000",
+        "anker_solix_c2000_gen2",
+        "anker_solix_c1000_gen2"
+      ],
+      "new_product_ids": [
+        "anker_solix_s2000"
+      ]
+    },
+    {
+      "key": "true_wireless_earbuds",
+      "label_ja": "完全ワイヤレスイヤホン",
+      "product_ids": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro",
+        "soundcore_liberty_4_pro",
+        "soundcore_liberty_5"
+      ],
+      "new_product_ids": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro"
+      ]
+    },
+    {
+      "key": "open_ear_earbuds",
+      "label_ja": "オープンイヤー型ワイヤレスイヤホン",
+      "product_ids": [
+        "soundcore_aerofit_2_pro",
+        "soundcore_aerofit_2_ai_assistant",
+        "soundcore_aerofit_2"
+      ],
+      "new_product_ids": [
+        "soundcore_aerofit_2_pro"
+      ]
+    },
+    {
+      "key": "portable_speaker",
+      "label_ja": "ポータブルスピーカー",
+      "product_ids": [
+        "soundcore_boom_go_3i",
+        "anker_soundcore_2",
+        "soundcore_select_4_go"
+      ],
+      "new_product_ids": [
+        "soundcore_boom_go_3i"
+      ]
+    },
+    {
+      "key": "ai_voice_recorder",
+      "label_ja": "AIボイスレコーダー",
+      "product_ids": [
+        "soundcore_work_64gb"
+      ],
+      "new_product_ids": [
+        "soundcore_work_64gb"
+      ]
+    },
+    {
+      "key": "robot_vacuum",
+      "label_ja": "ロボット掃除機",
+      "product_ids": [
+        "eufy_robot_vacuum_omni_s2",
+        "eufy_robot_vacuum_omni_e25",
+        "eufy_robot_vacuum_omni_c28",
+        "eufy_robot_vacuum_auto_empty_c10"
+      ],
+      "new_product_ids": [
+        "eufy_robot_vacuum_omni_s2"
+      ]
+    },
+    {
+      "key": "security_camera",
+      "label_ja": "セキュリティカメラ",
+      "product_ids": [
+        "eufy_eufycam_c37"
+      ],
+      "new_product_ids": [
+        "eufy_eufycam_c37"
+      ]
+    },
+    {
+      "key": "tracker_card",
+      "label_ja": "紛失防止トラッカー",
+      "product_ids": [
+        "eufy_smarttrack_card_e40",
+        "eufy_smarttrack_card"
+      ],
+      "new_product_ids": [
+        "eufy_smarttrack_card_e40"
+      ]
+    },
+    {
+      "key": "pokemon_collab_earbuds",
+      "label_ja": "ポケモンコラボ イヤホン",
+      "product_ids": [
+        "soundcore_c50i_pokemon"
+      ],
+      "new_product_ids": [
+        "soundcore_c50i_pokemon"
+      ]
+    },
+    {
+      "key": "pokemon_collab_charger",
+      "label_ja": "ポケモンコラボ 充電器",
+      "product_ids": [
+        "anker_usb_charger_70w_pikachu"
+      ],
+      "new_product_ids": [
+        "anker_usb_charger_70w_pikachu"
+      ]
+    },
+    {
+      "key": "pokemon_collab_travel_adapter",
+      "label_ja": "ポケモンコラボ トラベルアダプタ",
+      "product_ids": [
+        "anker_travel_adapter_pikachu"
+      ],
+      "new_product_ids": [
+        "anker_travel_adapter_pikachu"
+      ]
+    },
+    {
+      "key": "pokemon_collab_travel_pouch",
+      "label_ja": "ポケモンコラボ トラベルポーチ",
+      "product_ids": [
+        "anker_travel_pouch_pikachu"
+      ],
+      "new_product_ids": [
+        "anker_travel_pouch_pikachu"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "type": "vs_predecessor",
+      "new_id": "anker_nano_usb_c_hub_10in1_240hz_display",
+      "prev_id": "anker_usb_c_hub_10in1_dual_display",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "display",
+        "max_output_w",
+        "port_count",
+        "ports_detail",
+        "size_mm",
+        "total_output_w",
+        "video_output",
+        "weight_g"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "anker_nano_power_strip_10in1_70w_clamp",
+      "prev_id": "anker_nano_charging_station_7in1_100w",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ac_input_rating",
+        "clamp_mount",
+        "max_output_w",
+        "port_count",
+        "ports_detail",
+        "size_mm",
+        "total_output_w",
+        "weight_g"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "anker_solix_s2000",
+      "prev_id": "anker_solix_c2000_gen2",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ac_rated_output_w",
+        "app_support",
+        "battery_capacity_wh",
+        "battery_cycle_life",
+        "electronics_lifespan_h",
+        "expansion_battery",
+        "lfp_battery",
+        "min_charge_time_min",
+        "port_count",
+        "size_cm",
+        "technologies",
+        "weight_kg"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "soundcore_liberty_5_pro",
+      "prev_id": "soundcore_liberty_4_pro",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ai_voice_recorder",
+        "ambient_sound",
+        "bluetooth",
+        "codecs",
+        "control",
+        "display",
+        "driver",
+        "hires_audio",
+        "mic_count",
+        "multipoint",
+        "noise_cancelling",
+        "playtime_anc_off_h",
+        "playtime_anc_on_h",
+        "playtime_case_anc_off_h",
+        "playtime_case_anc_on_h",
+        "quick_charge",
+        "size_cm",
+        "spatial_audio",
+        "water_resistance",
+        "weight_case_g",
+        "weight_earbud_g"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "soundcore_aerofit_2_pro",
+      "prev_id": "soundcore_aerofit_2_ai_assistant",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ai_features",
+        "bluetooth",
+        "call_noise_reduction",
+        "codecs",
+        "control",
+        "driver",
+        "equalizer",
+        "hires_audio",
+        "multipoint",
+        "playtime_case_h",
+        "quick_charge",
+        "size_cm",
+        "water_resistance",
+        "weight_case_g",
+        "weight_earbud_g"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "soundcore_boom_go_3i",
+      "prev_id": "anker_soundcore_2",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "audio_output_w",
+        "bassup",
+        "bluetooth",
+        "codecs",
+        "dual_pairing",
+        "frequency_range",
+        "playtime_normal_h",
+        "size_mm",
+        "water_resistance",
+        "weight_g"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "eufy_robot_vacuum_omni_s2",
+      "prev_id": "eufy_robot_vacuum_omni_e25",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "anti_tangle",
+        "auto_detergent",
+        "auto_dust_collection",
+        "charge_time_min",
+        "cleaning_time_min",
+        "extendable_side_brush",
+        "matter_support",
+        "mop_auto_wash_dry",
+        "mop_lift_mm",
+        "mop_type",
+        "mop_wash_while_running",
+        "ozone_water_sanitizing",
+        "size_robot_cm",
+        "size_station_cm",
+        "suction_pa",
+        "weight_robot_kg",
+        "weight_station_kg"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "eufy_smarttrack_card_e40",
+      "prev_id": "eufy_smarttrack_card",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "alarm_volume_db",
+        "battery_life",
+        "bluetooth_range_m",
+        "charging",
+        "size_mm",
+        "supported_os",
+        "weight_g",
+        "wireless_charging"
+      ]
+    },
+    {
+      "type": "vs_predecessor",
+      "new_id": "soundcore_liberty_5_pro_max",
+      "prev_id": "soundcore_liberty_4_pro",
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ai_voice_recorder",
+        "ambient_sound",
+        "bluetooth",
+        "codecs",
+        "control",
+        "display",
+        "driver",
+        "hires_audio",
+        "mic_count",
+        "multipoint",
+        "noise_cancelling",
+        "playtime_anc_off_h",
+        "playtime_anc_on_h",
+        "playtime_case_anc_off_h",
+        "playtime_case_anc_on_h",
+        "quick_charge",
+        "size_cm",
+        "spatial_audio",
+        "water_resistance",
+        "weight_case_g",
+        "weight_earbud_g"
+      ]
+    },
+    {
+      "type": "same_category",
+      "category": "true_wireless_earbuds",
+      "label_ja": "完全ワイヤレスイヤホン",
+      "product_ids": [
+        "soundcore_liberty_5_pro_max",
+        "soundcore_liberty_5_pro"
+      ],
+      "shared_axes": [
+        "price_jpy_tax_in",
+        "ai_voice_recorder",
+        "ambient_sound",
+        "bluetooth",
+        "codecs",
+        "color_count",
+        "colors",
+        "control",
+        "display",
+        "driver",
+        "hires_audio",
+        "mic_count",
+        "multipoint",
+        "noise_cancelling",
+        "playtime_anc_off_h",
+        "playtime_anc_on_h",
+        "playtime_case_anc_off_h",
+        "playtime_case_anc_on_h",
+        "quick_charge",
+        "size_cm",
+        "spatial_audio",
+        "water_resistance",
+        "weight_case_g",
+        "weight_earbud_g"
+      ]
+    }
+  ]
+}

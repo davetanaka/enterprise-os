@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Enterprise OS - AI-Powered Knowledge Management",
-    "description": "Using GitHub Enterprise as a version-controlled knowledge operating system for the AI era."
+    "title": "Enterprise OS — Own Your Company's Intelligence as an Entity Graph",
+    "description": "You can outsource execution. What you must own is meaning, structure, relationships — your ontology. Enterprise OS is how you cultivate and govern your company's intelligence as an Entity Graph in the AI era."
   },
   "nav": {
     "problem": "The Problem",
@@ -13,7 +13,7 @@
   "hero": {
     "title": "Enterprise OS",
     "subtitle": "Why Your Enterprise AI Is Failing",
-    "tagline": "It's Not the AI You're Missing. It's the OS.",
+    "tagline": "It's Not the AI You're Missing. Own Your Intelligence.",
     "author": "Dave Tanaka / 田中訓",
     "date": "February 2026",
     "disclaimer": "This presentation reflects my personal views and does not represent the views of any employer or organization.",
@@ -35,7 +35,7 @@
   "problem": {
     "sectionTitle": "The Problem No One Talks About",
     "quote": "I once asked an internal assistant to summarize a document I had permission to access. It declined due to policy restrictions. That moment revealed something important: when AI appears \"blocked,\" the issue is often not the model — it's the way knowledge is governed and structured.",
-    "insight": "The AI wasn't broken. It was underfed — missing the structure it needed.",
+    "insight": "The AI wasn't broken. It was underfed — missing the structure of meaning, the ontology, it needed.",
     "stat1": {
       "value": "88%",
       "label": "of organizations now use AI in at least one function",
@@ -54,9 +54,9 @@
   },
   "rootCause": {
     "sectionTitle": "The Root Cause",
-    "subtitle": "It's not the AI. It's the way knowledge is stored and connected beneath the surface.",
+    "subtitle": "It's not the AI. It's that meaning — entities and their relationships — is fragmented across systems, and no one owns the company's ontology.",
     "systems": ["ERP / SAP", "CRM / Salesforce", "Email Servers", "SharePoint", "Internal Wiki", "Product DBs", "Legacy Systems", "Personal PCs", "Shared Drives", "Translation Mgmt", "Web CMS", "HR Systems"],
-    "insight": "Many disconnected systems • Limited version history • Fragmented search • AI struggles to make sense across them"
+    "insight": "Many disconnected systems • No shared map of meaning (ontology) • Fragmented search • AI can't connect meaning across them"
   },
   "postIt": {
     "sectionTitle": "What Post-it® Notes Teach Us About Designing AI-Ready Organizations",
@@ -76,22 +76,43 @@
   },
   "concept": {
     "sectionTitle": "The Idea of an Enterprise OS",
-    "subtitle": "An Enterprise OS is a shared knowledge layer that keeps track of changes and connects people, systems, and AI.",
+    "subtitle": "An Enterprise OS lets you own your company's intelligence as an Entity Graph — and cultivate and govern it over time.",
     "layer1": {
-      "title": "Infrastructure",
-      "description": "Git as the versioned file system for corporate knowledge. Every change tracked. Every version recoverable. Every department connected."
+      "title": "Entity Graph (the meaning you own)",
+      "description": "Your company's intelligence — what things mean and how they connect — owned as a graph of entities and relationships. This is what finally makes enterprise AI actually work."
     },
     "layer2": {
-      "title": "Intelligence",
-      "description": "AI reads from a unified, structured knowledge base. Context. History. Relationships. Your enterprise AI can finally make sense of them."
+      "title": "Cultivate & Govern (GitHub as the box)",
+      "description": "The graph is alive. You grow and version it in a box (GitHub). commit = how meaning changes, branch = regional/department variants, pull request = reviewed changes to meaning, fork = extend to partners. The box is replaceable; the graph inside is the point."
     },
     "layer3": {
       "title": "Human Flourishing",
-      "description": "When AI handles routine knowledge work, every employee gets time back. Not for more work — for different work. Creative, human, innovative work."
+      "description": "When AI handles the routine, time comes back — not for more work, but for human work: connecting more deeply with customers, partners, colleagues, and family."
     }
   },
+  "proof": {
+    "sectionTitle": "Not theory. Already built.",
+    "subtitle": "Inspired by Anker's product conference, I built two Entity Graphs — \"the conference itself\" and \"the mobile-battery market.\" Same method, different subjects. This is what owning the meaning — who it's for, how things connect — looks like, instead of specs or meeting minutes.",
+    "cards": [
+      {
+        "tag": "Event / People",
+        "title": "Anker Power Conference 2026",
+        "desc": "Products, tech, speakers and booths turned into a walkable map of nodes and relationships. Owning the meaning of an event.",
+        "cta": "Explore",
+        "href": "/demos/anker/"
+      },
+      {
+        "tag": "Products / Market",
+        "title": "Mobile Battery Market Entity Graph",
+        "desc": "30 products × user segments × contexts × regulations. \"Light up everything for business travelers\" — one move in a graph. With a meaning lens, AND filters and guided tours.",
+        "cta": "Explore",
+        "href": "/demos/powerbank/"
+      }
+    ],
+    "note": "Both are live Entity Graphs that run entirely in the browser."
+  },
   "gitFoundation": {
-    "sectionTitle": "A Practical Foundation: Git-Based Knowledge Infrastructure",
+    "sectionTitle": "A Practical Foundation: Git as the Box that Cultivates Meaning",
     "subtitle": "Software engineering has dealt with this problem for decades. The opportunity now is to apply it company-wide.",
     "whatIsGit": {
       "title": "What is Git?",
@@ -105,9 +126,9 @@
     },
     "proposal": {
       "title": "The Proposal",
-      "subtitle": "Use Git to manage company knowledge — not just code.",
+      "subtitle": "Use Git as the box to cultivate and govern the meaning you own — not just code.",
       "points": [
-        "Beyond code → manage company knowledge",
+        "Beyond code → cultivate and govern the meaning you own",
         "AI reads from Git → enterprise AI gains history, context, and traceability",
         "Existing approval workflows integrate naturally",
         "Decades of innovation, searchable & connected"
@@ -122,11 +143,11 @@
   },
   "howItWorks": {
     "sectionTitle": "How It Works",
-    "subtitle": "GitHub Enterprise as the central hub — connecting data, AI, and business outputs",
+    "subtitle": "Your owned Entity Graph at the center — GitHub is the box that cultivates and governs it, connecting data, AI, and outputs.",
     "inputs": ["ERP / Finance", "Product Systems", "Knowledge Base", "CRM / Sales Data"],
     "center": {
       "title": "GitHub Enterprise",
-      "subtitle": "Enterprise File System",
+      "subtitle": "The box for your Entity Graph",
       "features": ["Version control", "Access control", "Full audit trail"]
     },
     "aiLayer": "AI Layer — Search • Generate • Translate",
@@ -331,11 +352,17 @@
   },
   "whyNow": {
     "sectionTitle": "Why Now?",
+    "foil": {
+      "quote": "This loop becomes the new IP of the firm.",
+      "attribution": "— Satya Nadella, CEO of Microsoft (June 2026)",
+      "context": "Even Microsoft's CEO now argues the edge lies in the learning loop, not the model — that you should be able to swap a 'generalist' model without losing the 'company veteran' expertise built into your system.",
+      "counter": "But he draws the line at owning the loop — the process — and value there ultimately routes back to Microsoft's platform. We draw it one level deeper: what you must own is the thing the loop runs on — your meaning, your ontology."
+    },
     "reasons": [
       {
         "number": "01",
         "title": "The AI Gap Is Widening",
-        "description": "88% of organizations use AI, but only 39% see measurable impact (McKinsey, Nov 2025). The difference isn't the AI — it's the data foundation. Companies that fix this first will pull ahead for good."
+        "description": "88% of organizations use AI, but only 39% see measurable impact (McKinsey, Nov 2025). The difference isn't the AI — it's the foundation of meaning you own. Companies that own this first will pull ahead for good."
       },
       {
         "number": "02",
@@ -395,6 +422,17 @@
           "McKinsey Global Institute — 1.8 hrs/day spent searching; strong KM boosts productivity 20–25%, cuts search time 35%",
           "Bloomfire / Harvard Business Review (2025) — 21% searching, 14% recreating; 3.9 hrs/week saved",
           "IDC — $31.5B/year lost by Fortune 500 due to poor knowledge sharing"
+        ]
+      },
+      "ontologyOwnership": {
+        "title": "Owning Meaning: Ontology & Knowledge Graphs",
+        "items": [
+          "Google, \"Introducing the Knowledge Graph: things, not strings\" (2012) — the official shift from strings to entities",
+          "Palantir Foundry Docs, Ontology Overview — defines the ontology as the operational layer that represents the decisions in an enterprise",
+          "Zhamak Dehghani, Data Mesh — domain ownership of data (martinfowler.com 2019 / O'Reilly 2022)",
+          "Andrew Jones, Driving Data Quality with Data Contracts (Packt 2023) — data contracts that make meaning and responsibility boundaries explicit",
+          "MIT Sloan Management Review (2023) — AI models alone confer no sustainable advantage; the edge lies in proprietary meaning structures",
+          "dbt Labs / AtScale — the semantic layer: a single shared meaning for metrics across the company"
         ]
       },
       "githubEnterprise": {
@@ -466,8 +504,8 @@
   },
   "footer": {
     "title": "Enterprise OS",
-    "tagline": "It's Not the AI You're Missing. It's the OS.",
-    "subtitle": "Version-controlled knowledge. AI-powered intelligence. Human flourishing.",
+    "tagline": "It's Not the AI You're Missing. Own Your Intelligence.",
+    "subtitle": "Own your company's intelligence as an Entity Graph. Cultivate and govern it in the box (GitHub). AI — for human flourishing.",
     "links": {
       "youtube": "YouTube",
       "note": "note.com",

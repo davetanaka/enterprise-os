@@ -81,6 +81,38 @@ Automation & Innovation Manager at a global manufacturing company
 
 🔀 **Pull Requests** — Improvements and translations welcome
 
+## Tech Stack / 技術スタック
+
+### Website
+
+| Category | Technology | Version |
+|----------|------------|---------|
+| **Framework** | [Next.js](https://nextjs.org/) (App Router) | 16.1.6 |
+| **React** | React | 19.2.3 |
+| **Language** | TypeScript | 5.x |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | 4.x |
+| **Animation** | [Framer Motion](https://www.framer.com/motion/) | 12.x |
+| **i18n** | [next-intl](https://next-intl.dev/) | 4.8.3 |
+| **Hosting** | [Cloudflare Pages](https://pages.cloudflare.com/) | — |
+| **Domain** | [enterprise-os.davetanaka.net](https://enterprise-os.davetanaka.net) | — |
+
+### Build & Export
+
+- **Static Export**: `output: "export"` で完全静的サイト生成
+- **SEO**: sitemap.xml, robots.txt, JSON-LD 構造化データ
+- **Dark/Light Mode**: CSS変数 + localStorage
+
+### AI Crawler Support
+
+robots.txt で以下のAIクローラーを明示的に許可:
+- GPTBot (OpenAI)
+- PerplexityBot
+- ClaudeBot (Anthropic)
+- Google-Extended (Gemini)
+- Bytespider (ByteDance)
+
+---
+
 ## License / ライセンス
 
 This work is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).

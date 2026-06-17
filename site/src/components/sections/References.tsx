@@ -11,6 +11,7 @@ export default function References() {
   const categories = [
     { key: "aiAdoption", color: "text-accent-red" },
     { key: "knowledgeManagement", color: "text-accent-gold" },
+    { key: "ontologyOwnership", color: "text-accent-pink" },
     { key: "githubEnterprise", color: "text-accent-teal" },
     { key: "innovationCulture", color: "text-accent-blue" },
   ];
@@ -41,10 +42,8 @@ export default function References() {
                   {t(`categories.${cat.key}.title`)}
                 </h3>
                 <ul className="space-y-2">
-                  {[0, 1, 2].map((i) => {
-                    const item = t.raw(`categories.${cat.key}.items`)?.[i];
-                    if (!item) return null;
-                    return (
+                  {(t.raw(`categories.${cat.key}.items`) as string[]).map(
+                    (item, i) => (
                       <li
                         key={i}
                         className="text-text-secondary text-sm flex items-start gap-2"
@@ -52,8 +51,8 @@ export default function References() {
                         <span className="text-text-muted">•</span>
                         <span>{item}</span>
                       </li>
-                    );
-                  })}
+                    )
+                  )}
                 </ul>
               </div>
             ))}

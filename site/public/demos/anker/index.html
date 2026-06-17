@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anker Power Conference 2026 Event Graph</title>
+<link rel="icon" href="data:,">  <!-- favicon の 404 抑制 -->
+<!-- リンク共有時のプレビュー（OGP） -->
+<meta property="og:title" content="Anker Power Conference 2026 Event Graph">
+<meta property="og:description" content="Dave Tanaka が個人で制作した非公式の体験マップ。Anker Power Conference 2026 の新製品と戦略を、歩いて確かめる。">
+<meta property="og:image" content="https://anker-2026-conference-graph.pages.dev/assets/booth_image/IMG_2871.jpg">
+<meta property="og:url" content="https://anker-2026-conference-graph.pages.dev/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script src="i18n-en.js"></script>  <!-- EN 翻訳辞書（window.EN）。EN/JP トグル用 -->
+<style>
+  :root {
+    --bg: #ece8e0;
+    --stage: #e7e3da;
+    --panel: #ffffff;
+    --panel-2: #f7f6f3;
+    --line: #dedbd4;
+    --text: #191817;
+    --muted: #68645d;
+    --soft: #3d3935;
+    --red: #d71920;
+    --deep-red: #8d171c;
+    --gold: #b88a1d;
+    --cyan: #238e91;
+    --green: #4f8b5c;
+    --violet: #7e5aa7;
+    --steel: #6f7882;
+    --blue: #326fa8;
+    --rose: #b85270;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --right-width: 390px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: "Noto Sans CJK JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  button, input { font: inherit; }
+
+  #app {
+    height: 100vh;
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6px var(--right-width);
+    grid-template-rows: 1fr;
+  }
+  /* 右パネル幅のスプリッタ（ドラッグで自由幅 / ダブルクリックで広⇄標準） */
+  #splitter {
+    cursor: col-resize;
+    background: var(--line);
+    position: relative;
+    transition: background .15s var(--ease);
+    user-select: none;
+  }
+  #splitter:hover, #splitter.dragging { background: var(--red); }
+  #splitter::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px; height: 36px; background: var(--muted);
+    border-radius: 2px; opacity: .45;
+  }
+
+  #left, #right {
+    background: var(--panel);
+    border-color: var(--line);
+    overflow: auto;
+  }
+  /* 左パネルはグラフ上にフローティング＝ノード描画部を全幅に使い、下に余白を作らない */
+  #left {
+    position: absolute;
+    z-index: 6;
+    top: 14px;
+    left: 14px;
+    width: 296px;
+    max-height: calc(100vh - 28px);
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(33, 31, 28, .14);
+  }
+  #right { border-left: 1px solid var(--line); padding: 18px; }
+  #stage {
+    position: relative;
+    min-width: 0;
+    background:
+      linear-gradient(90deg, rgba(60,54,46,.05) 0 1px, transparent 1px 100%),
+      linear-gradient(0deg, rgba(60,54,46,.05) 0 1px, transparent 1px 100%),
+      var(--stage);
+    background-size: 46px 46px;
+  }
+  #network { position: absolute; inset: 0; }
+
+  .brand-mark {
+    display: grid;
+    gap: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .brand-mark::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 3px;
+    width: 5px;
+    height: 52px;
+    background: var(--red);
+  }
+  .eyebrow {
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.18;
+    font-weight: 900;
+  }
+  .subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  /* 制作者クレジット＝Anker 非公式・個人制作であることを冒頭で明示（広報合意の条件） */
+  .made-by {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+
+  .section { margin-top: 18px; }
+  .section h2 {
+    margin: 0 0 10px;
+    color: var(--soft);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  /* テーマ別ツアー＝操作ゾーン。囲み＋クリーム背景＋影で「ここを触る」と分かるように */
+  .control-panel {
+    margin-top: 18px;
+    padding: 14px 14px 16px;
+    border: 1px solid #d8cba8;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f3e9cf, #e9dab8);
+    box-shadow: 0 4px 16px rgba(40, 34, 26, .1);
+  }
+  .control-panel h2 { color: var(--red); display: flex; align-items: center; gap: 6px; }
+  .control-panel h2::before { content: "▶"; font-size: 11px; }
+  .control-panel .tour-card { margin-top: 12px; }
+  /* 軸レンズ＝もう一つの操作ゾーン。色違いの箱で「2つのチェック方法」を同格に示す */
+  .lens-panel {
+    margin-top: 14px;
+    padding: 14px 14px 16px;
+    border: 1px solid #bcd0d2;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #e8f0f0, #d9e7e7);
+    box-shadow: 0 4px 16px rgba(26, 34, 34, .1);
+  }
+  .lens-panel h2 { color: #1f7a7d; display: flex; align-items: center; gap: 6px; }
+  .lens-panel h2::before { content: "▶"; font-size: 11px; }
+  .credit { margin-top: 14px; text-align: center; font-size: 11px; color: var(--muted); letter-spacing: .02em; }
+  /* モバイル ボトムシートUI 用パーツ（デスクトップでは非表示） */
+  .sheet-grip, .sheet-close, .mobile-axis-toggle, .mobile-tap-hint { display: none; }
+  /* 軸レンズ */
+  .lens-cap { margin: 8px 0 3px; font-size: 11px; font-weight: 800; color: var(--muted); }
+  .lens-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lens-btn { border: 1px solid var(--line); background: var(--panel-2); color: var(--soft); border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 800; cursor: pointer; transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease); }
+  .lens-btn:hover { border-color: #bdb8ae; background: #fff; }
+  .lens-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .lens-btn.lens-off { color: var(--muted); margin-top: 8px; }
+  .lens-hint { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+  .mode-grid { display: grid; gap: 8px; }
+  .mode-btn, .icon-btn {
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .mode-btn {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+  }
+  .mode-btn:hover, .icon-btn:hover { transform: translateY(-1px); border-color: #bdb8ae; background: #fff; }
+  .mode-btn.active { background: #fff5f5; border-color: var(--red); box-shadow: inset 4px 0 0 var(--red); }
+  .mode-btn i { width: 20px; height: 20px; color: var(--red); }
+  .mode-title { display: block; font-size: 13px; font-weight: 800; }
+  .mode-copy { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+  .tour-card {
+    border: 1px solid var(--line);
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .tour-card .time {
+    color: var(--red);
+    font-weight: 900;
+    font-size: 12px;
+  }
+  .tour-card .title {
+    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+  .tour-card .copy {
+    margin-top: 7px;
+    color: var(--soft);
+    font-size: 12px;
+    line-height: 1.65;
+  }
+  .tour-actions {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .step-counter {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .icon-btn {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .icon-btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
+  .icon-btn i { width: 16px; height: 16px; }
+  /* 自動再生トグル＝ツアーを数秒ごとに自動送り（GIF/動画収録用）。再生中は赤系で「動いている」と分かる */
+  .autoplay-btn { width: 100%; margin-top: 8px; }
+  .autoplay-btn.playing { background: #fff5f5; border-color: var(--red); color: var(--red); }
+  .autoplay-btn.playing i { color: var(--red); }
+
+  #progressTrack {
+    height: 8px;
+    background: #ebe8e2;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  #progressBar {
+    width: 0%;
+    height: 100%;
+    background: var(--red);
+    transition: width .45s var(--ease);
+  }
+
+  .legend { display: grid; gap: 7px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .stage-top {
+    position: absolute;
+    z-index: 3;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .pill {
+    pointer-events: auto;
+    border: 1px solid rgba(242, 240, 232, .16);
+    background: rgba(255, 255, 255, .9);
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .pill b { color: var(--text); }
+
+  .floating-help {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    width: min(430px, calc(100% - 36px));
+    z-index: 4;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, .94);
+    border-radius: 8px;
+    padding: 14px;
+    transition: opacity .35s var(--ease), transform .35s var(--ease);
+  }
+  .floating-help.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
+  .floating-help h3 { margin: 0; font-size: 15px; }
+  .floating-help p { margin: 8px 0 0; color: var(--soft); font-size: 12px; line-height: 1.7; }
+
+  /* 凡例＝ノード描画部の右上にフローティング（左コントロールパネルを広く使うため移設） */
+  .stage-legend {
+    position: absolute;
+    z-index: 3;
+    top: 56px;
+    right: 14px;
+    display: grid;
+    gap: 6px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, .92);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .stage-legend .legend-row { color: var(--soft); }
+
+  .detail-head { display: grid; gap: 8px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 3px 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--soft);
+    background: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .badge.fact { color: #17351d; background: #dbeadf; border-color: #bfddc8; }
+  .badge.take { color: #4b3306; background: #f6e7bf; border-color: #e8cc7c; }
+  .badge.check { color: #fff; background: var(--red); border-color: var(--red); }
+  #detailTitle { margin: 10px 0 0; font-size: 22px; line-height: 1.25; }
+  #detailLead { margin: 8px 0 0; color: var(--soft); font-size: 13px; line-height: 1.75; }
+
+  .image-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));  /* 標準幅では1列＝1枚ずつ大きく */
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .image-strip img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: contain; /* トリミングしない＝画角が変わっても欠けない */
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #f2f0eb;
+    padding: 4px;
+  }
+  /* 画像1枚しか無い時はさらに大きく見せる */
+  .image-strip:has(img:only-child) img { max-height: 480px; }
+  .image-strip img { cursor: zoom-in; transition: transform .15s var(--ease); }
+  .image-strip img:hover { transform: scale(1.02); }
+  /* クリックで拡大するライトボックス */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px; background: rgba(24, 22, 19, .9);
+    cursor: zoom-out;
+    animation: lightboxIn .18s var(--ease);
+  }
+  .lightbox.hide { display: none; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.5); background: #fff; }
+  .lightbox-close {
+    position: absolute; top: 18px; right: 24px;
+    width: 44px; height: 44px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,.16); color: #fff;
+    font-size: 26px; line-height: 1; cursor: pointer;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,.3); }
+  @keyframes lightboxIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .detail-block {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .detail-block h3 {
+    margin: 0 0 8px;
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 900;
+  }
+  .detail-block ul { margin: 0; padding-left: 18px; }
+  .detail-block li, .detail-block p { color: var(--soft); font-size: 12px; line-height: 1.7; }
+  .detail-block p strong { font-weight: 800; color: var(--text); background: linear-gradient(transparent 60%, #f3e3b8 60%); }
+  .detail-block li + li { margin-top: 4px; }
+  .detail-block:empty { display: none; }
+  /* スペック表（縦リスト） */
+  .spec-list { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; }
+  .spec-list dt { color: var(--muted); font-size: 11px; line-height: 1.5; white-space: nowrap; }
+  .spec-list dd { margin: 0; color: var(--text); font-size: 11px; line-height: 1.5; text-align: right; }
+  /* 比較表（vs 前モデル / 同カテゴリ） */
+  .compare-sub { color: var(--muted); font-size: 11px; margin: 0 0 8px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  .compare-table th, .compare-table td { border: 1px solid var(--line); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .compare-table thead th { background: var(--panel-2); color: var(--muted); font-weight: 800; }
+  .compare-table thead th.cur { color: var(--red); }
+  .compare-table th[scope="row"] { color: var(--muted); font-weight: 700; white-space: nowrap; }
+  .compare-table td { color: var(--text); }
+  .compare-table td.same { color: var(--muted); font-style: italic; }
+  .compare-table td.win { color: var(--red); font-weight: 800; background: #fbe4e5; }
+  .cmp-tag { display: inline-block; padding: 0 5px; border-radius: 999px; font-size: 9px; font-weight: 800; line-height: 1.5; vertical-align: middle; }
+  .cmp-tag.new { background: var(--red); color: #fff; }
+  .cmp-tag.old { background: #d8d2c6; color: var(--soft); }
+  .links { display: grid; gap: 6px; }
+  .link-node {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    gap: 9px;
+    align-items: center;
+    min-height: 26px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-2);
+    color: var(--text);
+    padding: 8px 11px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+    font-weight: 600;
+    transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+  }
+  .link-node:hover { border-color: var(--red); background: #fff; color: var(--red); }
+  .link-node:active { transform: translateY(1px); }
+
+  @media (max-width: 1100px) {
+    #app { grid-template-columns: 1fr; }
+    #splitter { display: none; }
+    #right {
+      position: fixed;
+      right: 10px;
+      top: 86px;
+      bottom: 10px;
+      width: min(390px, calc(100vw - 20px));
+      z-index: 10;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+  }
+  @media (max-width: 760px) {
+    /* モバイル＝グラフ全面＋ボトムシート。グラフが常に主役、ノードタップで詳細が下からスライドアップ */
+    html, body { height: 100%; overflow: hidden; }
+    #app { display: block; height: 100vh; }
+    #splitter, .stage-top, .stage-legend { display: none; }
+
+    /* グラフを全面に */
+    #stage { position: fixed; inset: 0; height: 100vh; }
+    .floating-help { left: 12px; right: 12px; bottom: 124px; width: auto; }
+
+    /* タイトルは上部の極小バーに（非公式表記＝広報合意の条件を画面でも維持） */
+    #left .brand-mark { position: fixed; top: 0; left: 0; right: 0; padding: 6px 12px; gap: 0;
+      background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line); border-radius: 0; z-index: 15; }
+    #left .brand-mark::before { display: none; }
+    #left .eyebrow, #left .subtitle { display: none; }
+    #left .brand-mark h1 { font-size: 14px; line-height: 1.2; }
+    #left .made-by { display: block; font-size: 9px; margin-top: 1px; }
+
+    /* 左パネル本体＝下部ツアーバーに変形（見出し/解説/モード/軸レンズ/クレジットは隠す） */
+    #left { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: none; height: auto;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); border: none; border-top: 1px solid var(--line);
+      border-radius: 0; box-shadow: 0 -6px 20px rgba(33,31,28,.14); background: rgba(255,255,255,.97); z-index: 20; }
+    #left .mode-grid, #left .credit,
+    #left .control-panel h2, #left .tour-card .time, #left .tour-card .title,
+    #left .tour-card .copy, #left #progressTrack { display: none; }
+    #left .control-panel, #left .tour-card { margin: 0; padding: 0; border: none; background: none; box-shadow: none; }
+    .tour-actions { margin-top: 0; }
+    .autoplay-btn { margin-top: 6px; }
+    .icon-btn { height: 44px; }
+    /* 「タップで探索」常時ヒント＝自由探索の気づきを補強（floating-helpは初回操作で消えるため） */
+    .mobile-tap-hint { display: block; margin: 0 0 6px; font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; }
+    .mobile-tap-hint b { color: var(--red); }
+
+    /* 詳細＝下部ボトムシート（初期は隠れ、.sheet-open で出る） */
+    #right { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; height: 82vh; max-height: 82vh;
+      transform: translateY(105%); transition: transform .32s var(--ease);
+      border-radius: 16px 16px 0 0; border: 1px solid var(--line); border-bottom: none;
+      box-shadow: 0 -12px 40px rgba(33,31,28,.28); z-index: 30; overflow: auto; padding: 0 16px 24px;
+      -webkit-overflow-scrolling: touch; }
+    #right.sheet-open { transform: translateY(0); }
+    .sheet-grip { display: block; width: 40px; height: 4px; border-radius: 999px; background: #cfc9bf; margin: 10px auto 2px; }
+    .sheet-close { display: flex; position: sticky; top: 6px; margin-left: auto; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--soft);
+      font-size: 22px; line-height: 1; cursor: pointer; z-index: 2; }
+    /* 軸レンズ＝上部トグルで上からドロップ */
+    .mobile-axis-toggle { display: inline-flex; position: fixed; top: 7px; right: 10px; z-index: 26;
+      height: 30px; padding: 0 12px; align-items: center; gap: 5px; border: 1px solid var(--line);
+      border-radius: 999px; background: #fff; color: var(--soft); font-size: 12px; font-weight: 800; cursor: pointer; }
+    .mobile-axis-toggle.active { background: var(--cyan); color: #fff; border-color: var(--cyan); }
+    #left .lens-panel { display: block; position: fixed; top: 44px; left: 10px; right: 10px; z-index: 25; margin: 0;
+      max-height: 64vh; overflow: auto; transform: translateY(-130%); transition: transform .3s var(--ease);
+      box-shadow: 0 12px 32px rgba(26,34,34,.22); }
+    #left .lens-panel.lens-open { transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="left">
+    <div class="brand-mark">
+      <div class="eyebrow">INTERACTIVE Event AI Graph</div>
+      <h1>Anker Power Conference 2026</h1>
+      <p class="subtitle">Ankerの製品発表会を体験できる。まずは下の「進む」ボタンで新製品をチェック！</p>
+      <p class="made-by">Created by Dave Tanaka（Anker 非公式・個人制作）</p>
+    </div>
+
+    <section class="section control-panel">
+      <h2>テーマ別ツアー</h2>
+      <div class="mode-grid">
+        <button class="mode-btn active" data-mode="products"><i data-lucide="boxes"></i><span><span class="mode-title">最新新製品をチェック！</span><span class="mode-copy">新製品を順番にピックアップ</span></span></button>
+        <button class="mode-btn" data-mode="brand"><i data-lucide="orbit"></i><span><span class="mode-title">One Anker</span><span class="mode-copy">ブランド統合関連のトピックをチェック</span></span></button>
+        <button class="mode-btn" data-mode="safetyContext"><i data-lucide="shield-check"></i><span><span class="mode-title">Safety Context</span><span class="mode-copy">注力している安全関連のトピック</span></span></button>
+        <button class="mode-btn" data-mode="free"><i data-lucide="mouse-pointer-2"></i><span><span class="mode-title">自由探索</span><span class="mode-copy">好きなトピックをクリック</span></span></button>
+      </div>
+      <p class="mobile-tap-hint">💡 ノードをタップで詳細 ／ <b>◀ ▶</b> で順に巡回</p>
+      <div class="tour-card">
+        <div class="time" id="stepTime">00:03:34</div>
+        <div class="title" id="stepTitle">安全はセルだけではない</div>
+        <div class="copy" id="stepCopy">Ankerの安全思想から始めます。ここがNLB、スターフライヤー、Style Pouchまで伸びる起点です。</div>
+        <div id="progressTrack"><div id="progressBar"></div></div>
+        <div class="tour-actions">
+          <button class="icon-btn" id="prevStep"><i data-lucide="chevron-left"></i>戻る</button>
+          <span class="step-counter" id="stepCounter">1 / 9</span>
+          <button class="icon-btn primary" id="nextStep">進む<i data-lucide="chevron-right"></i></button>
+        </div>
+        <button class="icon-btn autoplay-btn" id="autoplayBtn"><i data-lucide="play"></i><span id="autoplayLabel">自動再生</span></button>
+      </div>
+    </section>
+
+    <section class="section lens-panel">
+      <h2>軸レンズ</h2>
+      <p class="lens-cap">テーマで見る（同じ実体が複数軸に現れる）</p>
+      <div class="lens-grid" id="themeLensGrid"></div>
+      <p class="lens-cap">製品カテゴリで見る</p>
+      <div class="lens-grid" id="catLensGrid"></div>
+      <button class="lens-btn lens-off" id="lensClear">解除</button>
+      <p class="lens-hint">ノードとエッジを軸で染め分けます。同じ発表を別の切り口で読み解けるのが Entity Graph の価値です。</p>
+    </section>
+
+    <div class="credit">© 2026 Dave Tanaka</div>
+  </aside>
+
+  <main id="stage">
+    <div id="network"></div>
+    <button class="mobile-axis-toggle" id="axisToggle" aria-label="軸レンズを開閉">⊕ 軸レンズ</button>
+    <div class="stage-top">
+      <div class="pill"><b id="modeLabel">5分ツアー</b> / <span id="modeHint">発表会を順番に歩きます</span></div>
+      <button class="pill" id="langToggle" type="button" style="cursor:pointer;font-weight:800;letter-spacing:.04em;" aria-label="Switch language">EN</button>
+    </div>
+    <div class="stage-legend" id="stageLegend">
+      <div class="legend-row"><span class="dot" style="background:#c99b3c"></span>中心仮説 / 中心ノード</div>
+      <div class="legend-row"><span class="dot" style="background:#8d171c"></span>ブランド / 企業戦略</div>
+      <div class="legend-row"><span class="dot" style="background:#238e91"></span>技術 / AI / 安全</div>
+      <div class="legend-row"><span class="dot" style="background:#4f8b5c"></span>製品</div>
+      <div class="legend-row"><span class="dot" style="background:#7e5aa7"></span>協業 / 外部環境</div>
+      <div class="legend-row"><span class="dot" style="background:#326fa8"></span>外部文脈 / 社会情勢</div>
+      <div class="legend-row"><span class="dot" style="background:#6f7882"></span>人物</div>
+    </div>
+    <div class="floating-help" id="help">
+      <h3>まず「進む」を押してください</h3>
+      <p>Graph全体をいきなり読ませず、発表会の順番で1つずつ焦点を移します。慣れたら「製品から探索」や「自由探索」へ。</p>
+    </div>
+  </main>
+
+  <div id="splitter" title="ドラッグで右パネル幅を調整・ダブルクリックで広/標準切替"></div>
+
+  <aside id="right">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <button class="sheet-close" id="sheetClose" aria-label="閉じる">×</button>
+    <div class="detail-head">
+      <div class="badge-row" id="badges"></div>
+      <h2 id="detailTitle">Anker発表会を歩く</h2>
+      <p id="detailLead">左の「進む」からツアーを始めると、安全、AI、協業、ブランド統合が1本の流れとして見えてきます。</p>
+    </div>
+    <div class="image-strip" id="images"></div>
+    <div class="detail-block" id="factsBlock"></div>
+    <div class="detail-block" id="specBlock"></div>
+    <div class="detail-block" id="comparisonBlock"></div>
+    <div class="detail-block" id="takeBlock"></div>
+    <div class="detail-block" id="sourcesBlock"></div>
+    <div class="detail-block" id="linksBlock"></div>
+  </aside>
+</div>
+
+<div id="lightbox" class="lightbox hide">
+  <img id="lightboxImg" alt="">
+  <button id="lightboxClose" class="lightbox-close" aria-label="閉じる">×</button>
+</div>
+
+<script type="module">
+// 配布資料から抽出した製品スペック＋横断スペックマスターをロード（ローカルサーバー経由）
+let PRODUCTS = {};
+let SPEC_MASTER = { axes:[], comparisons:[], categories:[] };
+let DAVE_COMMENTS = {};
+try {
+  const [pj, sm] = await Promise.all([
+    fetch('data/products.json').then(r => r.json()),
+    fetch('data/spec_master.json').then(r => r.json())
+  ]);
+  PRODUCTS = Object.fromEntries((pj.products || []).map(p => [p.id, p]));
+  SPEC_MASTER = sm;
+} catch (e) {
+  console.warn('スペックデータの読込に失敗しました。specsなしで継続します。', e);
+}
+// Daveコメントは編集用に外部ファイル化。data/dave_comments.json の "comment" を直接編集→リロードで反映
+try {
+  const dc = await fetch('data/dave_comments.json').then(r => r.json());
+  DAVE_COMMENTS = Object.fromEntries((dc || []).map(c => [c.id, c.comment]));
+} catch (e) {
+  console.warn('dave_comments.json の読込に失敗。HTMLインラインのtakeを使用します。', e);
+}
+// スペック軸の定義をキーで引けるように
+const AXIS_BY_KEY = Object.fromEntries((SPEC_MASTER.axes || []).map(a => [a.key, a]));
+// 製品名からブランド接頭辞を落とした短縮名（ノード/比較表ヘッダ用）
+const shortName = (name) => (name || '').replace(/^(Anker|Soundcore|Eufy)\s+/, '');
+// spec_master 軸に無いキーの日本語ラベル補完
+const AXIS_LABEL_FALLBACK = {
+  playtime_openear_h:'再生時間(オープンイヤー)', playtime_innerear_h:'再生時間(インナーイヤー)',
+  size_case_mm:'サイズ(ケース)', mic:'マイク', standby_case_days:'スタンバイ(ケース込み)'
+};
+const axisLabel = (key) => (LANG === 'en' && window.EN && window.EN.axes && window.EN.axes[key]) || (AXIS_BY_KEY[key] && AXIS_BY_KEY[key].label_ja) || AXIS_LABEL_FALLBACK[key] || key;
+
+const colors = {
+  core: { bg: '#c99b3c', border: '#8a6614', font: '#ffffff' },
+  strategy: { bg: '#8d171c', border: '#5e0f13', font: '#ffffff' },
+  tech: { bg: '#238e91', border: '#176164', font: '#ffffff' },
+  product: { bg: '#4f8b5c', border: '#2f5b39', font: '#ffffff' },
+  partner: { bg: '#7e5aa7', border: '#513877', font: '#ffffff' },
+  person: { bg: '#6f7882', border: '#444d57', font: '#ffffff' },
+  external: { bg: '#326fa8', border: '#204c78', font: '#ffffff' },
+  message: { bg: '#b85270', border: '#783248', font: '#ffffff' },
+  gratitude: { bg: '#f1b45a', border: '#9a6a22', font: '#191817' },
+  group: { bg: '#cdbf9e', border: '#9a8c66', font: '#211f1c' }
+};
+
+const nodeRaw = [
+  { id:'core', label:'One Anker\nひとつのAnkerへ', type:'core', size:52, source:'Daveの読み', lead:'発表会全体を貫くテーマ。Ankerが今年示した姿勢を、3本の柱に束ねる中心。', facts:['公式事実ではなく、CEO 猿渡さんの「One Anker」「Innovation Faster」を起点にしたDaveの構造化。','3本の柱＝① 真の安全は製品全体で ② 基盤は自社・最適は外から ③ カテゴリ拡張とブランド統合。'], take:'新製品の見本市じゃない。安全も内製も協業も、ぜんぶ One Anker という1枚の土台に載せにきた発表会だと思う。基盤は自分で握る、という意思表示。', images:['assets/booth_image/IMG_2871.jpg','assets/booth_image/IMG_2869.jpg','assets/本日の発表製品.jpg'] },
+  { id:'safety', label:'真の安全は\n製品全体で作る', type:'strategy', size:35, source:'発表要旨', time:'00:03:34', lead:'セル素材だけでなく、セル品質、筐体、BMS、製造/検証体制まで含めて安全を作る。', facts:['「セルが良ければ安全、私たちはそう考えていません」という趣旨。','セル、筐体、ソフトウェア制御を含む製品全体で安全性を実現。'], take:'スペック自慢じゃなく、姿勢から入ってきた。ここが今年の発表会の入り口で、たぶん全部の伏線。' },
+  { id:'nlb', label:'Neo Lithium-ion Battery\nという答え', type:'tech', size:34, source:'公式資料', time:'00:10:07', lead:'NLBはAnkerの新しい安全セル。代替素材ではなく、リチウムイオンを多角的に進化させる選択。', facts:['不純物排除、劣化しにくい安定性、釘刺し試験100%通過。','135度熱暴走試験、耐圧試験などもクリア。'], take:'半固体だ、ナトリウムだと各社が騒ぐ中で、あえて飛びつかない。この、枯れた道を磨くという判断こそがメッセージ。', images:['assets/A1113N11_TD01_pc.png','assets/Anker Power Bank (MagGo, Plus)  A1113 (1).png'] },
+  { id:'maggo', label:'Nano Power Bank\n(MagGo, Plus)', type:'product', size:30, source:'公式資料', time:'00:16:06', lead:'NLBを搭載する象徴的なモバイルバッテリー。安全、利便性、コンパクトさを同時に打ち出す。', facts:['販売予定価格 11,990円。','2026年5月27日予約開始、2026年夏頃一般販売。','USB-C最大30W、ワイヤレス最大15W。'], take:'安全の話を抽象で終わらせず、まず手に取れる1台に落とした。理屈より実物、の順番がうまい。', images:['assets/Add/Nano Power Bank (MagGo, Plus).png','assets/A11113N11_Neo-Lithium-ion_pc.png'] },
+  { id:'starflyer', label:'スターフライヤー\n協業', type:'partner', size:29, source:'公式資料', time:'00:17:36', lead:'航空法改正による機内モバイルバッテリー使用制限を背景に、機内ケーブル貸出や啓発で協業。', facts:['2026年6月1日よりスターフライヤー全路線・全便でAnker USBケーブル貸出開始予定。','客室乗務員/地上乗務員への安全な使用に関するナレッジ共有・研修サポートも計画。'], take:'機内規制という逆風を、自分の安全思想を証明する舞台に変えた。守りを攻めに反転させた一手。', images:['assets/スターフライヤーとの連携実施.png'] },
+  { id:'thus', label:'Thus\nCiM型AIチップ', type:'tech', size:34, source:'公式資料', time:'00:28:00', lead:'Soundcore Liberty 5 Proシリーズに搭載される独自開発AIチップ。小型のまま演算性能を高める。', facts:['Compute-in-Memory型AIチップ。','イヤホン内の演算処理性能を大きく高める。','Ultra Noise Cancelling 4.0を支える技術。'], take:'電池が NLB なら、音は Thus。チップまで自前＝体験を他社に握らせない、という同じ筋。', images:['assets/Thus.jpg','assets/Thus芯片-调整 2.jpg'] },
+  { id:'libertymax', label:'Liberty 5\nPro Max', type:'product', size:30, source:'公式資料', time:'00:31:00', lead:'AIボイスレコーダー搭載の次世代ビジネスイヤホン。Azure AIとの接続点にもなる。', facts:['販売予定価格 36,990円。','AIボイスレコーダー、大型ディスプレイ操作、8マイク+骨伝導センサー。','SBC/AAC/LDAC対応。'], take:'もう、イヤホンじゃない。耳につける AI 仕事道具として出してきた。オーディオの皮をかぶった別カテゴリ。', images:['assets/Soundcore Liberty 5 Pro Max _ D1204.png','assets/IMG_2892.jpg','assets/booth_image/展示会場風景.jpg'] },
+  { id:'libertypro', label:'Liberty 5\nPro', type:'product', size:28, source:'公式資料', lead:'Pro Maxからディスプレイを省いた実用版。中身の音質・AI機能はProシリーズの本命。', take:'ディスプレイが要らない人には、こっちが実質の本命。中身はほぼ Pro Max。差を見て選べばいい。', images:['assets/IMG_2889.jpg'] },
+  { id:'work', label:'Soundcore Work\n(64GB)', type:'product', size:25, source:'公式資料', time:'00:37:21', lead:'世界最小・最軽量級のAIボイスレコーダー。Liberty 5 Pro Maxと並ぶAzure AI活用製品。', facts:['販売予定価格 26,990円。','2026年6月上旬販売開始予定。','150以上の言語に対応、AI文字起こし・要約。'], take:'声をそのまま知識に変える小さな箱。今年の、AIをどう使うかの話と一番ハマる1台。', images:['assets/Add/nker Soundcore Work Black.avif','assets/Add/nker Soundcore Work White.avif'] },
+  { id:'azure', label:'Microsoft\nAzure AI', type:'partner', size:34, source:'発表要旨', time:'00:35:35', lead:'単一モデルに依存せず、OpenAI、Anthropic、特化型モデルまで統合的に活用できるAI基盤。', facts:['Liberty 5 Pro MaxとSoundcore WorkのAIボイスレコーダー機能にAzure AIを活用。','Azure AI Speechは150以上の言語/アクセントに対応。'], take:'AIエンジンは Microsoft から買い、体験は自分で組む。僕が3Mでやってる「エンジンを買い、システムを作る」と同じ構造。' },
+  { id:'pokemon', label:'Pokemon\n30周年コラボ', type:'partner', size:27, source:'公式資料', time:'00:40:14', lead:'機能だけでなく、日常のワクワクをガジェットに足す市場拡張の発表。', facts:['USB急速充電器、トラベルアダプタ、C50i、トラベルポーチの4製品。','コンセプトは「ポケモンと一緒なら日常も旅も冒険に変わる」。'], take:'戦略の本筋とは別レイヤー。でも、日常の入口を広げる動きとしては馬鹿にできない。', images:['assets/ポケモン.png'] },
+  { id:'omnis2', label:'Eufy Omni S2', type:'product', size:29, source:'公式資料', time:'00:43:04', lead:'Anker史上最高峰のロボット掃除機。スマートホーム領域のフラッグシップ。', facts:['販売予定価格 249,900円。','最大30,000Pa、CleanMind AI、3D MatrixEye 2.0、HydroJet 2.0。'], take:'充電、音、ときて、ついに家の中まで。Anker の守備範囲がここまで来たか、という1台。', images:['assets/S2_F2.8ver.png','assets/IMG_2877.jpg'] },
+  { id:'solix', label:'Anker Solix\nS2000', type:'product', size:29, source:'公式資料', time:'00:48:19', lead:'災害対策・家庭バックアップを狙うポータブル電源。', facts:['販売予定価格 179,900円。','2026年9月23日発売予定。','角柱型リン酸鉄リチウムイオン電池、6,000回以上、OptiSave搭載。'], take:'手のひらのバッテリーから、家の電力インフラへ。安全の話が、暮らしのライフラインまでスケールした。', images:['assets/IMG_2873.jpg'] },
+  { id:'oneanker', label:'カテゴリ拡張と\nブランド統合', type:'strategy', size:38, source:'Web確認 + 発表要旨', time:'00:54:36', lead:'柱③。カテゴリを広げ、Soundcore/EufyをAnkerへ集約する。今回最大級の企業戦略発表。', facts:['新コーポレートミッション Innovation Faster。','新ロゴ刷新。','Soundcore/EufyはAnkerへ集約する方針。'], take:'製品だけじゃなく、ブランドそのものを1つに畳みにきた。広げてから束ねる、その束ねるフェーズ。', images:['assets/新ブランド名.jpg'] },
+  { id:'theme_foundation', label:'基盤は自社、\n最適は外から', type:'strategy', size:34, source:'Daveの読み', lead:'柱②。バッテリー(NLB)やAIチップ(Thus)は自社で内製し、足りないAIや専門領域はMicrosoft・スターフライヤーと協業する。基盤は握り、エンジンは最適を選ぶ。', facts:['内製: NLB(セル)、Thus(AIチップ)。','協業: Microsoft Azure(多モデルAI)、スターフライヤー(機内安全)。'], take:'全部自前でも全部外注でもない。握る所（電池・チップ）と任せる所（AI・協業）を分ける。ここが一番マネしにくい。' },
+  { id:'soundcore', label:'Soundcore\n→ Anker', type:'strategy', size:25, source:'Web確認', lead:'オーディオ&ビジュアルブランドとして育ったSoundcoreをAnkerへ統合。', facts:['LibertyシリーズやAIボイスレコーダー文脈を持つ。'], take:'どうせ「Ankerのイヤホン」と呼ばれてた。なら看板も合わせる、という素直な判断。' },
+  { id:'eufy', label:'Eufy\n→ Anker', type:'strategy', size:25, source:'Web確認', lead:'スマートホームブランドEufyもAnkerへ集約する方針。', facts:['Omni S2、SmartTrack、eufyCamなどのカテゴリを持つ。'], take:'家の中の体験まで、Anker の名前で束ねにきた。' },
+  { id:'saruwatari', label:'アンカー・ジャパン\n猿渡 歩\n代表取締役CEO', type:'person', size:23, source:'公式資料', lead:'冒頭の安全思想と締めのブランド統合（One Anker・Innovation Faster）を語った中心人物。', facts:['「猿渡」の読みは「えんど あゆむ」。ASRが「遠藤」と誤認識した原因。','公開版では猿渡 歩で統一。'], take:'冒頭の安全と締めの One Anker、両端を自分で語った。数字の凄さより、重みを伝えにきたのが印象的。', images:['assets/IMG_2867.jpg'] },
+  { id:'motoi', label:'スターフライヤー\n本居 慎二\n営業本部長', type:'person', size:21, source:'公式役員一覧', lead:'株式会社スターフライヤー 執行役員 営業本部長。機内モバイルバッテリー規制への対応として、Ankerとの協業（安全配慮ケーブル貸出・啓発・乗務員研修）を説明したゲスト登壇者。', take:'規制を、うちの便利じゃなく乗客の安全で語ったゲスト。Anker と組む必然が、そこにあった。', images:['assets/IMG_2856.jpg'] },
+  { id:'uchiyama', label:'日本マイクロソフト\n内山 拓\nAzure GTM本部長', type:'person', size:21, source:'日本Microsoft公式', lead:'日本マイクロソフト株式会社 業務執行役員 Azure GTM本部 本部長（セールスイネーブルメント＆オペレーションズ部門）。Liberty 5 Pro Max / Soundcore Work のAIにAzure AIが使われ、単一モデルに依存せず最適なAIモデルを選べる構造を説明したゲスト登壇者。', images:['assets/IMG_2860.jpg'] },
+  { id:'shibahara', label:'アンカー・ジャパン\n芝原 航\n事業戦略統括', type:'person', size:22, source:'公式インタビュー', lead:'アンカー・ジャパン 事業戦略統括。Soundcore Liberty 5 Pro / Pro Max、内製AIチップ Thus、AIボイスレコーダー機能を発表。', images:['assets/1779888367694.jpg'] },
+  { id:'kato', label:'アンカー・ジャパン\n加藤ひと彩\nマーケティング本部長', type:'person', size:22, source:'公式', lead:'アンカー・ジャパン 執行役員 マーケティング本部長。ポケモン30周年コラボ4製品、Eufy Omni S2、Anker Solix S2000を発表。', images:['assets/IMG_2863.jpg'] },
+  { id:'ida', label:'アンカー・ジャパン\n井田 真人\nCX本部長', type:'person', size:22, source:'公式', lead:'アンカー・ジャパン 執行役員 カスタマーエクスペリエンス本部長。NLB（ネオリチウムイオンバッテリー）、Nano Power Bank、Style Pouchを発表。', images:['assets/1779888367526.jpg'] },
+  { id:'batteryTrend', label:'モバイルバッテリー\n安全の社会課題化', type:'external', size:29, source:'公開Web', lead:'発煙・発火リスクは、ユーザー個人の注意だけでなく、航空、廃棄、メーカー責任を含む社会的テーマになっている。', facts:['Anker公式記事は、発火事故や航空ルール厳格化を背景にNLBを説明。','国土交通省資料も国内外の発煙・発火事例とリスク管理に触れている。'], take:'なぜ冒頭から安全を連呼したか。会場の外＝発火・規制・回収という空気を知ると、腑に落ちる。', sources:[['Anker Magazine: NLBとは','https://www.ankerjapan.com/blogs/magazine/what-is-nlb'], ['国土交通省 報道発表資料','https://www.mlit.go.jp/report/press/kouku10_hh_000310.html']] },
+  { id:'flightRule', label:'2026年4月24日\n機内新ルール', type:'external', size:29, source:'公式公開情報', lead:'2026年4月24日から、国内航空会社でモバイルバッテリーの機内持込み/使用に関する新ルールが適用された。', facts:['機内持込みのモバイルバッテリーは2個まで (160Wh以下)。','機内でモバイルバッテリー本体を充電しない。','機内でモバイルバッテリーから他の電子機器へ充電しない。'], take:'スターフライヤー 協業は思いつきのタイアップじゃない。この規制変更への、具体的な返事として見ると効く。', sources:[['国土交通省 報道発表資料','https://www.mlit.go.jp/report/press/kouku10_hh_000310.html'], ['e-Gov意見公募結果資料','https://public-comment.e-gov.go.jp/pcm/download?seqNo=0000313039']] },
+  { id:'recycle', label:'正しい廃棄\n回収と再資源化', type:'external', size:27, source:'公式公開情報', lead:'モバイルバッテリーは使用後の回収・再資源化まで安全に扱う必要がある。', facts:['製造/輸入事業者には資源有効利用促進法に基づく回収責務がある。','Ankerは使用済みAnker製品モバイルバッテリー/ポータブル電源の回収サービスを案内。'], take:'作る・使う・捨てる。安全の話を、最後の捨てるところまで伸ばせるのがこのノード。', sources:[['経済産業省/環境省 回収チラシ','https://www.meti.go.jp/policy/it_policy/kaden/mobilebattery_leaflets.pdf'], ['Anker 回収サービス','https://www.ankerjapan.com/pages/recycle']] },
+  { id:'recallTrust', label:'回収対応と\n信頼回復', type:'external', size:27, source:'公式公開情報 + Daveの読み', lead:'Ankerは一部モバイルバッテリーについて回収・交換受付を案内している。安全姿勢が問われる市場環境として扱う。', facts:['Anker公式サイトでモバイルバッテリー回収・交換受付フォームが公開されている。','2025年6月26日追加として、継続調査により対象範囲を拡大した旨の案内がある。'], take:'回収・交換のニュースもある市場。だからこそ安全を真正面から語る順番になった、と読んでいる。', sources:[['Anker 回収・交換受付フォーム','https://www.ankerjapan.com/pages/202409-support']] },
+];
+
+const edgesRaw = [
+  ['safety','core','柱'], ['nlb','safety','技術化'], ['maggo','nlb','搭載'], ['starflyer','safety','信頼化'],
+  ['thus','theme_foundation','内製'], ['libertymax','thus','搭載'], ['libertypro','thus','搭載'], ['libertypro','libertymax','兄弟モデル'], ['work','azure','AI基盤'], ['libertymax','azure','AI基盤'], ['azure','theme_foundation','協業AI'],
+  ['pokemon','oneanker','市場拡張'], ['omnis2','eufy','ライン'], ['omnis2','oneanker','カテゴリ拡張'], ['solix','oneanker','電力基盤'],
+  ['oneanker','core','柱'], ['theme_foundation','core','柱'], ['nlb','theme_foundation','内製セル'], ['starflyer','theme_foundation','協業'], ['soundcore','oneanker','年内集約'], ['eufy','oneanker','年内集約'], ['soundcore','libertymax','ライン'], ['eufy','omnis2','ライン'],
+  ['saruwatari','safety','発言'], ['saruwatari','oneanker','発表'], ['saruwatari','core','代表'],
+  ['shibahara','libertymax','発表'], ['shibahara','thus','発表'], ['shibahara','work','発表'],
+  ['kato','pokemon','発表'], ['kato','omnis2','発表'], ['kato','solix','発表'],
+  ['ida','nlb','発表'], ['ida','maggo','発表'],
+  ['motoi','starflyer','登壇'], ['uchiyama','azure','登壇'],
+  ['batteryTrend','safety','背景'], ['batteryTrend','nlb','公式解説'], ['flightRule','starflyer','背景'], ['flightRule','batteryTrend','規制'], ['recycle','safety','ライフサイクル'], ['recallTrust','safety','信頼']
+];
+
+const tours = {
+  brand: {
+    label:'One Anker',
+    hint:'ブランド統合関連のトピック',
+    sequence:[
+      ['oneanker','00:54:36','ブランド統合','Soundcore/EufyをAnkerへ集約する大きな発表。'],
+      ['soundcore','確認済み','Soundcore → Anker','オーディオ製品もAnkerへ戻る。'],
+      ['eufy','確認済み','Eufy → Anker','Smart HomeもAnkerへ戻る。'],
+      ['core','読み','ブランドも基盤化','カテゴリを広げたあと、入口をAnkerに戻す。']
+    ]
+  },
+  products: {
+    label:'最新新製品をチェック',
+    hint:'新製品を順番にピックアップ',
+    sequence:[
+      ['maggo','Power','Nano Power Bank (MagGo, Plus)','NLBを積んだ象徴的なモバイルバッテリー。安全を持ち歩く。'],
+      ['anker_style_pouch','Power','Anker Style Pouch','内側まで難燃素材のガジェットポーチ。安全思想を小物まで。'],
+      ['anker_nano_power_strip_10in1_70w_clamp','Power','Nano Power Strip (10-in-1, 70W)','クランプで机に固定する10ポート・70W。配線地獄への回答。'],
+      ['anker_nano_usb_c_hub_10in1_240hz_display','Power','Nano USB-C ハブ (10-in-1, 240Hz)','240Hz出力＋スマートディスプレイ付きの10-in-1ハブ。'],
+      ['solix','Power','Anker Solix S2000','手のひらの電池から、家庭の電力インフラへ。'],
+      ['libertymax','Audio','Liberty 5 Pro Max','AIボイスレコーダー搭載。耳につけるAI仕事道具。'],
+      ['libertypro','Audio','Liberty 5 Pro','ディスプレイ不要派の本命。中身はProそのもの。'],
+      ['work','AI','Soundcore Work (64GB)','声を知識に変える小型AIレコーダー。150言語対応。'],
+      ['soundcore_aerofit_2_pro','Audio','Soundcore AeroFit 2 Pro','オープン/インナー2wayの攻めたデザイン。'],
+      ['soundcore_boom_go_3i','Audio','Soundcore Boom Go 3i','LED演出と迫力の低音が売りの小型スピーカー。'],
+      ['omnis2','Smart Home','Eufy Omni S2','30,000Pa・CleanMind AIのフラッグシップ掃除機。'],
+      ['eufy_eufycam_c37','Smart Home','Eufy eufyCam C37','ソーラー駆動・360度のAIモーショントラッキングカメラ。'],
+      ['eufy_smarttrack_card_e40','Smart Home','Eufy SmartTrack Card E40','約1.7mmでワイヤレス充電対応の紛失防止タグ。'],
+      ['soundcore_c50i_pokemon','Collab','Soundcore C50i ピカチュウ/イーブイ','イヤーカフ型にポケモンを乗せた遊び枠。'],
+      ['anker_usb_charger_70w_pikachu','Collab','USB急速充電器 70W ピカチュウ','実用の70W充電器に、ピカチュウの遊び心。'],
+      ['anker_travel_adapter_pikachu','Collab','トラベルアダプタ ピカチュウ','旅先で必ず要る変換アダプタをポケモンで楽しく。'],
+      ['anker_travel_pouch_pikachu','Collab','トラベルポーチ ピカチュウ','小物まで世界観で揃う、旅の収納ポーチ。']
+    ]
+  },
+  safetyContext: {
+    label:'Safety Context',
+    hint:'注力している安全関連のトピック',
+    sequence:[
+      ['batteryTrend','社会文脈','安全が社会課題になった','モバイルバッテリーの安全は、航空、廃棄、メーカー責任まで広がっています。'],
+      ['flightRule','2026-04-24','機内ルール変更','スターフライヤー協業を、規制変更への具体的な応答として見る。'],
+      ['recycle','廃棄/回収','正しく捨てるまでが安全','モバイルバッテリーは使った後の回収・再資源化まで含めて安全です。'],
+      ['recallTrust','信頼','回収対応と信頼回復','安全姿勢が問われる市場環境の中で、NLB発表の意味を読む。'],
+      ['safety','発表会へ戻る','真の安全は製品全体で作る','外部文脈を見たあと、冒頭の安全メッセージへ戻ります。']
+    ]
+  },
+  free: { label:'自由探索', hint:'好きなトピックをクリック', sequence:[] }
+};
+
+let currentMode = 'products';
+let stepIndex = 0;
+let graphAnimationTimers = [];
+let graphAnimationRun = 0;
+let graphReady = false;
+
+// 既存ナラティブ上の製品ノード → products.json の製品id（specs/比較を紐づける）
+const PROD_MAP = {
+  maggo:'anker_nano_power_bank_maggo_plus',
+  libertymax:'soundcore_liberty_5_pro_max',
+  libertypro:'soundcore_liberty_5_pro',
+  work:'soundcore_work_64gb',
+  omnis2:'eufy_robot_vacuum_omni_s2',
+  solix:'anker_solix_s2000'
+};
+nodeRaw.forEach(n => {
+  const pid = PROD_MAP[n.id];
+  if (!pid || !PRODUCTS[pid]) return;
+  n.productId = pid;
+  // 手書きの lead/facts が無いノード（libertypro等）は公式 key_facts で補完
+  if (!n.facts) n.facts = PRODUCTS[pid].key_facts || [];
+  if (!n.lead) n.lead = (PRODUCTS[pid].key_facts || [])[0] || '';
+});
+
+// ①A:「その他の新製品」をカテゴリ別グループに束ねる（クリックで展開）。既存5製品以外の新製品を収容
+const GROUPS = [
+  { id:'grp_power',     label:'その他のPower製品',     anchor:'oneanker', members:['anker_style_pouch','anker_nano_power_strip_10in1_70w_clamp','anker_nano_usb_c_hub_10in1_240hz_display'] },
+  { id:'grp_audio',     label:'その他のAudio製品',     anchor:'soundcore', members:['soundcore_aerofit_2_pro','soundcore_boom_go_3i'] },
+  { id:'grp_smarthome', label:'その他のSmart Home製品', anchor:'eufy',     members:['eufy_eufycam_c37','eufy_smarttrack_card_e40'] },
+  { id:'grp_pokemon',   label:'Pokémonコラボ',          anchor:'pokemon',  members:['soundcore_c50i_pokemon','anker_usb_charger_70w_pikachu','anker_travel_adapter_pikachu','anker_travel_pouch_pikachu'] }
+];
+const GROUP_BY_ID = {};
+const existingIds = new Set(nodeRaw.map(n => n.id));
+GROUPS.forEach(g => {
+  g.members = g.members.filter(pid => PRODUCTS[pid]);
+  GROUP_BY_ID[g.id] = g;
+  // グループノード（破線箱・展開可能）
+  nodeRaw.push({ id:g.id, label:`${g.label}\n(${g.members.length}) ▼`, type:'group', size:26, isGroup:true });
+  // グループ → アンカー（常時表示）
+  if (existingIds.has(g.anchor)) edgesRaw.push([g.id, g.anchor, 'その他']);
+  // メンバー製品ノード（初期は hidden、展開で表示）
+  g.members.forEach(pid => {
+    const p = PRODUCTS[pid];
+    nodeRaw.push({ id:pid, label:shortName(p.name), type:'product', size:20, productId:pid, isMember:true, hidden:true,
+      source:'公式資料', lead:(p.key_facts && p.key_facts[0]) || '', facts:p.key_facts || [], images:p.images || [] });
+    edgesRaw.push([g.id, pid, '', { hidden:true }]);
+  });
+});
+
+// Daveコメント外部ファイル(data/dave_comments.json)を全ノード（グループ製品含む）に適用
+nodeRaw.forEach(n => { if (DAVE_COMMENTS[n.id]) n.take = DAVE_COMMENTS[n.id]; });
+
+const nodes = nodeRaw.map(n => {
+  const c = colors[n.type];
+  return {
+    id:n.id, label:n.label, type:n.type, raw:n,
+    shape:n.type === 'core' ? 'star' : n.type === 'strategy' ? 'diamond' : (n.type === 'product' || n.type === 'group') ? 'box' : n.type === 'tech' ? 'hexagon' : n.type === 'external' ? 'triangle' : 'dot',
+    size:n.size || 24,
+    hidden: !!n.hidden,
+    color:{ background:c.bg, border:c.border, highlight:{ background:c.bg, border:'#1c1b19' }, hover:{ background:c.bg, border:'#1c1b19' } },
+    // ラベルは黒＋淡いハロー＝ライト背景でも図形の上でも確実に読める
+    font:{ color:'#211f1c', size:n.type === 'core' ? 16 : 12, face:'Noto Sans CJK JP', bold:{ color:'#211f1c' }, strokeWidth:4, strokeColor:'#f1eee8' },
+    borderWidth:n.type === 'core' ? 3 : 1.5,
+    // グループノードは破線枠で「束ね＝展開できる」と分かるように
+    shapeProperties: { borderDashes: n.isGroup ? [6,4] : false },
+    margin: (n.type === 'product' || n.type === 'group') ? 10 : undefined
+  };
+});
+
+const edges = edgesRaw.map((e, i) => {
+  const opt = e[3] || {};
+  return {
+    id:'e'+i, from:e[0], to:e[1], label:e[2],
+    arrows:{ to:{ enabled:true, scaleFactor:.45 } },
+    color:{ color:e[2] === '年内集約' ? '#d71920' : '#b5afa1', highlight:'#191817' },
+    width:e[2] === '柱' || e[2] === '統合' || e[2] === '体現' ? 3 : 1.7,
+    smooth:{ type:'continuous', roundness:.18 },
+    font:{ color:'#6f6a61', size:9, strokeColor:'#ece8e0', strokeWidth:4 },
+    hidden: !!opt.hidden,
+    dashes: opt.dashed || undefined
+  };
+});
+
+// 躍動感(ウニウニ)の正体＝この値そのもの。human-graph / 3mer と同一の実証済みレシピ
+const DEFAULT_PHYSICS = {
+  barnesHut:{ gravitationalConstant:-1450, centralGravity:.04, springLength:118, springConstant:.025, damping:.78, avoidOverlap:.55 },
+  minVelocity:.08,
+  timestep:.45,
+  stabilization:{ iterations:230, fit:true }
+};
+
+// ふわっと押して中心にまとまりながらゆっくり収束＝弾きすぎず滑らかに動く
+const PULSE_PHYSICS = {
+  barnesHut:{ gravitationalConstant:-1700, centralGravity:.18, springLength:118, springConstant:.045, damping:.54, avoidOverlap:.28 },
+  minVelocity:.08,
+  timestep:.45,
+  stabilization:false
+};
+
+const network = new vis.Network(
+  document.getElementById('network'),
+  { nodes:new vis.DataSet(nodes), edges:new vis.DataSet(edges) },
+  {
+    layout:{ improvedLayout:false, randomSeed: 12 },
+    physics: DEFAULT_PHYSICS,
+    interaction:{ hover:true, tooltipDelay:180, zoomView:true, dragView:true, keyboard:true },
+    nodes:{ shadow:{ enabled:true, color:'rgba(38,32,24,0.22)', size:12, x:0, y:4 } },
+    edges:{ hoverWidth:1.5, selectionWidth:2 }
+  }
+);
+
+// 左パネル（フローティング）がグラフに重なる分、カメラ中心を可視領域（コントロール右端〜描画右端）の中心へ補正する
+const camOffset = () => (window.matchMedia('(min-width: 761px)').matches ? { x: 155, y: 0 } : { x: 0, y: 0 });
+function fitOffset(opts) {
+  network.fit(opts || {});
+  const dur = (opts && opts.animation && opts.animation.duration) || 0;
+  setTimeout(() => network.moveTo({ offset: camOffset(), animation: { duration: 300, easingFunction: 'easeInOutCubic' } }), dur + 40);
+}
+
+const idToRaw = Object.fromEntries(nodeRaw.map(n => [n.id, n]));
+const connected = (id) => edgesRaw.filter(e => e[0] === id || e[1] === id).map(e => e[0] === id ? e[1] : e[0]);
+
+function badge(text, cls='') { return `<span class="badge ${cls}">${text}</span>`; }
+
+// スペック値を表示用文字列に（{value,unit,raw} / string / boolean / list に対応）
+function specDisplay(v) {
+  if (v == null) return '';
+  if (typeof v === 'boolean') return v ? '◯' : '—';
+  if (Array.isArray(v)) return v.join('、');
+  if (typeof v === 'object') return v.raw || (v.value != null ? `${v.value}${v.unit && v.unit !== 'colors' ? v.unit : ''}` : '');
+  return String(v);
+}
+
+// 製品のスペック表を右パネルに描画
+function renderSpecBlock(productId) {
+  const block = document.getElementById('specBlock');
+  block.replaceChildren();
+  const p = PRODUCTS[productId];
+  if (!p || !p.specs || !Object.keys(p.specs).length) return;
+  const h = document.createElement('h3'); h.textContent = C('h_spec'); block.append(h);
+  const dl = document.createElement('dl'); dl.className = 'spec-list';
+  const addRow = (label, val) => {
+    if (val === '' || val == null) return;
+    const dt = document.createElement('dt'); dt.textContent = label;
+    const dd = document.createElement('dd'); dd.textContent = val;
+    dl.append(dt, dd);
+  };
+  if (p.price_jpy_tax_in) addRow(C('priceLabel'), '¥' + p.price_jpy_tax_in.toLocaleString());
+  Object.entries(p.specs).forEach(([k, v]) => {
+    addRow(axisLabel(k), specDisplay(v));
+  });
+  block.append(dl);
+}
+
+// 比較表（行=スペック軸、列=製品）を組み立てる
+// 数値スペックの優劣方向（小さいほど良い / 大きいほど良い）。価格・サイズ等は方向なし＝強調しない
+const LOWER_BETTER = new Set(['weight_g','weight_kg','weight_robot_kg','weight_station_kg','weight_earbud_g','weight_case_g','min_charge_time_min','charge_time_min','cleaning_time_min']);
+const HIGHER_BETTER = new Set(['playtime_anc_on_h','playtime_anc_off_h','playtime_case_anc_on_h','playtime_case_anc_off_h','playtime_h','playtime_case_h','playtime_normal_h','playtime_openear_h','playtime_innerear_h','battery_capacity_wh','battery_capacity_mah','max_output_w','total_output_w','max_input_w','ac_rated_output_w','audio_output_w','port_count','mic_count','suction_pa','color_count','bluetooth_range_m','mop_lift_mm','battery_cycle_life','electronics_lifespan_h']);
+
+const specNum = (p, key) => {
+  if (key === 'price_jpy_tax_in') return p.price_jpy_tax_in ?? null;
+  const s = p.specs ? p.specs[key] : undefined;
+  return (s && typeof s === 'object' && !Array.isArray(s) && typeof s.value === 'number') ? s.value : null;
+};
+const specRaw = (p, key) => key === 'price_jpy_tax_in'
+  ? (p.price_jpy_tax_in ? '¥' + p.price_jpy_tax_in.toLocaleString() : '—')
+  : (specDisplay(p.specs ? p.specs[key] : null) || '—');
+
+// この軸で単独最良の列インデックスを返す（優劣方向が定義された軸のみ）。なければ -1
+function winnerIndex(prods, key) {
+  if (LOWER_BETTER.has(key) || HIGHER_BETTER.has(key)) {
+    const valid = prods.map((p, i) => ({ n:specNum(p, key), i })).filter(x => x.n != null);
+    if (valid.length < 2) return -1;
+    const best = LOWER_BETTER.has(key) ? Math.min(...valid.map(x => x.n)) : Math.max(...valid.map(x => x.n));
+    const winners = valid.filter(x => x.n === best);
+    return winners.length === 1 ? winners[0].i : -1;
+  }
+  const types = prods.map(p => p.specs ? p.specs[key] : undefined);
+  if (types.some(s => typeof s === 'boolean')) {
+    const tIdx = types.map((s, i) => s === true ? i : -1).filter(i => i >= 0);
+    return (tIdx.length === 1 && types.some(s => s === false)) ? tIdx[0] : -1;
+  }
+  const valid = prods.map((p, i) => ({ n:Array.isArray(p.specs && p.specs[key]) ? p.specs[key].length : null, i })).filter(x => x.n != null);
+  if (valid.length >= 2) {
+    const mx = Math.max(...valid.map(x => x.n)), mn = Math.min(...valid.map(x => x.n));
+    const winners = valid.filter(x => x.n === mx);
+    if (winners.length === 1 && mx > mn) return winners[0].i;
+  }
+  // enum/text: 1つだけが「ない系/不可」でない実値なら、その列を勝者（例: 充電不可 vs ワイヤレス充電）
+  const NEG = /(不可|なし|無し|非対応|未対応|不要|−|―)/;
+  const strs = prods.map(p => { const s = p.specs ? p.specs[key] : null; return typeof s === 'string' ? s : null; });
+  if (strs.every(s => s != null)) {
+    const positives = strs.map((s, i) => NEG.test(s) ? -1 : i).filter(i => i >= 0);
+    const negatives = strs.filter(s => NEG.test(s));
+    if (positives.length === 1 && negatives.length >= 1) return positives[0];
+  }
+  return -1;
+}
+
+// mode='vs_predecessor': prods=[旧,新]（左=旧/右=新）。変化なしの非記号項目は旧に値・新を「共通」、進化ポイント(新優位)を赤
+// mode='peer'        : prods=[表示中,...]。同値の非記号項目は先頭のみ表示・他は「同じ」、勝者セルを赤
+function buildCompareTable(prods, axisKeys, mode = 'peer', curIdx = 0) {
+  const newIdx = mode === 'vs_predecessor' ? prods.length - 1 : curIdx;
+  const table = document.createElement('table'); table.className = 'compare-table';
+  const thead = document.createElement('thead'); const htr = document.createElement('tr');
+  htr.append(document.createElement('th'));
+  prods.forEach((p, i) => {
+    const th = document.createElement('th');
+    if (mode === 'vs_predecessor') {
+      const tag = document.createElement('span');
+      tag.className = 'cmp-tag ' + (i === newIdx ? 'new' : 'old');
+      tag.textContent = i === newIdx ? C('tagNew') : C('tagOld');
+      th.append(tag, document.createTextNode(' ' + shortName(p.name)));
+    } else th.textContent = shortName(p.name);
+    if (i === newIdx) th.classList.add('cur');
+    htr.append(th);
+  });
+  thead.append(htr); table.append(thead);
+  const tbody = document.createElement('tbody');
+  const axes = ['price_jpy_tax_in', ...(axisKeys || []).filter(k => k !== 'price_jpy_tax_in')];
+  axes.forEach(key => {
+    const symbolRow = (AXIS_BY_KEY[key] && AXIS_BY_KEY[key].type) === 'boolean'; // ◯/— は畳まず常に両方表示
+    const disp = prods.map(p => specRaw(p, key));
+    const allSame = disp.every(d => d === disp[0]);
+    const collapsible = !symbolRow && allSame && disp[0] !== '—';
+    const win = allSame ? -1 : winnerIndex(prods, key);
+    const hi = (mode === 'vs_predecessor') ? (win === newIdx ? newIdx : -1) : win; // 進化/勝者の列
+    const tr = document.createElement('tr');
+    const th = document.createElement('th'); th.scope = 'row'; th.textContent = axisLabel(key); tr.append(th);
+    prods.forEach((p, ci) => {
+      const td = document.createElement('td');
+      if (collapsible && ((mode === 'vs_predecessor' && ci === newIdx) || (mode === 'peer' && ci > 0))) {
+        td.textContent = mode === 'vs_predecessor' ? C('common') : C('same');
+        td.classList.add('same');
+      } else {
+        td.textContent = disp[ci];
+        if (ci === hi) td.classList.add('win'); // 進化/優位ポイントを赤強調
+      }
+      tr.append(td);
+    });
+    tbody.append(tr);
+  });
+  table.append(tbody);
+  return table;
+}
+
+// vs 前モデル ＋ 同カテゴリ比較を右パネルに描画
+function renderComparisonBlock(productId) {
+  const block = document.getElementById('comparisonBlock');
+  block.replaceChildren();
+  const comps = SPEC_MASTER.comparisons || [];
+  const vp = comps.find(c => c.type === 'vs_predecessor' && c.new_id === productId);
+  if (vp && PRODUCTS[vp.prev_id] && PRODUCTS[productId]) {
+    const h = document.createElement('h3'); h.textContent = C('h_vsPrev'); block.append(h);
+    const sub = document.createElement('p'); sub.className = 'compare-sub';
+    sub.textContent = `${C('predOld')} ${shortName(PRODUCTS[vp.prev_id].name)} → ${C('predNew')} ${shortName(PRODUCTS[productId].name)}`;
+    block.append(sub);
+    // 左=旧 / 右=新。新の列を縦に見ると「共通」でない所＝進化ポイント
+    block.append(buildCompareTable([PRODUCTS[vp.prev_id], PRODUCTS[productId]], vp.shared_axes, 'vs_predecessor'));
+  }
+  const sc = comps.find(c => c.type === 'same_category' && (c.product_ids || []).includes(productId));
+  if (sc) {
+    const others = (sc.product_ids || []).filter(pid => pid !== productId && PRODUCTS[pid]);
+    if (others.length) {
+      const h = document.createElement('h3'); h.textContent = C('h_sameCat'); block.append(h);
+      // 価格昇順で並べる＝上位機種（高価格）を右に。選択中ノードのヘッダーを強調
+      const scProds = [PRODUCTS[productId], ...others.map(pid => PRODUCTS[pid])].sort((a, b) => (a.price_jpy_tax_in || 0) - (b.price_jpy_tax_in || 0));
+      block.append(buildCompareTable(scProds, sc.shared_axes, 'peer', scProds.findIndex(p => p.id === productId)));
+    }
+  }
+}
+
+function showNode(id) {
+  const n = idToRaw[id];
+  if (!n) return;
+  const badges = [];
+  badges.push(badge(sourceLabel(n.source), n.source && n.source.includes('公式') ? 'fact' : n.source && n.source.includes('Dave') ? 'take' : ''));
+  if (n.time) badges.push(badge(n.time));
+  if (n.lead && (n.lead.includes('要確認') || n.lead.includes('Needs check'))) badges.push(badge(C('needCheck'), 'check'));
+  document.getElementById('badges').innerHTML = badges.join('');
+  // 製品ノードは正式名称（products.json）を表示。それ以外はノードラベル
+  document.getElementById('detailTitle').textContent = (n.productId && PRODUCTS[n.productId]) ? PRODUCTS[n.productId].name : n.label.replace(/\n/g, ' ');
+  document.getElementById('detailLead').textContent = n.lead || '';
+  document.getElementById('images').innerHTML = (n.images || []).map(src => `<img src="${encodeURI(src)}" alt="">`).join('');
+  document.getElementById('factsBlock').innerHTML = n.facts ? `<h3>${C('h_facts')}</h3><ul>${n.facts.map(x => `<li>${x}</li>`).join('')}</ul>` : '';
+  // 製品ノードならスペック表＋比較を表示
+  if (n.productId) { renderSpecBlock(n.productId); renderComparisonBlock(n.productId); }
+  else { document.getElementById('specBlock').replaceChildren(); document.getElementById('comparisonBlock').replaceChildren(); }
+  const takeBlock = document.getElementById('takeBlock');
+  takeBlock.replaceChildren();
+  if (n.take) {
+    const h = document.createElement('h3'); h.textContent = C('h_take');
+    const p = document.createElement('p');
+    // **強調** を太字に（安全なDOM生成。"" や生HTMLは使わない）
+    n.take.split(/\*\*(.+?)\*\*/g).forEach((seg, i) => {
+      if (i % 2 === 1) { const b = document.createElement('strong'); b.textContent = seg; p.append(b); }
+      else if (seg) p.append(document.createTextNode(seg));
+    });
+    takeBlock.append(h, p);
+  }
+  document.getElementById('sourcesBlock').innerHTML = n.sources ? `<h3>${C('h_sources')}</h3><ul>${n.sources.map(x => `<li><a href="${x[1]}" target="_blank" rel="noreferrer">${x[0]}</a></li>`).join('')}</ul>` : '';
+  const links = connected(id).map(other => {
+    const o = idToRaw[other];
+    const c = colors[o.type];
+    return `<button class="link-node" data-node="${other}"><span class="dot" style="background:${c.bg}"></span><span>${o.label.replace(/\n/g, ' ')}</span></button>`;
+  }).join('');
+  document.getElementById('linksBlock').innerHTML = links ? `<h3>${C('h_links')}</h3><div class="links">${links}</div>` : '';
+  document.querySelectorAll('.link-node').forEach(btn => btn.addEventListener('click', () => focusNode(btn.dataset.node)));
+}
+
+const edgeBaseColor = (e) => e[2] === '年内集約' ? '#d71920' : '#b5afa1';
+
+function dimTo(ids) {
+  const keep = new Set(ids);
+  network.body.data.nodes.update(nodeRaw.map(n => ({ id:n.id, opacity:keep.has(n.id) ? 1 : .18 })));
+  // フォーカス外の線も一緒に退かせる＝シェイプに被って浮く線を消す
+  network.body.data.edges.update(edgesRaw.map((e, i) => {
+    const on = keep.has(e[0]) && keep.has(e[1]);
+    return { id:'e'+i, color:{ color:edgeBaseColor(e), highlight:'#191817', opacity: on ? 1 : .28 } };
+  }));
+}
+
+// 全ノード・全エッジを色付き表示に戻す（初回オープン／自由探索）
+function showAll() {
+  network.body.data.nodes.update(nodeRaw.map(n => ({ id:n.id, opacity:1 })));
+  network.body.data.edges.update(edgesRaw.map((e, i) => ({ id:'e'+i, color:{ color:edgeBaseColor(e), highlight:'#191817', opacity:1 } })));
+}
+
+function focusNode(id, includeNeighbors=true) {
+  const ids = includeNeighbors ? [id, ...connected(id)] : [id];
+  network.selectNodes([id]);
+  // 確定前はdim/カメラを動かさない（全色表示のまま＝描画ミスと初回の暗転を防ぐ）
+  if (graphReady) {
+    dimTo(ids);
+    network.focus(id, { scale: id === 'core' ? .92 : 1.18, offset: camOffset(), animation:{ duration:700, easingFunction:'easeInOutCubic' } });
+  }
+  showNode(id);
+  document.getElementById('help').classList.add('hide');
+  // 共有用：開いているノードを URL ハッシュに反映（#node=<id>）。記事/動画から特定ノードへ直接誘導できる。
+  // graphReady 前（初回 setMode）の呼び出しでは付けない＝初回ロードの One Anker 中央表示を壊さない
+  if (graphReady && history.replaceState) history.replaceState(null, '', '#node=' + encodeURIComponent(id));
+  // 選択製品の前モデルを点線で隣に表示（選択連動・混雑回避）。初回ロード（graphReady前）は出さない
+  if (graphReady) showPredecessor(id);
+}
+
+// 共有URL（#node=<id>）から該当ノードを開く。hidden なメンバー製品は所属グループを展開してから焦点を当てる
+function openFromHash() {
+  const m = location.hash.match(/^#node=(.+)$/);
+  if (!m) return false;
+  const id = decodeURIComponent(m[1]);
+  if (!idToRaw[id]) return false;
+  const g = GROUPS.find(gr => gr.members.includes(id));
+  if (g && !expandedGroups.has(g.id)) toggleGroup(g.id);
+  focusNode(id);
+  if (isMobile()) openSheet();   // 共有リンクは詳細を見せる意図
+  return true;
+}
+
+// モバイル（≤760px）の詳細ボトムシート開閉
+const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
+function openSheet() { if (isMobile()) document.getElementById('right').classList.add('sheet-open'); }
+function closeSheet() { document.getElementById('right').classList.remove('sheet-open'); }
+
+// C: 選択連動の前モデル表示。製品ノードを選ぶと、その前モデルだけを点線で隣に出す（混雑回避＝Entity Graph的な文脈表示）
+const PREV_COLOR = { background:'#cfcabf', border:'#8d8678', highlight:{ background:'#cfcabf', border:'#5f5a50' }, hover:{ background:'#cfcabf', border:'#5f5a50' } };
+let prevModelNodeId = null;
+function clearPredecessor() {
+  if (!prevModelNodeId) return;
+  try { network.body.data.edges.remove('prevedge'); } catch (e) {}
+  try { network.body.data.nodes.remove(prevModelNodeId); } catch (e) {}
+  delete idToRaw[prevModelNodeId];
+  prevModelNodeId = null;
+}
+function showPredecessor(curId) {
+  const cur = idToRaw[curId];
+  if (cur && cur.isPrevModel) return;        // 前モデル自身のクリックでは消さない（自分を巻き込まない）
+  clearPredecessor();
+  const productId = cur && cur.productId;
+  if (!productId) return;
+  const vp = (SPEC_MASTER.comparisons || []).find(c => c.type === 'vs_predecessor' && c.new_id === productId);
+  if (!vp || !PRODUCTS[vp.prev_id]) return;
+  const prev = PRODUCTS[vp.prev_id];
+  const nodeId = 'prevmodel_' + vp.prev_id;
+  const pos = (network.getPositions([curId])[curId]) || { x:0, y:0 };
+  network.body.data.nodes.add({
+    id:nodeId, label: shortName(prev.name) + '\n' + C('predecessorSuffix'), shape:'box', size:16, color:PREV_COLOR,
+    font:{ color:'#3d3935', size:11, face:'Noto Sans CJK JP', strokeWidth:4, strokeColor:'#f1eee8' },
+    borderWidth:1.5, margin:8, x: pos.x - 132, y: pos.y + 74
+  });
+  network.body.data.edges.add({
+    id:'prevedge', from:nodeId, to:curId, label:C('predEdge'), dashes:true,
+    arrows:{ to:{ enabled:true, scaleFactor:.45 } }, color:{ color:'#a59e90', highlight:'#191817' }, width:1.5,
+    smooth:{ type:'continuous', roundness:.18 }, font:{ color:'#8a8478', size:9, strokeColor:'#ece8e0', strokeWidth:4 }
+  });
+  // 前モデルもクリックでスペックパネルを開けるよう idToRaw に動的登録（点線ノードのクリック対応）
+  idToRaw[nodeId] = { id:nodeId, productId:vp.prev_id, label:prev.name, source:'公式資料',
+    lead:(prev.key_facts || [])[0] || '', facts:prev.key_facts || [], images:prev.images || [], isPrevModel:true };
+  prevModelNodeId = nodeId;
+  network.setOptions({ physics:{ enabled:true, ...PULSE_PHYSICS } });
+  network.startSimulation();
+}
+
+function setMode(mode) {
+  clearPredecessor();
+  stopAutoplay();
+  currentMode = mode;
+  stepIndex = 0;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  document.getElementById('modeLabel').textContent = tours[mode].label;
+  document.getElementById('modeHint').textContent = tours[mode].hint;
+  // 新製品ツアーはグループ内の製品（初期hidden）も巡るので、全グループを展開しておく
+  if (mode === 'products') GROUPS.forEach(g => { if (!expandedGroups.has(g.id)) toggleGroup(g.id); });
+  if (mode === 'free') {
+    document.getElementById('stepTime').textContent = C('freeTime');
+    document.getElementById('stepTitle').textContent = C('freeTitle');
+    document.getElementById('stepCopy').textContent = C('freeCopy');
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('stepCounter').textContent = C('freeTime');
+    showAll();
+    fitOffset({ animation:{ duration:850, easingFunction:'easeInOutCubic' } });
+    animateGraphPulse(nodeRaw.map(n => n.id), .5, false);
+    return;
+  }
+  runStep(0, false);
+  if (graphReady) animateGraphPulse(modeNodeIds(mode), .85, true);
+}
+
+function runStep(index, pulse=true, focusCam=true) {
+  const seq = tours[currentMode].sequence;
+  if (!seq.length) return;
+  stepIndex = Math.max(0, Math.min(index, seq.length - 1));
+  const [id, time, title, copy] = seq[stepIndex];
+  document.getElementById('stepTime').textContent = time;
+  document.getElementById('stepTitle').textContent = title;
+  document.getElementById('stepCopy').textContent = copy;
+  document.getElementById('progressBar').style.width = `${((stepIndex + 1) / seq.length) * 100}%`;
+  document.getElementById('stepCounter').textContent = `${stepIndex + 1} / ${seq.length}`;
+  if (focusCam) {
+    focusNode(id);
+    if (graphReady && pulse) animateGraphPulse([id, ...connected(id)], .7, false);
+  } else {
+    // 初回：カメラは全体表示のまま、パネルだけ更新（dimなし＝全製品が色付きで見える）
+    showNode(id);
+    document.getElementById('help').classList.add('hide');
+  }
+}
+
+network.on('click', params => {
+  stopAutoplay();
+  if (!params.nodes.length) { closeSheet(); return; }   // 背景タップでシートを閉じる
+  const id = params.nodes[0];
+  if (GROUP_BY_ID[id]) toggleGroup(id);
+  else { focusNode(id); openSheet(); }                   // ノードタップで詳細シートを開く
+});
+
+// 「その他の新製品」グループの展開/折りたたみ
+const expandedGroups = new Set();
+function toggleGroup(gid) {
+  const g = GROUP_BY_ID[gid];
+  if (!g) return;
+  const expand = !expandedGroups.has(gid);
+  expand ? expandedGroups.add(gid) : expandedGroups.delete(gid);
+  // 展開時はメンバーをグループ付近に置いてから表示＝物理で広がる（躍動感）
+  const gp = (network.getPositions([gid])[gid]) || { x:0, y:0 };
+  network.body.data.nodes.update(g.members.map((pid, i) => {
+    const angle = i * 2.39996;
+    return expand
+      ? { id:pid, hidden:false, x: gp.x + Math.cos(angle) * 34, y: gp.y + Math.sin(angle) * 34 }
+      : { id:pid, hidden:true };
+  }));
+  // group→member エッジの表示切替
+  const edgeUpdates = [];
+  edgesRaw.forEach((e, i) => { if (e[0] === gid && g.members.includes(e[1])) edgeUpdates.push({ id:'e'+i, hidden:!expand }); });
+  network.body.data.edges.update(edgeUpdates);
+  // ラベルの開閉インジケータ更新
+  network.body.data.nodes.update({ id:gid, label:`${g.label}\n(${g.members.length}) ${expand ? '▲' : '▼'}` });
+  // 躍動感を出して自然に再配置
+  if (graphReady) animateGraphPulse(expand ? [gid, ...g.members] : [gid], .6, false);
+}
+
+// 軸レンズ：テーマ/製品カテゴリで全ノードを染め分け、Entity Graphの「同じ実体を別の軸で見る」を体現
+const NODE_THEMES = {
+  core:['brand'], safety:['safety'], nlb:['safety','inhouse'], maggo:['safety'],
+  starflyer:['safety','partnership'], thus:['inhouse','ai'], libertymax:['ai'],
+  libertypro:['ai'], work:['ai'], azure:['partnership','ai'], pokemon:['brand'],
+  omnis2:['brand'], solix:['brand'], oneanker:['brand'], theme_foundation:['inhouse','partnership'],
+  soundcore:['brand'], eufy:['brand'], saruwatari:['safety','brand'], motoi:['safety','partnership'],
+  uchiyama:['partnership','ai'], shibahara:['inhouse','ai'], kato:['brand'], ida:['safety'],
+  batteryTrend:['safety'], flightRule:['safety'], recycle:['safety'], recallTrust:['safety'],
+  grp_pokemon:['brand'], anker_style_pouch:['safety'],
+  anker_nano_power_strip_10in1_70w_clamp:['brand'], anker_nano_usb_c_hub_10in1_240hz_display:['brand'],
+  soundcore_aerofit_2_pro:['brand'], soundcore_boom_go_3i:['brand'], eufy_eufycam_c37:['brand'],
+  eufy_smarttrack_card_e40:['brand'], soundcore_c50i_pokemon:['brand'],
+  anker_usb_charger_70w_pikachu:['brand'], anker_travel_adapter_pikachu:['brand'],
+  anker_travel_pouch_pikachu:['brand']
+};
+const CATEGORY_AXIS = {
+  mobile_battery:'power', power_strip:'power', usb_c_hub:'power', gadget_pouch:'power', portable_power_station:'power',
+  true_wireless_earbuds:'audio', open_ear_earbuds:'audio', portable_speaker:'audio', ai_voice_recorder:'audio',
+  robot_vacuum:'smarthome', security_camera:'smarthome', tracker_card:'smarthome'
+};
+const nodeCategoryAxis = (n) => {
+  if (!n.productId || !PRODUCTS[n.productId]) return null;
+  const cat = PRODUCTS[n.productId].category || '';
+  if (cat.startsWith('pokemon_collab')) return 'pokemon';
+  return CATEGORY_AXIS[cat] || null;
+};
+const THEME_AXES = [
+  { key:'safety', label:'🛡 安全', color:'#8d171c' },
+  { key:'inhouse', label:'🔧 内製', color:'#238e91' },
+  { key:'partnership', label:'🤝 協業', color:'#7e5aa7' },
+  { key:'ai', label:'🤖 AI活用', color:'#326fa8' },
+  { key:'brand', label:'🏢 ブランド統合', color:'#c99b3c' }
+];
+const CATEGORY_AXES = [
+  { key:'power', label:'🔌 Power', color:'#4f8b5c' },
+  { key:'audio', label:'🎧 Audio', color:'#b85270' },
+  { key:'smarthome', label:'🏠 Smart Home', color:'#3f7fb0' },
+  { key:'pokemon', label:'⚡ Pokémon', color:'#d8a72b' }
+];
+let activeAxis = null;
+function clearAxisLens() {
+  clearPredecessor();
+  stopAutoplay();
+  activeAxis = null;
+  document.querySelectorAll('.lens-btn').forEach(b => b.classList.remove('active'));
+  network.body.data.nodes.update(nodeRaw.map(n => {
+    const c = colors[n.type];
+    return { id:n.id, opacity:1, color:{ background:c.bg, border:c.border, highlight:{ background:c.bg, border:'#1c1b19' }, hover:{ background:c.bg, border:'#1c1b19' } } };
+  }));
+  network.body.data.edges.update(edgesRaw.map((e, i) => ({ id:'e'+i, color:{ color:edgeBaseColor(e), highlight:'#191817', opacity:1 } })));
+  // モバイル：軸を適用/解除したらドロップメニューを閉じてグラフの染め分けを見せる
+  if (isMobile()) { const lp = document.querySelector('.lens-panel'); if (lp) lp.classList.remove('lens-open'); const tb = document.getElementById('axisToggle'); if (tb) tb.classList.remove('active'); }
+}
+function applyAxisLens(kind, key, color) {
+  const id = kind + ':' + key;
+  if (activeAxis === id) { clearAxisLens(); return; }
+  clearAxisLens();
+  activeAxis = id;
+  document.querySelectorAll('.lens-btn').forEach(b => b.classList.toggle('active', b.dataset.axis === id));
+  GROUPS.forEach(g => { if (!expandedGroups.has(g.id)) toggleGroup(g.id); }); // 全製品を見せてから染める
+  const hit = new Set();
+  nodeRaw.forEach(n => {
+    const on = kind === 'theme' ? (NODE_THEMES[n.id] || []).includes(key) : nodeCategoryAxis(n) === key;
+    if (on) hit.add(n.id);
+  });
+  network.body.data.nodes.update(nodeRaw.map(n => hit.has(n.id)
+    ? { id:n.id, opacity:1, color:{ background:color, border:'#1c1b19', highlight:{ background:color, border:'#1c1b19' }, hover:{ background:color, border:'#1c1b19' } } }
+    : { id:n.id, opacity:.12 }));
+  network.body.data.edges.update(edgesRaw.map((e, i) => {
+    const on = hit.has(e[0]) && hit.has(e[1]);
+    return { id:'e'+i, color:{ color: on ? color : edgeBaseColor(e), highlight:'#191817', opacity: on ? 1 : .1 } };
+  }));
+  // 該当ノード群が画面に収まるよう寄せる（少し引いた余白付き）
+  if (graphReady && hit.size) {
+    clearGraphAnimationTimers();
+    const runId = ++graphAnimationRun;
+    network.setOptions({ physics:{ enabled:true, ...PULSE_PHYSICS } });
+    network.startSimulation();
+    graphAnimationTimers.push(setTimeout(() => {
+      if (runId !== graphAnimationRun) return;
+      fitOffset({ nodes:[...hit], animation:{ duration:760, easingFunction:'easeInOutCubic' } });
+    }, 80));
+  }
+}
+// 軸レンズのボタン生成
+(() => {
+  const mk = (gridId, axes, kind) => {
+    const el = document.getElementById(gridId);
+    if (!el) return;
+    axes.forEach(a => {
+      const b = document.createElement('button');
+      b.className = 'lens-btn'; b.dataset.axis = kind + ':' + a.key; b.textContent = a.label;
+      b.addEventListener('click', () => applyAxisLens(kind, a.key, a.color));
+      el.append(b);
+    });
+  };
+  mk('themeLensGrid', THEME_AXES, 'theme');
+  mk('catLensGrid', CATEGORY_AXES, 'category');
+  const off = document.getElementById('lensClear');
+  if (off) off.addEventListener('click', () => clearAxisLens());
+})();
+
+function clearGraphAnimationTimers() {
+  graphAnimationTimers.forEach(timer => clearTimeout(timer));
+  graphAnimationTimers = [];
+}
+
+function modeNodeIds(mode=currentMode) {
+  const seq = tours[mode]?.sequence || [];
+  if (!seq.length) return nodeRaw.map(n => n.id);
+  const ids = new Set();
+  seq.forEach(([id]) => {
+    ids.add(id);
+    connected(id).forEach(other => ids.add(other));
+  });
+  return [...ids];
+}
+
+function animateGraphPulse(ids, intensity=.75, shouldFit=true) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  clearGraphAnimationTimers();
+  const runId = ++graphAnimationRun;
+  const visibleIds = [...new Set(ids)].filter(id => idToRaw[id]);
+  if (!visibleIds.length) return;
+  const positions = network.getPositions(visibleIds);
+  const updates = visibleIds
+    .filter(id => positions[id])
+    .map((id, index) => {
+      const angle = (index * 2.3999632297) + (currentMode.length * .21);
+      const pulse = (14 + (index % 5) * 4) * intensity;
+      return {
+        id,
+        x: positions[id].x + Math.cos(angle) * pulse,
+        y: positions[id].y + Math.sin(angle) * pulse,
+        fixed:false
+      };
+    });
+  if (updates.length) network.body.data.nodes.update(updates);
+  // 凍結中(enabled:false)から起こすので enabled:true を明示
+  network.setOptions({ physics:{ enabled:true, ...PULSE_PHYSICS } });
+  network.startSimulation();
+  if (shouldFit) {
+    graphAnimationTimers.push(setTimeout(() => {
+      if (runId !== graphAnimationRun) return;
+      fitOffset({ nodes:visibleIds, animation:{ duration:760, easingFunction:'easeInOutCubic' } });
+    }, 80));
+  }
+  graphAnimationTimers.push(setTimeout(() => {
+    if (runId !== graphAnimationRun) return;
+    // 物理は止めず、ゆるい余韻を残して躍動感を維持（3mer式）
+    network.setOptions({ physics:{ enabled:true, ...PULSE_PHYSICS, barnesHut:{ ...PULSE_PHYSICS.barnesHut, damping:.72 } } });
+    graphAnimationTimers = [];
+  }, 1500));
+}
+
+document.querySelectorAll('.mode-btn').forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+document.getElementById('prevStep').addEventListener('click', () => {
+  stopAutoplay();
+  const seq = tours[currentMode].sequence;
+  if (!seq.length) return;
+  runStep(stepIndex - 1 < 0 ? seq.length - 1 : stepIndex - 1);   // 最初で「戻る」→最後へループ
+});
+document.getElementById('nextStep').addEventListener('click', () => {
+  stopAutoplay();
+  if (currentMode === 'free') { setMode('products'); return; }
+  const seq = tours[currentMode].sequence;
+  if (!seq.length) return;
+  runStep(stepIndex + 1 >= seq.length ? 0 : stepIndex + 1);       // 最後で「進む」→最初へループ
+});
+
+// D: ツアー自動再生（数秒ごとに次ステップへ送る。GIF/動画収録に便利）。手動操作で止まる
+let autoplayTimer = null;
+function setAutoplayUI(on) {
+  const btn = document.getElementById('autoplayBtn');
+  if (!btn) return;
+  btn.classList.toggle('playing', on);
+  // lucide は <i data-lucide> を <svg> に置換するため querySelector('i') は使えない。毎回 innerHTML を作り直して再生成する
+  btn.innerHTML = `<i data-lucide="${on ? 'pause' : 'play'}"></i>${on ? C('autoplayStop') : C('autoplay')}`;
+  lucide.createIcons();
+}
+function stopAutoplay() {
+  if (!autoplayTimer) return;
+  clearTimeout(autoplayTimer);
+  autoplayTimer = null;
+  setAutoplayUI(false);
+}
+function scheduleAutoplayNext() {
+  autoplayTimer = setTimeout(() => {
+    const seq = tours[currentMode].sequence;
+    if (!seq.length) { stopAutoplay(); return; }
+    runStep(stepIndex + 1 >= seq.length ? 0 : stepIndex + 1);
+    scheduleAutoplayNext();
+  }, 4500);
+}
+function toggleAutoplay() {
+  if (currentMode === 'free') return;        // 自由探索ではツアーが無いので無効
+  if (autoplayTimer) { stopAutoplay(); return; }
+  setAutoplayUI(true);
+  scheduleAutoplayNext();
+}
+document.getElementById('autoplayBtn').addEventListener('click', toggleAutoplay);
+
+network.once('stabilizationIterationsDone', () => {
+  // 物理は生かしたまま（ノードのゆるい動きを残す）。カメラ操作は重ねない
+  network.setOptions({ physics:DEFAULT_PHYSICS });
+  graphReady = true;
+  showAll();                                  // 全ノード・全エッジ色付き＝新製品が一望できる
+  network.fit();                              // 全体が収まる基準スケールを取得
+  const overviewScale = network.getScale() * 1.3;  // そこから一回り寄せた目標
+  // 初回は中心ノード One Anker を画面センターに据える
+  const corePos = network.getPositions(['core']).core || network.getViewPosition();
+  network.moveTo({ scale: overviewScale * 0.45, position: corePos, offset: camOffset() });  // いったん引いた位置から
+  network.moveTo({ scale: overviewScale, position: corePos, offset: camOffset(), animation:{ duration:1300, easingFunction:'easeInOutCubic' } }); // 一回り寄せてイーズイン
+  // 共有URLに #node=<id> があればそのノードを開く。無ければ初回はカメラを One Anker 中央・右パネルはツアー1番目（1/17）
+  setTimeout(() => { if (!openFromHash()) runStep(0, false, false); }, 250);
+});
+
+// 右パネル幅のスプリッタ（ドラッグ＋ダブルクリックで広⇄標準切替・localStorageで保存）
+(() => {
+  const splitter = document.getElementById('splitter');
+  const root = document.documentElement;
+  const STORE_KEY = 'apc2026_right_width';
+  const MIN_W = 280, MAX_W = 820, WIDE_W = 600, NORMAL_W = 390;
+  const saved = localStorage.getItem(STORE_KEY);
+  if (saved) root.style.setProperty('--right-width', saved);
+  let dragging = false;
+  splitter.addEventListener('pointerdown', (e) => {
+    dragging = true; splitter.classList.add('dragging');
+    splitter.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  splitter.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const w = Math.max(MIN_W, Math.min(MAX_W, window.innerWidth - e.clientX));
+    root.style.setProperty('--right-width', w + 'px');
+  });
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false; splitter.classList.remove('dragging');
+    localStorage.setItem(STORE_KEY, getComputedStyle(root).getPropertyValue('--right-width').trim());
+    window.dispatchEvent(new Event('resize')); // vis-network のキャンバスを再描画
+  };
+  splitter.addEventListener('pointerup', endDrag);
+  splitter.addEventListener('pointercancel', endDrag);
+  splitter.addEventListener('dblclick', () => {
+    const cur = parseInt(getComputedStyle(root).getPropertyValue('--right-width'), 10) || NORMAL_W;
+    const next = cur >= 500 ? NORMAL_W : WIDE_W;
+    root.style.setProperty('--right-width', next + 'px');
+    localStorage.setItem(STORE_KEY, next + 'px');
+    window.dispatchEvent(new Event('resize'));
+  });
+})();
+
+// 製品画像クリックで拡大（ライトボックス）。画像は showNode で動的生成なのでデリゲートで拾う
+(() => {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const open = (src) => { lightboxImg.src = src; lightbox.classList.remove('hide'); };
+  const close = () => { lightbox.classList.add('hide'); lightboxImg.removeAttribute('src'); };
+  document.getElementById('images').addEventListener('click', (e) => {
+    const img = e.target.closest('img');
+    if (img && img.src) open(img.src);
+  });
+  lightbox.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lightbox.classList.contains('hide')) close(); });
+})();
+
+// モバイル：詳細ボトムシートを閉じる（×ボタン）
+document.getElementById('sheetClose').addEventListener('click', closeSheet);
+
+// モバイル：軸レンズを上部トグルで開閉
+(() => {
+  const btn = document.getElementById('axisToggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const lp = document.querySelector('.lens-panel');
+    btn.classList.toggle('active', lp.classList.toggle('lens-open'));
+  });
+})();
+
+// ブラウザの戻る/共有リンク経由のハッシュ変更で該当ノードを開く
+window.addEventListener('hashchange', openFromHash);
+
+/* ===== i18n: EN/JP トグル ===== */
+const CHROME_JA = {
+  subtitle:'Ankerの製品発表会を体験できる。まずは下の「進む」ボタンで新製品をチェック！',
+  madeBy:'Created by Dave Tanaka（Anker 非公式・個人制作）',
+  tourHeading:'テーマ別ツアー',
+  mode_products_title:'最新新製品をチェック！', mode_products_copy:'新製品を順番にピックアップ',
+  mode_brand_title:'One Anker', mode_brand_copy:'ブランド統合関連のトピックをチェック',
+  mode_safety_title:'Safety Context', mode_safety_copy:'注力している安全関連のトピック',
+  mode_free_title:'自由探索', mode_free_copy:'好きなトピックをクリック',
+  mobileTapHint:'💡 ノードをタップで詳細 ／ <b>◀ ▶</b> で順に巡回',
+  prev:'戻る', next:'進む', autoplay:'自動再生', autoplayStop:'停止',
+  lensHeading:'軸レンズ', lensThemeCap:'テーマで見る（同じ実体が複数軸に現れる）', lensCatCap:'製品カテゴリで見る',
+  lensClear:'解除', lensHint:'ノードとエッジを軸で染め分けます。同じ発表を別の切り口で読み解けるのが Entity Graph の価値です。',
+  legend_core:'中心仮説 / 中心ノード', legend_strategy:'ブランド / 企業戦略', legend_tech:'技術 / AI / 安全', legend_product:'製品', legend_partner:'協業 / 外部環境', legend_external:'外部文脈 / 社会情勢', legend_person:'人物',
+  helpTitle:'まず「進む」を押してください', helpBody:'Graph全体をいきなり読ませず、発表会の順番で1つずつ焦点を移します。慣れたら「製品から探索」や「自由探索」へ。',
+  detailTitleDefault:'Anker発表会を歩く', detailLeadDefault:'左の「進む」からツアーを始めると、安全、AI、協業、ブランド統合が1本の流れとして見えてきます。',
+  axisToggle:'⊕ 軸レンズ', modeLabelDefault:'5分ツアー', modeHintDefault:'発表会を順番に歩きます',
+  h_facts:'公式事実 / 発表要旨', h_spec:'スペック', h_vsPrev:'vs 前モデル', h_sameCat:'同カテゴリの新製品と比較', h_take:'Daveコメント', h_sources:'外部出典', h_links:'関連ノード',
+  priceLabel:'価格(税込)', common:'共通', same:'同じ', tagNew:'新', tagOld:'旧', predecessorSuffix:'(前モデル)', needCheck:'要確認', sourceFallback:'整理中',
+  freeTime:'自由', freeTitle:'好きなノードをクリック', freeCopy:'ドラッグ、ズーム、ノードのクリックで発表会を歩いてください。',
+  predOld:'旧', predNew:'新', predEdge:'前モデル'
+};
+let LANG = (() => { try { return localStorage.getItem('apc2026_lang') === 'en' ? 'en' : 'ja'; } catch (e) { return 'ja'; } })();
+const C = (k) => (LANG === 'en' && window.EN && window.EN.chrome && window.EN.chrome[k] != null) ? window.EN.chrome[k] : (CHROME_JA[k] != null ? CHROME_JA[k] : '');
+const SRC_MAP = { '公式資料':'Official material', '発表要旨':'Briefing', '公式公開情報':'Public info', '公開Web':'Public web', 'Web確認':'Web-checked', 'Daveの読み':"Dave's read", '公式インタビュー':'Official interview', '公式':'Official', '公式役員一覧':'Official roster', '日本Microsoft公式':'Microsoft Japan' };
+function sourceLabel(s) { if (!s) return C('sourceFallback'); if (LANG !== 'en') return s; return String(s).split(/\s*\+\s*/).map(t => SRC_MAP[t.trim()] || t.trim()).join(' + '); }
+const JA_NODES = Object.fromEntries(nodeRaw.filter(n => !GROUP_BY_ID[n.id]).map(n => [n.id, { label:n.label, lead:n.lead, facts:n.facts ? [...n.facts] : n.facts, take:n.take }]));
+const JA_GROUPS = Object.fromEntries(GROUPS.map(g => [g.id, g.label]));
+const JA_TOURS = JSON.parse(JSON.stringify({ brand:tours.brand, products:tours.products, safetyContext:tours.safetyContext, free:tours.free }));
+const JA_EDGES = edgesRaw.map(e => e[2]);
+const JA_THEME = THEME_AXES.map(a => a.label);
+const JA_CAT = CATEGORY_AXES.map(a => a.label);
+function applyDataLang(lang) {
+  const en = lang === 'en' && window.EN;
+  nodeRaw.forEach(n => {
+    if (GROUP_BY_ID[n.id]) return;
+    const ja = JA_NODES[n.id]; const s = en && window.EN.nodes && window.EN.nodes[n.id];
+    if (s) { n.label = s.label != null ? s.label : (ja ? ja.label : n.label); n.lead = s.lead != null ? s.lead : (ja ? ja.lead : n.lead); n.facts = s.facts != null ? s.facts : (ja ? ja.facts : n.facts); n.take = s.take != null ? s.take : (ja ? ja.take : n.take); }
+    else if (ja) { n.label = ja.label; n.lead = ja.lead; n.facts = ja.facts; n.take = ja.take; }
+  });
+  GROUPS.forEach(g => { const s = en && window.EN.nodes && window.EN.nodes[g.id]; g.label = (s && s.label) ? s.label : JA_GROUPS[g.id]; const gn = idToRaw[g.id]; if (gn) gn.label = g.label; });
+  ['brand','products','safetyContext','free'].forEach(m => { const t = tours[m]; const s = en && window.EN.tours && window.EN.tours[m]; if (s) { t.label = s.label != null ? s.label : JA_TOURS[m].label; t.hint = s.hint != null ? s.hint : JA_TOURS[m].hint; if (s.sequence) t.sequence = s.sequence; } else { t.label = JA_TOURS[m].label; t.hint = JA_TOURS[m].hint; t.sequence = JA_TOURS[m].sequence; } });
+  edgesRaw.forEach((e, i) => { e[2] = en && window.EN.edges && window.EN.edges[JA_EDGES[i]] ? window.EN.edges[JA_EDGES[i]] : JA_EDGES[i]; });
+  THEME_AXES.forEach((a, i) => { a.label = en && window.EN.themeAxes && window.EN.themeAxes[a.key] ? window.EN.themeAxes[a.key] : JA_THEME[i]; });
+  CATEGORY_AXES.forEach((a, i) => { a.label = en && window.EN.catAxes && window.EN.catAxes[a.key] ? window.EN.catAxes[a.key] : JA_CAT[i]; });
+}
+function rebuildGraphLabels() {
+  network.body.data.nodes.update(nodeRaw.map(n => { const g = GROUP_BY_ID[n.id]; return { id:n.id, label: g ? `${g.label}\n(${g.members.length}) ${expandedGroups.has(n.id) ? '▲' : '▼'}` : n.label }; }));
+  network.body.data.edges.update(edgesRaw.map((e, i) => ({ id:'e'+i, label:e[2] })));
+}
+function applyChromeDOM() {
+  const set = (sel, key, html) => { const el = document.querySelector(sel); if (el) { if (html) el.innerHTML = C(key); else el.textContent = C(key); } };
+  set('.subtitle','subtitle'); set('.made-by','madeBy'); set('.mobile-tap-hint','mobileTapHint', true);
+  const cph = document.querySelector('.control-panel > h2'); if (cph) cph.textContent = C('tourHeading');
+  const lph = document.querySelector('.lens-panel > h2'); if (lph) lph.textContent = C('lensHeading');
+  const modeMap = { products:['mode_products_title','mode_products_copy'], brand:['mode_brand_title','mode_brand_copy'], safetyContext:['mode_safety_title','mode_safety_copy'], free:['mode_free_title','mode_free_copy'] };
+  document.querySelectorAll('.mode-btn').forEach(btn => { const m = modeMap[btn.dataset.mode]; if (!m) return; const t = btn.querySelector('.mode-title'), c = btn.querySelector('.mode-copy'); if (t) t.textContent = C(m[0]); if (c) c.textContent = C(m[1]); });
+  const pv = document.getElementById('prevStep'); if (pv) pv.innerHTML = `<i data-lucide="chevron-left"></i>${C('prev')}`;
+  const nx = document.getElementById('nextStep'); if (nx) nx.innerHTML = `${C('next')}<i data-lucide="chevron-right"></i>`;
+  if (typeof setAutoplayUI === 'function') setAutoplayUI(!!autoplayTimer);
+  const caps = document.querySelectorAll('.lens-panel .lens-cap'); if (caps[0]) caps[0].textContent = C('lensThemeCap'); if (caps[1]) caps[1].textContent = C('lensCatCap');
+  set('#lensClear','lensClear'); set('.lens-hint','lensHint');
+  const legendKeys = ['legend_core','legend_strategy','legend_tech','legend_product','legend_partner','legend_external','legend_person'];
+  document.querySelectorAll('.stage-legend .legend-row').forEach((row, i) => { if (!legendKeys[i]) return; const tn = [...row.childNodes].reverse().find(x => x.nodeType === 3); if (tn) tn.textContent = C(legendKeys[i]); });
+  const hH = document.querySelector('#help h3'); if (hH) hH.textContent = C('helpTitle'); const hP = document.querySelector('#help p'); if (hP) hP.textContent = C('helpBody');
+  set('#detailTitle','detailTitleDefault'); set('#detailLead','detailLeadDefault'); set('#axisToggle','axisToggle');
+  document.querySelectorAll('#themeLensGrid .lens-btn').forEach((b, i) => { if (THEME_AXES[i]) b.textContent = THEME_AXES[i].label; });
+  document.querySelectorAll('#catLensGrid .lens-btn').forEach((b, i) => { if (CATEGORY_AXES[i]) b.textContent = CATEGORY_AXES[i].label; });
+  const lt = document.getElementById('langToggle'); if (lt) lt.textContent = LANG === 'en' ? '日本語' : 'EN';
+  document.documentElement.lang = LANG;
+  lucide.createIcons();
+}
+function setLang(lang) { LANG = lang; try { localStorage.setItem('apc2026_lang', lang); } catch (e) {} applyDataLang(lang); rebuildGraphLabels(); clearAxisLens(); applyChromeDOM(); setMode(currentMode); }
+// init
+window.EN = window.EN || { chrome:{}, nodes:{}, edges:{}, tours:{}, axes:{}, themeAxes:{}, catAxes:{} };
+['predOld','predNew','predEdge'].forEach(k => { if (window.EN.chrome[k] == null) window.EN.chrome[k] = { predOld:'Old', predNew:'New', predEdge:'Predecessor' }[k]; });
+if (LANG === 'en') applyDataLang('en');
+rebuildGraphLabels();
+applyChromeDOM();
+const _lt = document.getElementById('langToggle'); if (_lt) _lt.addEventListener('click', () => setLang(LANG === 'en' ? 'ja' : 'en'));
+lucide.createIcons();
+setMode('products');
+</script>
+</body>
+</html>

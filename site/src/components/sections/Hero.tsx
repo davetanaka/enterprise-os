@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { staggerContainer, staggerItem } from "@/lib/animations";
+import HeroGraph from "@/components/sections/HeroGraph";
 
 export default function Hero() {
   const t = useTranslations("hero");
@@ -69,14 +69,7 @@ export default function Hero() {
             transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
             className="hidden lg:block"
           >
-            <Image
-              src="/images/og-image.png"
-              alt="Enterprise OS - The Operating System for Corporate Knowledge"
-              width={600}
-              height={400}
-              className="w-full h-auto rounded-xl shadow-2xl"
-              priority
-            />
+            <HeroGraph />
           </motion.div>
         </div>
 
@@ -87,14 +80,7 @@ export default function Hero() {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="lg:hidden mt-12"
         >
-          <Image
-            src="/images/og-image.png"
-            alt="Enterprise OS - The Operating System for Corporate Knowledge"
-            width={600}
-            height={400}
-            className="w-full h-auto rounded-xl shadow-xl"
-            priority
-          />
+          <HeroGraph />
         </motion.div>
       </div>
 

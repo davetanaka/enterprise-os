@@ -11,8 +11,8 @@ export default function SocialShare() {
 
   const siteUrl = typeof window !== "undefined" ? window.location.href : "";
   const title = locale === "ja"
-    ? "Enterprise OS - 足りないのはAIじゃない。OSだ。"
-    : "Enterprise OS - It's Not the AI You're Missing. It's the OS.";
+    ? "Enterprise OS - 足りないのはAIじゃない。インテリジェンスを、所有せよ。"
+    : "Enterprise OS - It's Not the AI You're Missing. Own Your Intelligence.";
 
   const shareLinks = [
     {

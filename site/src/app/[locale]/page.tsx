@@ -6,6 +6,7 @@ import Manifesto from "@/components/sections/Manifesto";
 import Problem from "@/components/sections/Problem";
 import RootCause from "@/components/sections/RootCause";
 import Concept from "@/components/sections/Concept";
+import Proof from "@/components/sections/Proof";
 import HowItWorks from "@/components/sections/HowItWorks";
 import FAQ from "@/components/sections/FAQ";
 import Comparison from "@/components/sections/Comparison";
@@ -32,6 +33,7 @@ export default async function HomePage({ params }: Props) {
         <Problem />
         <RootCause />
         <Concept />
+        <Proof />
         <HowItWorks />
         <FAQ />
         <Comparison />

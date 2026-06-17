@@ -33,6 +33,25 @@ export default function WhyNow() {
             {t("sectionTitle")}
           </motion.h2>
 
+          {/* 当て馬：市場の声（Satya Nadella）→ 所有線を一段深く引き直す */}
+          <motion.blockquote
+            variants={staggerItem}
+            className="bg-bg-card rounded-xl p-8 border-l-4 border-l-accent-blue"
+          >
+            <p className="text-xl md:text-2xl font-semibold leading-snug">
+              &ldquo;{t("foil.quote")}&rdquo;
+            </p>
+            <p className="mt-3 text-text-muted text-sm">
+              {t("foil.attribution")}
+            </p>
+            <p className="mt-5 text-text-secondary leading-relaxed">
+              {t("foil.context")}
+            </p>
+            <p className="mt-4 text-text-primary font-medium leading-relaxed border-t border-text-muted/15 pt-4">
+              {t("foil.counter")}
+            </p>
+          </motion.blockquote>
+
           {/* 理由リスト */}
           <motion.div variants={staggerItem} className="space-y-8">
             {reasons.map((i) => (

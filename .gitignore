@@ -1,6 +1,13 @@
 *.pptx
 slides/*.pptx
+slides/build/
 .DS_Store
 **/.DS_Store
 *small.txt
 Planning_Sheet_by_Dave_v3.1.xlsx
+Planning_Sheet_by_Dave_v3.2.xlsx
+
+# 内部メモ・作業ファイル（公開リポに含めない）
+context/
+.playwright-mcp/
+proof-section.png

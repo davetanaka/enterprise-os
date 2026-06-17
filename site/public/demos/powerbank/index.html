@@ -1,0 +1,2965 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>モバイルバッテリー Entity Graph — Enterprise OS</title>
+<meta name="description" content="スペックでなく『意味（誰に・どの場面で・何が要る）』を所有する。モバイルバッテリー市場のEntity Graph。Enterprise OS Proof demo by Dave Tanaka." />
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  :root{--bg:#14172a;--bg2:#1e2235;--card:#222843;--line:#2c3352;--txt:#fff;--mut:#9ca3af;--dim:#6b7280;
+    --blue:#4361ee;--red:#e63946;--teal:#2a9d8f;--gold:#e9c46a;--pink:#f472b6;--grey:#6b7280}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Inter','Noto Sans JP',system-ui,-apple-system,sans-serif}
+  #app{position:fixed;inset:0}
+  #net{position:absolute;inset:0;background:radial-gradient(ellipse 1000px 700px at 70% 30%,rgba(67,97,238,.10),transparent 60%),radial-gradient(ellipse 800px 600px at 25% 85%,rgba(42,157,143,.08),transparent 60%),linear-gradient(135deg,#1e2235,#14172a 60%)}
+  .topbar{position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);z-index:40}
+
+  .hdr{position:absolute;top:16px;left:20px;z-index:20;pointer-events:none;max-width:42%}
+  .hdr .eos{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--teal);letter-spacing:1px;margin-bottom:4px}
+  .hdr .eos b{color:var(--gold)}
+  .hdr h1{font-size:19px;font-weight:800;letter-spacing:-.3px}
+  .hdr .sub{font-size:12px;color:var(--mut);margin-top:3px}
+
+  .ctrl{position:absolute;top:16px;right:20px;z-index:35;display:flex;gap:8px;align-items:center}
+  .seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg span{padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--mut)}
+  .seg span.on{background:var(--blue);color:#fff}
+  .btn{cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--txt);font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;user-select:none}
+  .btn:hover{border-color:var(--blue)} .btn.on{background:var(--blue);border-color:var(--blue)}
+
+  /* breadcrumb (top-center) */
+  .crumb{position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:30;display:none;
+    align-items:center;gap:7px;flex-wrap:wrap;justify-content:center;max-width:46%}
+  .crumb.show{display:flex}
+  .crumb .cc{display:inline-flex;align-items:center;gap:6px;background:rgba(67,97,238,.16);border:1px solid var(--blue);
+    color:#dfe3ee;font-size:12px;font-weight:600;padding:4px 6px 4px 10px;border-radius:20px}
+  .crumb .cc .x{cursor:pointer;color:#9fb0ff;font-weight:800;padding:0 2px}
+  .crumb .cnt{font-size:12px;font-weight:800;color:var(--gold);background:rgba(233,196,106,.12);border:1px solid rgba(233,196,106,.4);padding:4px 11px;border-radius:20px}
+  .crumb .zero{color:var(--red);border-color:var(--red);background:rgba(230,57,70,.12)}
+  .crumb .op{color:var(--dim);font-size:12px}
+
+  /* right nav panel (always visible) */
+  .nav{position:absolute;top:88px;left:20px;width:248px;max-height:calc(100% - 110px);overflow:auto;z-index:30;background:rgba(30,34,53,.92);
+    border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);padding:13px 14px}
+  .nav h4{font-size:10.5px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin:2px 0 10px}
+  .nav label{display:block;font-size:11px;color:var(--mut);margin:9px 0 3px;font-weight:600}
+  .nav select{width:100%;background:var(--card);color:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:7px 9px;font-size:12.5px;font-family:inherit;cursor:pointer}
+  .nav select:focus{outline:none;border-color:var(--blue)}
+  .nav .clr{margin-top:10px;text-align:center;font-size:11.5px;color:var(--mut);cursor:pointer;user-select:none}
+  .nav .clr:hover{color:#fff}
+  /* stepper (right under selects) */
+  .step{margin-top:12px;border-top:1px solid var(--line);padding-top:11px;display:none}
+  .step.show{display:block}
+  .step .now{font-size:12.5px;font-weight:700;color:#fff;line-height:1.3;min-height:32px;margin-bottom:8px}
+  .step .row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .step .b{cursor:pointer;font-size:13px;font-weight:800;color:#cbd2e0;padding:5px 11px;border-radius:8px;background:var(--card);border:1px solid var(--line);user-select:none}
+  .step .b:hover{border-color:var(--blue);color:#fff} .step .b.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .step .c{font-size:12px;color:var(--mut);min-width:42px;text-align:center}
+  /* insight box */
+  .ins{margin-top:11px;border-top:1px solid var(--line);padding-top:10px;display:none}
+  .ins.show{display:block}
+  .ins .it{font-size:12px;font-weight:700;color:var(--gold);line-height:1.35;margin-bottom:4px}
+  .ins .ib{font-size:11.5px;color:#aab2c5;line-height:1.55;max-height:0;overflow:hidden;transition:max-height .3s}
+  .ins.open .ib{max-height:340px;overflow:auto}
+  .ins .more{font-size:11px;color:var(--teal);cursor:pointer;margin-top:4px;user-select:none}
+
+  /* detail panel (left, under header) */
+  .panel{position:absolute;top:54px;right:20px;width:300px;max-height:calc(100% - 90px);z-index:24;
+    background:rgba(34,40,67,.95);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);overflow:auto;padding:15px 17px;display:none}
+  .panel.show{display:block}
+  .panel .x{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--mut);font-size:18px;line-height:1}
+  .panel .badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;color:#0d1020;margin-bottom:8px}
+  .panel h3{font-size:15px;font-weight:800;line-height:1.25;margin-bottom:4px;padding-right:16px}
+  .panel .sub2{font-size:11px;color:var(--mut);margin-bottom:11px}
+  .panel .kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:12px;margin-bottom:11px}
+  .panel .kv .k{color:var(--mut)} .panel .kv .v{color:#e8eaf2}
+  .panel .rat{font-size:12px;color:#dfe3ee;line-height:1.5;background:rgba(67,97,238,.10);border-left:3px solid var(--blue);padding:8px 10px;border-radius:6px;margin-bottom:10px}
+  .panel .src a{display:block;font-size:10.5px;color:var(--teal);text-decoration:none;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .panel .src a:hover{text-decoration:underline}
+  .panel .srch{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:6px 0 2px}
+
+  .legend{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .legend h4{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+  .legend .row{display:flex;flex-wrap:wrap;gap:8px 12px}
+  .legend .it{display:flex;align-items:center;gap:5px;font-size:11px;color:#cbd2e0}
+  .legend .dot{width:9px;height:9px;border-radius:50%}
+  .foot{position:absolute;right:20px;bottom:14px;z-index:18;font-size:10px;color:var(--dim);text-align:right;line-height:1.5;pointer-events:none}
+
+  @media (max-width:820px){
+    .hdr{max-width:60%} .hdr .sub{display:none}
+    .crumb{max-width:92%;top:auto;bottom:128px;left:10px;right:10px;transform:none}
+    .nav{top:auto;left:8px;right:8px;width:auto;bottom:8px;max-height:46vh;overflow:auto}
+    .panel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:52%;border-radius:14px 14px 0 0}
+    .legend{display:none} .foot{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar"></div>
+  <div id="net"></div>
+
+  <div class="hdr">
+    <div class="eos">&lt;entity-graph&gt; <b>$_</b> own the meaning</div>
+    <h1 id="t-title">モバイルバッテリー Entity Graph</h1>
+    <div class="sub" id="t-sub">スペックでなく「意味（誰に・どの場面で・何が要る）」を所有する。</div>
+  </div>
+
+  <div class="ctrl">
+    <div class="seg" id="lang"><span data-l="ja" class="on">日本語</span><span data-l="en">EN</span></div>
+    <div class="btn" id="lens"><span id="t-lens">意味レンズ</span></div>
+  </div>
+
+  <div class="crumb" id="crumb"></div>
+
+  <div class="nav">
+    <h4 id="t-navh">絞り込み（掛け算）</h4>
+    <label id="t-lb">メーカー</label>
+    <select id="sel-brand"></select>
+    <label id="t-lt">テーマ</label>
+    <select id="sel-theme"></select>
+    <label id="t-lf">機能的特徴</label>
+    <select id="sel-feat"></select>
+    <div class="clr" id="clr">✕ <span id="t-clr">すべて解除</span></div>
+
+    <div class="step" id="step">
+      <div class="now" id="step-now"></div>
+      <div class="row">
+        <span class="b" id="step-prev">◀</span>
+        <span class="c" id="step-c">1 / 1</span>
+        <span class="b" id="step-next">▶</span>
+        <span class="b" id="step-auto" title="auto">▶</span>
+      </div>
+    </div>
+
+    <div class="ins" id="ins">
+      <div class="it" id="ins-t"></div>
+      <div class="ib" id="ins-b"></div>
+      <div class="more" id="ins-more"></div>
+    </div>
+
+    <div class="legend">
+      <h4 id="t-leg">凡例 / Node types</h4>
+      <div class="row" id="leg-row"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel"></div>
+  <div class="foot" id="t-foot"></div>
+</div>
+
+<script>
+const KG = {
+  "meta": {
+    "title": "モバイルバッテリー（USBパワーバンク）市場 エンティティグラフ",
+    "title_en": "Mobile Battery (USB Power Bank) Market Entity Graph",
+    "version": "1.0.0",
+    "created": "2026-06-17",
+    "scope": "2025〜2026年 日本市場主要モデル＋世界的著名機",
+    "node_count": 62,
+    "edge_count": 111,
+    "node_types": [
+      "Product",
+      "Brand",
+      "UserSegment",
+      "UseContext",
+      "Technology",
+      "Regulation"
+    ],
+    "edge_types": [
+      "made_by",
+      "suited_for",
+      "used_in",
+      "uses_tech",
+      "competes_with",
+      "needs",
+      "limited_by",
+      "fits_scene"
+    ],
+    "sources_primary": [
+      "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane",
+      "https://www.mlit.go.jp/report/press/content/001995959.pdf",
+      "https://www.mlit.go.jp/report/press/kouku10_hh_000310.html",
+      "https://www.meti.go.jp/policy/consumer/seian/denan/mlb_faq.html",
+      "https://makuring.jp/best-power-bank/",
+      "https://my-best.com/959",
+      "https://ugreen.jp/blogs/articles/2025powerbank"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "brand_anker",
+      "type": "Brand",
+      "label_ja": "Anker（アンカー）",
+      "label_en": "Anker",
+      "attrs": {
+        "origin": "中国（米国上場）",
+        "founded": 2011,
+        "japan_presence": true,
+        "market_position": "日本モバイル充電ブランド売上No.1（ユーロモニター2024）",
+        "key_tech": [
+          "GaNPrime",
+          "PowerIQ",
+          "ActiveShield"
+        ],
+        "product_lines": [
+          "Prime",
+          "MagGo",
+          "Nano",
+          "Zolo",
+          "Fusion"
+        ]
+      },
+      "sources": [
+        "https://www.ankerjapan.com/pages/anker-prime",
+        "https://www.ankerjapan.com/blogs/magazine/what-is-pse"
+      ]
+    },
+    {
+      "id": "brand_cio",
+      "type": "Brand",
+      "label_ja": "CIO（シーアイオー）",
+      "label_en": "CIO (Connect International One)",
+      "attrs": {
+        "origin": "日本",
+        "founded": 2015,
+        "japan_presence": true,
+        "market_position": "日本発GaN充電器・モバイルバッテリーブランド",
+        "key_tech": [
+          "Nova Safety 2.0",
+          "GaN",
+          "コンセント一体型"
+        ],
+        "product_lines": [
+          "SMARTCOBY",
+          "SMARTCOBY Pro",
+          "SMARTCOBY TRIO",
+          "SMARTCOBY SLIM"
+        ]
+      },
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/"
+      ]
+    },
+    {
+      "id": "brand_ugreen",
+      "type": "Brand",
+      "label_ja": "UGREEN（ユーグリーン）",
+      "label_en": "UGREEN",
+      "attrs": {
+        "origin": "中国",
+        "founded": 2012,
+        "japan_presence": true,
+        "market_position": "PC周辺機器・充電ガジェット急成長ブランド",
+        "key_tech": [
+          "Nexode（GaN）",
+          "PD3.1 140W",
+          "TFTスマートディスプレイ"
+        ],
+        "product_lines": [
+          "Nexode",
+          "Nexode Pro",
+          "MagFlow Air"
+        ]
+      },
+      "sources": [
+        "https://ugreen.jp/collections/mobilebattery"
+      ]
+    },
+    {
+      "id": "brand_belkin",
+      "type": "Brand",
+      "label_ja": "Belkin（ベルキン）",
+      "label_en": "Belkin",
+      "attrs": {
+        "origin": "米国（フォックスコン傘下）",
+        "founded": 1983,
+        "japan_presence": true,
+        "market_position": "Apple認定アクセサリーブランド、MFi・MagSafe公認",
+        "key_tech": [
+          "BoostCharge",
+          "MagSafe公認"
+        ],
+        "product_lines": [
+          "BoostCharge",
+          "BoostCharge Pro"
+        ]
+      },
+      "sources": [
+        "https://www.belkin.com/products/portable-chargers-power-banks/"
+      ]
+    },
+    {
+      "id": "brand_zendure",
+      "type": "Brand",
+      "label_ja": "Zendure（ゼンデュア）",
+      "label_en": "Zendure",
+      "attrs": {
+        "origin": "中国（米国拠点）",
+        "founded": 2013,
+        "japan_presence": true,
+        "market_position": "堅牢性・大容量特化ブランド、ポータブル電源も展開",
+        "key_tech": [
+          "全ポートUSB-C",
+          "100W PD"
+        ],
+        "product_lines": [
+          "SuperTank",
+          "SuperTank Pro"
+        ]
+      },
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro"
+      ]
+    },
+    {
+      "id": "brand_cmf",
+      "type": "Brand",
+      "label_ja": "CMF by Nothing",
+      "label_en": "CMF by Nothing",
+      "attrs": {
+        "origin": "英国（Nothing Technology）",
+        "founded": 2023,
+        "japan_presence": true,
+        "market_position": "デザイン重視・コスパ訴求のサブブランド",
+        "key_tech": [
+          "GaN",
+          "PD3.0"
+        ],
+        "product_lines": [
+          "CMF Power Bank",
+          "CMF Power 65W GaN"
+        ]
+      },
+      "sources": [
+        "https://nothing.tech/products/cmf-power-65w-gan"
+      ]
+    },
+    {
+      "id": "brand_elecom",
+      "type": "Brand",
+      "label_ja": "ELECOM（エレコム）",
+      "label_en": "ELECOM",
+      "attrs": {
+        "origin": "日本",
+        "founded": 1986,
+        "japan_presence": true,
+        "market_position": "日本大手PC周辺機器メーカー、安心・安全訴求",
+        "key_tech": [
+          "独自安全設計",
+          "ケーブル一体型"
+        ],
+        "product_lines": [
+          "DE-Cシリーズ"
+        ]
+      },
+      "sources": [
+        "https://www.elecom.co.jp/category/cat_cellphone-battery/"
+      ]
+    },
+    {
+      "id": "brand_baseus",
+      "type": "Brand",
+      "label_ja": "Baseus（ベースアス）",
+      "label_en": "Baseus",
+      "attrs": {
+        "origin": "中国",
+        "founded": 2011,
+        "japan_presence": true,
+        "market_position": "コスパ重視・薄型大容量モデルが特徴",
+        "key_tech": [
+          "PD 100W",
+          "薄型設計"
+        ],
+        "product_lines": [
+          "Adaman",
+          "Blade",
+          "PicoGO"
+        ]
+      },
+      "sources": [
+        "https://baseus.co.jp/"
+      ]
+    },
+    {
+      "id": "brand_xiaomi",
+      "type": "Brand",
+      "label_ja": "Xiaomi（シャオミ）",
+      "label_en": "Xiaomi",
+      "attrs": {
+        "origin": "中国",
+        "founded": 2010,
+        "japan_presence": true,
+        "market_position": "スマートフォンメーカー直系、独自HyperCharge対応",
+        "key_tech": [
+          "HyperCharge 212W",
+          "PD3.1 140W",
+          "ケーブル内蔵"
+        ],
+        "product_lines": [
+          "HyperCharge Power Bank",
+          "33W Power Bank"
+        ]
+      },
+      "sources": [
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/"
+      ]
+    },
+    {
+      "id": "brand_ecoflow",
+      "type": "Brand",
+      "label_ja": "EcoFlow（エコフロー）",
+      "label_en": "EcoFlow",
+      "attrs": {
+        "origin": "中国",
+        "founded": 2017,
+        "japan_presence": true,
+        "market_position": "ポータブル電源大手がモバイルバッテリー参入、X-Stream技術",
+        "key_tech": [
+          "X-Stream",
+          "Qi2.2",
+          "ケーブル内蔵"
+        ],
+        "product_lines": [
+          "RAPID Mag Power Bank"
+        ]
+      },
+      "sources": [
+        "https://jp.ecoflow.com/products/ecoflow-rapid-magnetic-power-bank-5000mah"
+      ]
+    },
+    {
+      "id": "prod_anker_prime_300w",
+      "type": "Product",
+      "label_ja": "Anker Prime Power Bank (26250mAh, 300W)",
+      "label_en": "Anker Prime Power Bank (26250mAh, 300W)",
+      "attrs": {
+        "capacity_mah": 26250,
+        "capacity_wh": 99.75,
+        "max_output_w": 300,
+        "single_port_max_w": 140,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": 24990,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "LED数字",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "PD3.1対応・単ポート140W・世界初安定140W単ポート・TSA承認容量"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a110a",
+        "https://kakaku.com/item/K0001641947/",
+        "https://www.theverge.com/news/765778/anker-fastest-power-bank-launches-new-prime-family"
+      ]
+    },
+    {
+      "id": "prod_anker_prime_250w",
+      "type": "Product",
+      "label_ja": "Anker Prime Power Bank (27650mAh, 250W)",
+      "label_en": "Anker Prime Power Bank (27650mAh, 250W)",
+      "attrs": {
+        "capacity_mah": 27650,
+        "capacity_wh": 102.3,
+        "max_output_w": 250,
+        "single_port_max_w": 140,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": 665,
+        "price_jpy": 24990,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "スマートディスプレイ（Ankerアプリ連携）",
+        "airline_carry_on": false,
+        "release_year": 2023,
+        "note": "容量102.3Wh→航空機100Wh超のため事前承認必要"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1340",
+        "https://kakaku.com/item/K0001641947/"
+      ]
+    },
+    {
+      "id": "prod_anker_prime_220w",
+      "type": "Product",
+      "label_ja": "Anker Prime Power Bank (20100mAh, 220W)",
+      "label_en": "Anker Prime Power Bank (20100mAh, 220W)",
+      "attrs": {
+        "capacity_mah": 20100,
+        "capacity_wh": 74.4,
+        "max_output_w": 220,
+        "single_port_max_w": 140,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": 19990,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "74.4Wh→100Wh以下で航空機制限なし"
+      },
+      "sources": [
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "id": "prod_anker_prime_fusion_65w",
+      "type": "Product",
+      "label_ja": "Anker Prime Power Bank (9600mAh, 65W, Fusion)",
+      "label_en": "Anker Prime Power Bank (9600mAh, 65W, Fusion)",
+      "attrs": {
+        "capacity_mah": 9600,
+        "capacity_wh": 35.5,
+        "max_output_w": 65,
+        "single_port_max_w": 65,
+        "ports": "USB-C×1 + USB-A×1 + ACプラグ",
+        "weight_g": 308,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "充電器＋モバイルバッテリー2-in-1、GaNPrime採用で従来比60%小型化"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "id": "prod_anker_maggo_10k",
+      "type": "Product",
+      "label_ja": "Anker MagGo Power Bank (10000mAh, Slim)",
+      "label_en": "Anker MagGo Power Bank (10000mAh, Slim)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 15,
+        "single_port_max_w": 15,
+        "ports": "Qi2ワイヤレス×1 + USB-C×1",
+        "weight_g": 207,
+        "price_jpy": 8490,
+        "wireless": true,
+        "wireless_standard": "Qi2（MagSafe互換）",
+        "built_in_cable": false,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "iPhone背面マグネット吸着・パススルー対応・薄型15mm"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1664",
+        "https://www.amazon.co.jp/dp/B0DB17C63X"
+      ]
+    },
+    {
+      "id": "prod_anker_nano_30w",
+      "type": "Product",
+      "label_ja": "Anker Nano Power Bank (30W, Built-In USB-C Cable)",
+      "label_en": "Anker Nano Power Bank (30W, Built-In USB-C Cable)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 30,
+        "single_port_max_w": 30,
+        "ports": "USB-C内蔵ケーブル×1 + USB-C×1",
+        "weight_g": 215,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": true,
+        "display": "LEDディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2023,
+        "note": "USB-Cケーブル内蔵・ケーブル忘れ防止・コンパクト"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1259",
+        "https://www.amazon.co.jp/dp/B0CDBY9P5Q"
+      ]
+    },
+    {
+      "id": "prod_anker_pb_10k_22w",
+      "type": "Product",
+      "label_ja": "Anker Power Bank (10000mAh, 22.5W)",
+      "label_en": "Anker Power Bank (10000mAh, 22.5W)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 22.5,
+        "single_port_max_w": 22.5,
+        "ports": "USB-C×1 + USB-A×1",
+        "weight_g": 200,
+        "price_jpy": 3490,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "価格.comランキング常連・コスパ最強エントリーモデル"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1257",
+        "https://kakaku.com/kaden/mobile-battery/ranking_3114/"
+      ]
+    },
+    {
+      "id": "prod_anker_fusion_30w",
+      "type": "Product",
+      "label_ja": "Anker Power Bank (30W, Fusion, Built-In USB-C Cable)",
+      "label_en": "Anker Power Bank (30W, Fusion, Built-In USB-C Cable)",
+      "attrs": {
+        "capacity_mah": 5000,
+        "capacity_wh": 18.5,
+        "max_output_w": 30,
+        "single_port_max_w": 30,
+        "ports": "USB-C×1 + ACプラグ + USB-Cケーブル内蔵",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": true,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "充電器＋バッテリー＋ケーブル3-in-1・出張の荷物最小化"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1636"
+      ]
+    },
+    {
+      "id": "prod_anker_maggo_applewatch",
+      "type": "Product",
+      "label_ja": "Anker MagGo Power Bank (10000mAh, 35W, For Apple Watch)",
+      "label_en": "Anker MagGo Power Bank (10000mAh, 35W, For Apple Watch)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 35,
+        "single_port_max_w": 30,
+        "ports": "Qi2ワイヤレス×1 + Apple Watch充電パッド×1 + USB-Cケーブル内蔵",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": true,
+        "wireless_standard": "Qi2",
+        "built_in_cable": true,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "Apple Watch充電パッド内蔵・Appleエコシステム完結"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1657"
+      ]
+    },
+    {
+      "id": "prod_cio_smartcoby_trio",
+      "type": "Product",
+      "label_ja": "CIO SMARTCOBY TRIO 67W 20000mAh",
+      "label_en": "CIO SMARTCOBY TRIO 67W 20000mAh",
+      "attrs": {
+        "capacity_mah": 20000,
+        "capacity_wh": 74.0,
+        "max_output_w": 67,
+        "single_port_max_w": 67,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": 333,
+        "price_jpy": 8980,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "数字",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "20000mAhクラス最軽量級・my-bestランキング1位・Nova Safety 2.0"
+      },
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w2c1a-20000/",
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "id": "prod_cio_smartcoby_plug2",
+      "type": "Product",
+      "label_ja": "CIO SMARTCOBY Pro PLUG II 67W 10000mAh",
+      "label_en": "CIO SMARTCOBY Pro PLUG II 67W 10000mAh",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 67,
+        "single_port_max_w": 67,
+        "ports": "USB-C×3 + ACプラグ内蔵",
+        "weight_g": null,
+        "price_jpy": 10800,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "液晶（保護フィルム付）",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "コンセント一体型・充電器不要・3ポート同時充電・出張ミニマリスト向け"
+      },
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w3c-10k-p2/",
+        "https://macfan.book.mynavi.jp/article/41121/"
+      ]
+    },
+    {
+      "id": "prod_cio_smartcoby_slim_wireless",
+      "type": "Product",
+      "label_ja": "CIO SMARTCOBY SLIM II Wireless 2.2 10K",
+      "label_en": "CIO SMARTCOBY SLIM II Wireless 2.2 10K",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 22,
+        "single_port_max_w": 22,
+        "ports": "Qi2.2ワイヤレス×1 + USB-C×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": true,
+        "wireless_standard": "Qi2.2（25W）",
+        "built_in_cable": false,
+        "display": "数字",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "Qi2.2（25W）対応・薄型・MagSafe互換"
+      },
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "prod_ugreen_nexode_25k_200w",
+      "type": "Product",
+      "label_ja": "UGREEN Nexode Pro モバイルバッテリー 25000mAh 200W",
+      "label_en": "UGREEN Nexode Pro Power Bank 25000mAh 200W",
+      "attrs": {
+        "capacity_mah": 25000,
+        "capacity_wh": 92.5,
+        "max_output_w": 200,
+        "single_port_max_w": 140,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "TFTスマートディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "PD3.1 140W・TFTディスプレイ・MacBook Pro 16インチ対応・2台PC同時充電"
+      },
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w",
+        "https://www.amazon.co.jp/dp/B0CXHM5RY2"
+      ]
+    },
+    {
+      "id": "prod_ugreen_magflow_10k",
+      "type": "Product",
+      "label_ja": "UGREEN MagFlow Air 10000mAh モバイルバッテリー",
+      "label_en": "UGREEN MagFlow Air 10000mAh",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 15,
+        "single_port_max_w": 15,
+        "ports": "Qi2ワイヤレス×1 + USB-C×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": true,
+        "wireless_standard": "Qi2",
+        "built_in_cable": false,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "MagSafe互換・薄型・iPhone吸着充電"
+      },
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "prod_belkin_boostcharge_20k",
+      "type": "Product",
+      "label_ja": "Belkin BoostCharge Pro 3ポート ラップトップ パワーバンク 20K",
+      "label_en": "Belkin BoostCharge Pro 3-Port Laptop Power Bank 20K",
+      "attrs": {
+        "capacity_mah": 20000,
+        "capacity_wh": 74.0,
+        "max_output_w": 65,
+        "single_port_max_w": 65,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "Apple MFi認定・MacBook Air 1.3回充電・Belkin安心ブランド"
+      },
+      "sources": [
+        "https://www.belkin.com/p/power-bank-20k/BPB012btBK.html",
+        "https://www.bestbuy.com/product/belkin-boostcharge-pro-3-port-laptop-power-bank-20k"
+      ]
+    },
+    {
+      "id": "prod_zendure_supertank_pro",
+      "type": "Product",
+      "label_ja": "Zendure SuperTank Pro 26800mAh 100W",
+      "label_en": "Zendure SuperTank Pro 26800mAh 100W",
+      "attrs": {
+        "capacity_mah": 26800,
+        "capacity_wh": 99.1,
+        "max_output_w": 100,
+        "single_port_max_w": 100,
+        "ports": "USB-C×4",
+        "weight_g": 580,
+        "price_jpy": 26800,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "数字",
+        "airline_carry_on": true,
+        "release_year": 2020,
+        "note": "全ポートUSB-C・4台同時100W・99.1Wh（100Wh以下ギリギリ）・アウトドア・ビジネス両対応"
+      },
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro",
+        "https://chibimegane.jp/zendure-supertank-pro-spec/"
+      ]
+    },
+    {
+      "id": "prod_xiaomi_212w_25k",
+      "type": "Product",
+      "label_ja": "Xiaomi 212W HyperCharge Power Bank 25000",
+      "label_en": "Xiaomi 212W HyperCharge Power Bank 25000",
+      "attrs": {
+        "capacity_mah": 25000,
+        "capacity_wh": 92.5,
+        "max_output_w": 212,
+        "single_port_max_w": 140,
+        "ports": "USB-C×2 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": 12980,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "カラーディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "Xiaomiスマホ最大120W・PD3.1 140W・コスパ最強ハイスペック"
+      },
+      "sources": [
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/",
+        "https://orefolder.jp/2025/04/xiaomi-212w-hypercharge-power-bank-25000mah-2/"
+      ]
+    },
+    {
+      "id": "prod_ecoflow_rapid_mag_10k",
+      "type": "Product",
+      "label_ja": "EcoFlow RAPID Mag Power Bank 10000mAh（USB-Cケーブル内蔵）",
+      "label_en": "EcoFlow RAPID Mag Power Bank 10000mAh (Built-in Cable)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 65,
+        "single_port_max_w": 65,
+        "ports": "Qi2.2ワイヤレス×1 + USB-Cケーブル内蔵 + USB-C×1",
+        "weight_g": 220,
+        "price_jpy": null,
+        "wireless": true,
+        "wireless_standard": "Qi2.2（25W）",
+        "built_in_cable": true,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "X-Stream技術・0→70%を33分・ケーブル内蔵＋Qi2.2の全部入り"
+      },
+      "sources": [
+        "https://jp.ecoflow.com/",
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "prod_baseus_blade_100w",
+      "type": "Product",
+      "label_ja": "Baseus Blade 100W 20000mAh（薄型）",
+      "label_en": "Baseus Blade 100W 20000mAh",
+      "attrs": {
+        "capacity_mah": 20000,
+        "capacity_wh": 74.0,
+        "max_output_w": 100,
+        "single_port_max_w": 100,
+        "ports": "USB-C×2 + USB-A×2",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "LED出力表示",
+        "airline_carry_on": true,
+        "release_year": 2023,
+        "note": "厚さ1.8cm極薄・4ポート・コスパ重視ユーザー向け"
+      },
+      "sources": [
+        "https://note.com/yaririri/n/n9248595f34c2"
+      ]
+    },
+    {
+      "id": "prod_elecom_de_c64_20k",
+      "type": "Product",
+      "label_ja": "ELECOM DE-C64-20000 ケーブル一体型 20000mAh",
+      "label_en": "ELECOM DE-C64-20000 Built-in Cable 20000mAh",
+      "attrs": {
+        "capacity_mah": 20000,
+        "capacity_wh": 74.0,
+        "max_output_w": null,
+        "single_port_max_w": null,
+        "ports": "USB-Cケーブル内蔵",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": true,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "日本メーカー安心感・ケーブル一体型・シニア・初心者向け"
+      },
+      "sources": [
+        "https://www.yamada-denkiweb.com/media/21909/"
+      ]
+    },
+    {
+      "id": "prod_anker_pb_25k_100w",
+      "type": "Product",
+      "label_ja": "Anker Power Bank (25000mAh, Built-In & 巻取り式USB-Cケーブル)",
+      "label_en": "Anker Power Bank (25000mAh, Built-In & Retractable USB-C Cable)",
+      "attrs": {
+        "capacity_mah": 25000,
+        "capacity_wh": 92.5,
+        "max_output_w": 100,
+        "single_port_max_w": 100,
+        "ports": "USB-C×2 + USB-A×2 + USB-Cケーブル内蔵×1 + 巻取りケーブル×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": true,
+        "display": "数字ディスプレイ",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "ケーブル2本内蔵・4ポート・MacBook Air対応・旅行最適化"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1695"
+      ]
+    },
+    {
+      "id": "prod_anker_zolo_10k",
+      "type": "Product",
+      "label_ja": "Anker Zolo Power Bank (10000mAh, 22.5W, Built-In USB-C Cable)",
+      "label_en": "Anker Zolo Power Bank (10000mAh, 22.5W, Built-In USB-C Cable)",
+      "attrs": {
+        "capacity_mah": 10000,
+        "capacity_wh": 37.0,
+        "max_output_w": 22.5,
+        "single_port_max_w": 22.5,
+        "ports": "USB-Cケーブル内蔵×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": true,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2025,
+        "note": "エントリー価格帯・ケーブル内蔵・通勤通学向け"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/products/a1688"
+      ]
+    },
+    {
+      "id": "prod_ugreen_strap_20k",
+      "type": "Product",
+      "label_ja": "UGREEN ストラップ型モバイルバッテリー 20000mAh 22.5W",
+      "label_en": "UGREEN Strap-Type Power Bank 20000mAh 22.5W",
+      "attrs": {
+        "capacity_mah": 20000,
+        "capacity_wh": 74.0,
+        "max_output_w": 22.5,
+        "single_port_max_w": 22.5,
+        "ports": "USB-C×1 + USB-A×1",
+        "weight_g": null,
+        "price_jpy": null,
+        "wireless": false,
+        "built_in_cable": false,
+        "display": "LED",
+        "airline_carry_on": true,
+        "release_year": 2024,
+        "note": "ショルダーストラップ付き・フェス・ライブ・アウトドア特化デザイン"
+      },
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "seg_business_traveler",
+      "type": "UserSegment",
+      "label_ja": "出張ビジネスパーソン",
+      "label_en": "Business Traveler",
+      "attrs": {
+        "needs": [
+          "MacBook/iPad急速充電",
+          "荷物最小化",
+          "コンセント不要",
+          "新幹線・飛行機対応"
+        ],
+        "pain_points": "コンセント争奪・ケーブル忘れ・重量増加",
+        "device_profile": "MacBook Air/Pro + iPhone + iPad",
+        "typical_capacity": "10000〜20000mAh",
+        "typical_output": "65W以上"
+      },
+      "sources": [
+        "https://chargenavi.com/travel-powerbank/",
+        "https://03review.com/mobile-battery-plug/"
+      ]
+    },
+    {
+      "id": "seg_video_creator",
+      "type": "UserSegment",
+      "label_ja": "動画クリエイター・カメラマン",
+      "label_en": "Video Creator / Cameraman",
+      "attrs": {
+        "needs": [
+          "長時間給電",
+          "複数機器同時充電",
+          "大容量20000mAh以上",
+          "カメラ・LED・モニター給電"
+        ],
+        "pain_points": "撮影中の電源切れ・航空機持込制限（2026年新ルール）",
+        "device_profile": "ミラーレスカメラ + スマホ + LEDライト",
+        "typical_capacity": "20000mAh以上",
+        "typical_output": "100W以上"
+      },
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614",
+        "https://www.youtube.com/watch?v=yuHzEnA1BcI"
+      ]
+    },
+    {
+      "id": "seg_disaster_prep",
+      "type": "UserSegment",
+      "label_ja": "防災備蓄ユーザー",
+      "label_en": "Disaster Preparedness User",
+      "attrs": {
+        "needs": [
+          "大容量20000mAh以上",
+          "複数デバイス充電",
+          "長期保存",
+          "信頼性・安全性"
+        ],
+        "pain_points": "停電時の電源確保・バッテリー劣化",
+        "device_profile": "スマホ + ラジオ + 家族分の端末",
+        "typical_capacity": "20000mAh以上",
+        "typical_output": "30W以上"
+      },
+      "sources": [
+        "https://joshinweb.jp/mobile/em_mobb.html",
+        "https://motteru.co.jp/column/item/18473/"
+      ]
+    },
+    {
+      "id": "seg_gadget_enthusiast",
+      "type": "UserSegment",
+      "label_ja": "ガジェット好き・テックギーク",
+      "label_en": "Gadget Enthusiast / Tech Geek",
+      "attrs": {
+        "needs": [
+          "最高スペック",
+          "スマートディスプレイ",
+          "アプリ連携",
+          "最新規格（PD3.1/Qi2.2）"
+        ],
+        "pain_points": "スペック不足・古い規格",
+        "device_profile": "MacBook Pro + iPhone + iPad + AirPods + Apple Watch",
+        "typical_capacity": "20000mAh以上",
+        "typical_output": "140W以上"
+      },
+      "sources": [
+        "https://note.com/kazu_3734/n/nf47b722f9545",
+        "https://www.ankerjapan.com/pages/anker-prime"
+      ]
+    },
+    {
+      "id": "seg_commuter",
+      "type": "UserSegment",
+      "label_ja": "通勤・通学ユーザー",
+      "label_en": "Daily Commuter / Student",
+      "attrs": {
+        "needs": [
+          "軽量コンパクト",
+          "ケーブル内蔵",
+          "低価格",
+          "スマホ1〜2回充電"
+        ],
+        "pain_points": "バッグが重い・ケーブル忘れ",
+        "device_profile": "スマホ（iPhone/Android）",
+        "typical_capacity": "5000〜10000mAh",
+        "typical_output": "22.5〜30W"
+      },
+      "sources": [
+        "https://my-best.com/959",
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "seg_outdoor",
+      "type": "UserSegment",
+      "label_ja": "アウトドア・登山ユーザー",
+      "label_en": "Outdoor / Hiking User",
+      "attrs": {
+        "needs": [
+          "軽量（100g台〜200g台）",
+          "防水・耐衝撃",
+          "ソーラー充電対応",
+          "GPS・カメラ給電"
+        ],
+        "pain_points": "重量増加・コンセントなし環境",
+        "device_profile": "スマホ + GPS + カメラ",
+        "typical_capacity": "10000〜20000mAh（縦走は大容量）",
+        "typical_output": "18W以上"
+      },
+      "sources": [
+        "https://yamatabitabi.com/archives/195050",
+        "https://hiker-h.com/mountain-mobile-battery/"
+      ]
+    },
+    {
+      "id": "seg_pc_heavy",
+      "type": "UserSegment",
+      "label_ja": "PCヘビーユーザー（クリエイター・エンジニア）",
+      "label_en": "PC Heavy User (Creator / Engineer)",
+      "attrs": {
+        "needs": [
+          "140W以上の高出力",
+          "MacBook Pro 16インチ対応",
+          "大容量25000mAh以上",
+          "複数PC同時充電"
+        ],
+        "pain_points": "出力不足でPC充電不可・重量",
+        "device_profile": "MacBook Pro 16インチ + iPad Pro + 外付けSSD",
+        "typical_capacity": "25000mAh以上",
+        "typical_output": "140W以上（PD3.1）"
+      },
+      "sources": [
+        "https://note.com/orisusarusan/n/n2b9f2c1d09cf",
+        "https://03review.com/usb-charger-pd140w/"
+      ]
+    },
+    {
+      "id": "seg_senior",
+      "type": "UserSegment",
+      "label_ja": "シニア・デジタル初心者",
+      "label_en": "Senior / Digital Beginner",
+      "attrs": {
+        "needs": [
+          "操作簡単",
+          "残量わかりやすい表示",
+          "信頼ブランド（日本メーカー）",
+          "ケーブル内蔵"
+        ],
+        "pain_points": "充電方法がわからない・端子の差し込み方向",
+        "device_profile": "スマホ（Android/らくらくスマホ）",
+        "typical_capacity": "10000mAh",
+        "typical_output": "18W以下"
+      },
+      "sources": [
+        "https://www.yamada-denkiweb.com/media/21909/",
+        "https://www.elecom.co.jp/pickup/mobile_battery/basic07.html"
+      ]
+    },
+    {
+      "id": "seg_live_fan",
+      "type": "UserSegment",
+      "label_ja": "ライブ・フェス・推し活ユーザー",
+      "label_en": "Live Concert / Festival Fan",
+      "attrs": {
+        "needs": [
+          "10〜12時間持続",
+          "軽量・携帯性",
+          "ストラップ付き",
+          "スマホ複数回充電"
+        ],
+        "pain_points": "長時間イベントでの電池切れ・荷物の重さ",
+        "device_profile": "スマホ（撮影・SNS・電子チケット）",
+        "typical_capacity": "10000〜20000mAh",
+        "typical_output": "22.5〜30W"
+      },
+      "sources": [
+        "https://kyoonlife.com/fes-mobile-battery-guide/",
+        "https://zoe-travel.com/mobilebattery-anker/"
+      ]
+    },
+    {
+      "id": "ctx_shinkansen_business",
+      "type": "UseContext",
+      "label_ja": "新幹線・国内出張",
+      "label_en": "Shinkansen / Domestic Business Trip",
+      "attrs": {
+        "duration_hours": "2〜5時間",
+        "power_source": "コンセント争奪・座席によりなし",
+        "key_requirement": "MacBook継続使用・コンセント一体型で自己完結",
+        "regulation_concern": "なし（国内）"
+      },
+      "sources": [
+        "https://chargenavi.com/travel-powerbank/"
+      ]
+    },
+    {
+      "id": "ctx_disaster",
+      "type": "UseContext",
+      "label_ja": "災害・停電時",
+      "label_en": "Disaster / Power Outage",
+      "attrs": {
+        "duration_hours": "数時間〜数日",
+        "power_source": "なし",
+        "key_requirement": "大容量・複数デバイス・長期保存可能",
+        "regulation_concern": "なし"
+      },
+      "sources": [
+        "https://joshinweb.jp/mobile/em_mobb.html"
+      ]
+    },
+    {
+      "id": "ctx_outdoor_shooting",
+      "type": "UseContext",
+      "label_ja": "屋外撮影・フィールドワーク",
+      "label_en": "Outdoor Shooting / Fieldwork",
+      "attrs": {
+        "duration_hours": "6〜12時間",
+        "power_source": "なし",
+        "key_requirement": "大容量・複数機器給電・軽量",
+        "regulation_concern": "航空機持込（ロケ移動時）"
+      },
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614"
+      ]
+    },
+    {
+      "id": "ctx_desk_setup",
+      "type": "UseContext",
+      "label_ja": "デスク常設・在宅ワーク補助",
+      "label_en": "Desk Setup / Remote Work Supplement",
+      "attrs": {
+        "duration_hours": "終日",
+        "power_source": "コンセントあり（パススルー活用）",
+        "key_requirement": "パススルー・複数ポート・充電器兼用",
+        "regulation_concern": "なし"
+      },
+      "sources": [
+        "https://macfan.book.mynavi.jp/article/41121/"
+      ]
+    },
+    {
+      "id": "ctx_international_travel",
+      "type": "UseContext",
+      "label_ja": "海外旅行・国際線フライト",
+      "label_en": "International Travel / Long-haul Flight",
+      "attrs": {
+        "duration_hours": "12〜24時間以上",
+        "power_source": "機内コンセント（機内充電は2026年4月より禁止）",
+        "key_requirement": "100Wh以下・2個まで・事前承認不要容量",
+        "regulation_concern": "航空機持込規制（160Wh以下・2個まで・機内充電禁止）"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane",
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
+    },
+    {
+      "id": "ctx_live_festival",
+      "type": "UseContext",
+      "label_ja": "ライブ・フェス・屋外イベント",
+      "label_en": "Live Concert / Music Festival",
+      "attrs": {
+        "duration_hours": "8〜14時間",
+        "power_source": "なし（屋外）",
+        "key_requirement": "軽量・ストラップ付き・スマホ複数回充電",
+        "regulation_concern": "なし"
+      },
+      "sources": [
+        "https://kyoonlife.com/fes-mobile-battery-guide/"
+      ]
+    },
+    {
+      "id": "ctx_hiking_camping",
+      "type": "UseContext",
+      "label_ja": "登山・キャンプ・アウトドア",
+      "label_en": "Hiking / Camping / Outdoor",
+      "attrs": {
+        "duration_hours": "1日〜数日",
+        "power_source": "なし（ソーラー補助可）",
+        "key_requirement": "軽量・耐衝撃・GPS・カメラ給電",
+        "regulation_concern": "なし"
+      },
+      "sources": [
+        "https://hiker-h.com/mountain-mobile-battery/"
+      ]
+    },
+    {
+      "id": "ctx_cafe_coworking",
+      "type": "UseContext",
+      "label_ja": "カフェ・コワーキングスペース",
+      "label_en": "Cafe / Coworking Space",
+      "attrs": {
+        "duration_hours": "2〜6時間",
+        "power_source": "コンセントあり/なし混在",
+        "key_requirement": "ノートPC充電・コンパクト・コンセント一体型",
+        "regulation_concern": "なし"
+      },
+      "sources": [
+        "https://note.com/saban_note360/n/n7f3e83906097"
+      ]
+    },
+    {
+      "id": "tech_gan",
+      "type": "Technology",
+      "label_ja": "GaN（窒化ガリウム）充電技術",
+      "label_en": "GaN (Gallium Nitride) Charging Technology",
+      "attrs": {
+        "benefit": "同出力比で最大50%小型化・発熱低減・高効率",
+        "adoption": "Anker GaNPrime / CIO Nova Safety / UGREEN Nexode",
+        "maturity": "主流化（2023〜）"
+      },
+      "sources": [
+        "https://motteru.co.jp/column/ac/18494/",
+        "https://iniushop.com/ja-jp/blogs/blog/what-is-gan-charging-technology"
+      ]
+    },
+    {
+      "id": "tech_pd31_140w",
+      "type": "Technology",
+      "label_ja": "USB PD 3.1（最大140W）",
+      "label_en": "USB Power Delivery 3.1 (up to 140W)",
+      "attrs": {
+        "benefit": "MacBook Pro 16インチをフルスピード充電可能・単ポート最大140W",
+        "adoption": "Anker Prime 300W / UGREEN Nexode 200W / Xiaomi 212W",
+        "maturity": "ハイエンド標準化（2024〜）"
+      },
+      "sources": [
+        "https://03review.com/usb-charger-pd140w/",
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/"
+      ]
+    },
+    {
+      "id": "tech_qi2_magsafe",
+      "type": "Technology",
+      "label_ja": "Qi2 / MagSafe（磁気吸着ワイヤレス充電）",
+      "label_en": "Qi2 / MagSafe Magnetic Wireless Charging",
+      "attrs": {
+        "benefit": "iPhone背面に磁力吸着・ケーブルレス・最大15W（Qi2）〜25W（Qi2.2）",
+        "adoption": "Anker MagGo / CIO SLIM Wireless / UGREEN MagFlow / EcoFlow RAPID",
+        "maturity": "急速普及（2024〜）",
+        "compatible_devices": "iPhone 12以降（iOS17.4以降でQi2対応）"
+      },
+      "sources": [
+        "https://www.silicon-power.com/jp/knowledge-detail/magsafe/",
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "id": "tech_builtin_cable",
+      "type": "Technology",
+      "label_ja": "ケーブル内蔵型",
+      "label_en": "Built-in Cable",
+      "attrs": {
+        "benefit": "ケーブル忘れ防止・荷物削減・即充電",
+        "adoption": "Anker Nano / Anker Zolo / CIO PLUG II / EcoFlow RAPID / ELECOM",
+        "maturity": "主流化（2023〜）",
+        "variants": [
+          "固定式USB-C",
+          "巻取り式",
+          "Lightning内蔵"
+        ]
+      },
+      "sources": [
+        "https://my-best.com/959",
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "id": "tech_smart_display",
+      "type": "Technology",
+      "label_ja": "スマートディスプレイ（TFT/数字残量表示）",
+      "label_en": "Smart Display (TFT / Numeric Remaining Capacity)",
+      "attrs": {
+        "benefit": "残量の正確な把握・充電状況の可視化・アプリ連携（Anker Prime）",
+        "adoption": "UGREEN Nexode TFT / Anker Prime（アプリ連携） / Xiaomi 212W",
+        "maturity": "ハイエンド標準化（2024〜）"
+      },
+      "sources": [
+        "https://www.ankerjapan.com/pages/anker-prime",
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "id": "tech_passthrough",
+      "type": "Technology",
+      "label_ja": "パススルー充電",
+      "label_en": "Pass-Through Charging",
+      "attrs": {
+        "benefit": "コンセント1つでバッテリー本体とデバイスを同時充電",
+        "adoption": "CIO PLUG II / Anker MagGo / Anker Fusion / Belkin BoostCharge",
+        "maturity": "普及済み",
+        "caveat": "常時使用はバッテリー寿命を縮める可能性あり"
+      },
+      "sources": [
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "id": "tech_ac_plug",
+      "type": "Technology",
+      "label_ja": "ACプラグ内蔵（コンセント一体型）",
+      "label_en": "Built-in AC Plug (Wall Plug Integrated)",
+      "attrs": {
+        "benefit": "充電器不要・荷物削減・コンセントに直挿し",
+        "adoption": "CIO SMARTCOBY PLUG II / Anker Prime Fusion / Anker Fusion / UGREEN コンセント付き",
+        "maturity": "急速普及（2022〜）"
+      },
+      "sources": [
+        "https://03review.com/mobile-battery-plug/",
+        "https://macfan.book.mynavi.jp/article/41121/"
+      ]
+    },
+    {
+      "id": "tech_semi_solid_battery",
+      "type": "Technology",
+      "label_ja": "半固体電池（次世代安全バッテリー）",
+      "label_en": "Semi-Solid State Battery",
+      "attrs": {
+        "benefit": "液漏れ・発火リスク低減・安全性向上",
+        "adoption": "一部新興ブランドが採用開始（2025〜）",
+        "maturity": "黎明期"
+      },
+      "sources": [
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "id": "reg_pse",
+      "type": "Regulation",
+      "label_ja": "PSE（電気用品安全法）マーク義務",
+      "label_en": "PSE Mark (Japan Electrical Appliance and Material Safety Act)",
+      "attrs": {
+        "authority": "経済産業省（METI）",
+        "applicable_to": "日本国内で製造・輸入・販売されるモバイルバッテリー全品",
+        "mark_type": "丸形PSEマーク（リチウムイオン蓄電池）",
+        "enforcement": "2019年2月〜義務化",
+        "penalty": "PSEなし製品の製造・輸入・販売禁止"
+      },
+      "sources": [
+        "https://www.meti.go.jp/policy/consumer/seian/denan/mlb_faq.html",
+        "https://www.ankerjapan.com/blogs/magazine/what-is-pse"
+      ]
+    },
+    {
+      "id": "reg_airline_160wh",
+      "type": "Regulation",
+      "label_ja": "航空機持込規制（160Wh上限・2個まで・機内充電禁止）",
+      "label_en": "Airline Carry-On Regulation (160Wh limit, 2 units max, no in-flight charging)",
+      "attrs": {
+        "authority": "国土交通省（MLIT）・ICAO国際基準",
+        "threshold_free": "100Wh以下：申告不要",
+        "threshold_approval": "100Wh超〜160Wh以下：航空会社事前承認が必要な場合あり",
+        "threshold_banned": "160Wh超：持込・預入禁止",
+        "quantity_limit": "1人2個まで（2026年4月24日〜）",
+        "in_flight_charging": "禁止（2026年4月24日〜）",
+        "penalty": "航空法違反・2年以下拘禁または100万円以下罰金",
+        "effective_date": "2026-04-24"
+      },
+      "sources": [
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf",
+        "https://www.mlit.go.jp/report/press/kouku10_hh_000310.html",
+        "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane"
+      ]
+    },
+    {
+      "id": "reg_lithium_transport",
+      "type": "Regulation",
+      "label_ja": "リチウム電池輸送規制（IATA・国際危険物規則）",
+      "label_en": "Lithium Battery Transport Regulation (IATA DGR)",
+      "attrs": {
+        "authority": "IATA（国際航空運送協会）",
+        "scope": "航空貨物・宅配便でのリチウム電池輸送",
+        "key_rule": "モバイルバッテリーは航空貨物での単品輸送に制限あり・宅配便事業者への申告義務",
+        "note": "2027年1月以降100Wh制限への厳格化が検討中（IATA）"
+      },
+      "sources": [
+        "https://www.iata.org/contentassets/6fea26dd84d24b26a7a1fd5788561d6e/lithium-battery-vehicles-cargo.pdf",
+        "https://www.jal.co.jp/jp/ja/info/2026/other/260330/"
+      ]
+    },
+    {
+      "id": "reg_pse_import",
+      "type": "Regulation",
+      "label_ja": "PSE未取得製品の並行輸入・個人輸入規制",
+      "label_en": "PSE Non-Compliant Import Restriction",
+      "attrs": {
+        "authority": "経済産業省（METI）",
+        "scope": "海外EC・個人輸入でのPSE未取得モバイルバッテリー",
+        "key_rule": "販売目的の輸入はPSE取得必須・個人使用目的は例外あり",
+        "risk": "PSE未取得品は発火リスクが高く、事故時の補償なし"
+      },
+      "sources": [
+        "https://www.meti.go.jp/policy/consumer/seian/denan/mlb_faq.html",
+        "https://www.owltech.co.jp/note/note-technology/mobilebattery-safety-pse-guide/"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A110AH11）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a110a"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1340）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1340"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_220w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A110BH11）",
+      "confidence": "high",
+      "sources": [
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1339）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1664）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1664"
+      ]
+    },
+    {
+      "from": "prod_anker_nano_30w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1259）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1259"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1257）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1257"
+      ]
+    },
+    {
+      "from": "prod_anker_fusion_30w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1636）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1636"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_applewatch",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1657）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1657"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_25k_100w",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1695）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1695"
+      ]
+    },
+    {
+      "from": "prod_anker_zolo_10k",
+      "to": "brand_anker",
+      "type": "made_by",
+      "rationale_ja": "Anker Japan公式製品（型番A1688）",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1688"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "brand_cio",
+      "type": "made_by",
+      "rationale_ja": "CIO公式製品（CIO-MB67W2C1A-20000）",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w2c1a-20000/"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "brand_cio",
+      "type": "made_by",
+      "rationale_ja": "CIO公式製品（CIO-MB67W3C-10K-P2）",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w3c-10k-p2/"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_slim_wireless",
+      "to": "brand_cio",
+      "type": "made_by",
+      "rationale_ja": "CIO公式製品ライン（SMARTCOBY SLIM II Wireless）",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "brand_ugreen",
+      "type": "made_by",
+      "rationale_ja": "UGREEN公式製品（Nexode Pro PB728）",
+      "confidence": "high",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_ugreen_magflow_10k",
+      "to": "brand_ugreen",
+      "type": "made_by",
+      "rationale_ja": "UGREEN公式製品（MagFlow Air）",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_ugreen_strap_20k",
+      "to": "brand_ugreen",
+      "type": "made_by",
+      "rationale_ja": "UGREEN公式製品（PB525）",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_belkin_boostcharge_20k",
+      "to": "brand_belkin",
+      "type": "made_by",
+      "rationale_ja": "Belkin公式製品（BoostCharge Pro 3-Port 20K）",
+      "confidence": "high",
+      "sources": [
+        "https://www.belkin.com/p/power-bank-20k/BPB012btBK.html"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "brand_zendure",
+      "type": "made_by",
+      "rationale_ja": "Zendure公式製品（SuperTank Pro 26800mAh）",
+      "confidence": "high",
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro"
+      ]
+    },
+    {
+      "from": "prod_xiaomi_212w_25k",
+      "to": "brand_xiaomi",
+      "type": "made_by",
+      "rationale_ja": "Xiaomi公式製品（212W HyperCharge Power Bank 25000）",
+      "confidence": "high",
+      "sources": [
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/"
+      ]
+    },
+    {
+      "from": "prod_ecoflow_rapid_mag_10k",
+      "to": "brand_ecoflow",
+      "type": "made_by",
+      "rationale_ja": "EcoFlow公式製品（RAPID Mag Power Bank）",
+      "confidence": "high",
+      "sources": [
+        "https://jp.ecoflow.com/"
+      ]
+    },
+    {
+      "from": "prod_baseus_blade_100w",
+      "to": "brand_baseus",
+      "type": "made_by",
+      "rationale_ja": "Baseus公式製品（Blade 100W）",
+      "confidence": "high",
+      "sources": [
+        "https://baseus.co.jp/"
+      ]
+    },
+    {
+      "from": "prod_elecom_de_c64_20k",
+      "to": "brand_elecom",
+      "type": "made_by",
+      "rationale_ja": "ELECOM公式製品（DE-C64-20000）",
+      "confidence": "high",
+      "sources": [
+        "https://www.elecom.co.jp/category/cat_cellphone-battery/"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "seg_business_traveler",
+      "type": "suited_for",
+      "rationale_ja": "コンセント一体型でUSB充電器不要・出張荷物最小化・3ポート同時充電でMacBook+iPhone+iPadを一台でカバー。複数レビューサイトが「出張向け最強」と評価。",
+      "confidence": "high",
+      "sources": [
+        "https://03review.com/mobile-battery-plug/",
+        "https://macfan.book.mynavi.jp/article/41121/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "seg_business_traveler",
+      "type": "suited_for",
+      "rationale_ja": "充電器＋モバイルバッテリー2-in-1・GaNで従来比60%小型・65WでMacBook Air対応。Anker公式が「出張・旅行向け」と明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339",
+        "https://www.ankerjapan.com/blogs/magazine/5-best-mobile-battery-anker"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "seg_pc_heavy",
+      "type": "suited_for",
+      "rationale_ja": "単ポート140W（PD3.1）でMacBook Pro 16インチをフルスピード充電・合計300Wで2台のMacBook Pro同時充電可能。Anker公式・The Vergeが「PCヘビーユーザー向け最強」と評価。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a110a",
+        "https://www.theverge.com/news/765778/anker-fastest-power-bank-launches-new-prime-family"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "seg_pc_heavy",
+      "type": "suited_for",
+      "rationale_ja": "PD3.1 140W単ポート・2ポート合計200W・TFTディスプレイで残量精確把握。UGREEN公式が「マルチデバイスPCユーザー向け」と位置付け。",
+      "confidence": "high",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_xiaomi_212w_25k",
+      "to": "seg_pc_heavy",
+      "type": "suited_for",
+      "rationale_ja": "PD3.1 140W単ポート・合計212W・価格12980円でコスパ最強。Xiaomi公式が「MacBook Pro充電対応」を明示。PCヘビーユーザーのコスパ重視層に適合。",
+      "confidence": "high",
+      "sources": [
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "seg_commuter",
+      "type": "suited_for",
+      "rationale_ja": "iPhone背面に磁力吸着・ケーブル不要・薄型207g・通勤中にiPhoneを持ちながら充電可能。Anker公式が「日常使い・通勤向け」と位置付け。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1664"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "seg_commuter",
+      "type": "suited_for",
+      "rationale_ja": "3490円・200g・コンパクト・価格.comランキング常連。通勤通学のスマホ充電に最適なエントリーモデルとして複数メディアが推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://kakaku.com/kaden/mobile-battery/ranking_3114/",
+        "https://www.ankerjapan.com/products/a1257"
+      ]
+    },
+    {
+      "from": "prod_anker_nano_30w",
+      "to": "seg_commuter",
+      "type": "suited_for",
+      "rationale_ja": "USB-Cケーブル内蔵でケーブル忘れゼロ・215g・30W急速充電。「ケーブル忘れ防止」を重視する通勤ユーザー向けとして複数レビューが評価。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/mochu_restroom/n/n791b0654417d"
+      ]
+    },
+    {
+      "from": "prod_anker_zolo_10k",
+      "to": "seg_commuter",
+      "type": "suited_for",
+      "rationale_ja": "ケーブル内蔵・エントリー価格帯・コンパクト。Anker公式が通勤通学向けZoloラインとして展開。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1688"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "seg_disaster_prep",
+      "type": "suited_for",
+      "rationale_ja": "20000mAh大容量・333g軽量・67W高出力・Nova Safety 2.0安全機能。防災用大容量バッテリーとして複数防災記事が推奨。my-best総合1位の信頼性。",
+      "confidence": "high",
+      "sources": [
+        "https://joshinweb.jp/mobile/em_mobb.html",
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_25k_100w",
+      "to": "seg_disaster_prep",
+      "type": "suited_for",
+      "rationale_ja": "25000mAh超大容量・ケーブル2本内蔵・4ポート同時充電で家族分の端末を充電可能。Anker公式が「旅行・防災」用途を明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1695"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "seg_disaster_prep",
+      "type": "suited_for",
+      "rationale_ja": "26800mAh・4ポート全USB-C・堅牢設計。Amazon商品説明が「停電時の非常用電源」として明示。アウトドア・防災兼用ユーザーに支持。",
+      "confidence": "high",
+      "sources": [
+        "https://www.amazon.co.jp/dp/B08NW7XKGM"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "seg_video_creator",
+      "type": "suited_for",
+      "rationale_ja": "250W高出力・27650mAh大容量・3ポート同時充電でカメラ+照明+スマホを同時給電可能。スマートディスプレイで残量管理。動画撮影レビュー記事が推奨。",
+      "confidence": "med",
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "seg_video_creator",
+      "type": "suited_for",
+      "rationale_ja": "200W高出力・25000mAh・TFTディスプレイで充電状況可視化。MacBook Pro＋カメラ機材の同時給電が可能。",
+      "confidence": "med",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_elecom_de_c64_20k",
+      "to": "seg_senior",
+      "type": "suited_for",
+      "rationale_ja": "日本メーカー（ELECOM）の安心感・ケーブル内蔵で端子差し込み不要・シンプル操作。日本メーカー推薦記事がシニア・初心者向けとして明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.yamada-denkiweb.com/media/21909/"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "seg_senior",
+      "type": "suited_for",
+      "rationale_ja": "Ankerブランドの信頼性・シンプル操作・LED残量表示・3490円の入手しやすい価格。家電量販店での取り扱いが多く、シニアが購入しやすい。",
+      "confidence": "med",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1257"
+      ]
+    },
+    {
+      "from": "prod_ugreen_strap_20k",
+      "to": "seg_live_fan",
+      "type": "suited_for",
+      "rationale_ja": "ショルダーストラップ付きデザインがフェス・ライブ向けに特化。20000mAhで10〜12時間イベントに対応。UGREEN公式がアウトドア・フェス向けと位置付け。",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "seg_live_fan",
+      "type": "suited_for",
+      "rationale_ja": "200g軽量・10000mAhでiPhone約2回分・ライブ遠征記事が「迷ったらこれ」と推奨。コスパと軽さのバランスが評価される。",
+      "confidence": "high",
+      "sources": [
+        "https://zoe-travel.com/mobilebattery-anker/",
+        "https://kyoonlife.com/fes-mobile-battery-guide/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "seg_gadget_enthusiast",
+      "type": "suited_for",
+      "rationale_ja": "Qi2（MagSafe互換）・薄型15mm・パススルー対応・最新規格採用。ガジェット系レビューサイトが「iPhone最新規格対応」として推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/kazu_3734/n/nf47b722f9545"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "seg_gadget_enthusiast",
+      "type": "suited_for",
+      "rationale_ja": "世界初安定140W単ポート・合計300W・PD3.1・アプリ連携対応。Anker Primeシリーズは「最高峰スペックを求めるガジェット好き」向けとAnker公式が明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/pages/anker-prime"
+      ]
+    },
+    {
+      "from": "prod_ecoflow_rapid_mag_10k",
+      "to": "seg_gadget_enthusiast",
+      "type": "suited_for",
+      "rationale_ja": "Qi2.2（25W）＋65W有線＋ケーブル内蔵の「全部入り」・X-Stream技術で0→70%を33分。最新規格を試したいガジェット好きに訴求。",
+      "confidence": "med",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "seg_outdoor",
+      "type": "suited_for",
+      "rationale_ja": "308g軽量・充電器兼用で荷物削減・65WでMacBook Air対応。軽量重視のアウトドアユーザーにも適合（ただし防水非対応のため注意）。",
+      "confidence": "low",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "seg_outdoor",
+      "type": "suited_for",
+      "rationale_ja": "26800mAh・4ポート全USB-C・堅牢設計。Zendure公式が「アウトドア・ビジネス両対応」と明示。ただし580gは登山には重い。",
+      "confidence": "med",
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "ctx_shinkansen_business",
+      "type": "used_in",
+      "rationale_ja": "コンセント一体型でコンセント争奪不要・新幹線での自己完結充電が可能。出張向けレビュー記事が「新幹線・ホテルで充電器不要」と明示。",
+      "confidence": "high",
+      "sources": [
+        "https://03review.com/mobile-battery-plug/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "ctx_shinkansen_business",
+      "type": "used_in",
+      "rationale_ja": "充電器＋バッテリー2-in-1・65W・308g。新幹線でコンセントがあれば充電器として、なければバッテリーとして使える。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "ctx_disaster",
+      "type": "used_in",
+      "rationale_ja": "20000mAh大容量・Nova Safety 2.0安全機能・3ポート同時充電で家族分の端末を充電可能。防災記事が「20000mAh以上推奨」と明示。",
+      "confidence": "high",
+      "sources": [
+        "https://joshinweb.jp/mobile/em_mobb.html"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_25k_100w",
+      "to": "ctx_disaster",
+      "type": "used_in",
+      "rationale_ja": "25000mAh・ケーブル2本内蔵・4ポート。Anker公式が防災用途を明示。大容量で複数デバイスを長時間給電可能。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1695"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "ctx_outdoor_shooting",
+      "type": "used_in",
+      "rationale_ja": "250W高出力・27650mAh・3ポート同時充電。動画撮影記事が「カメラ+照明+スマホ同時給電」として推奨。ただし102.3Whで航空機事前承認必要。",
+      "confidence": "med",
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "ctx_outdoor_shooting",
+      "type": "used_in",
+      "rationale_ja": "200W・25000mAh・TFTディスプレイ。撮影現場での複数機器給電に対応。92.5Whで航空機制限なし。",
+      "confidence": "med",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "ctx_desk_setup",
+      "type": "used_in",
+      "rationale_ja": "パススルー機能でコンセントに挿したままバッテリー＋デバイス同時充電。デスク常設でコンセント1口を有効活用。",
+      "confidence": "high",
+      "sources": [
+        "https://macfan.book.mynavi.jp/article/41121/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_applewatch",
+      "to": "ctx_desk_setup",
+      "type": "used_in",
+      "rationale_ja": "Apple Watch充電パッド内蔵・パススルー対応。デスク上でiPhone＋Apple Watchを同時ワイヤレス充電するスタンドとして使用可能。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1657"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_25k_100w",
+      "to": "ctx_international_travel",
+      "type": "used_in",
+      "rationale_ja": "92.5Wh（100Wh以下）・航空機持込制限なし・ケーブル2本内蔵で旅先での充電完結。Anker公式が「旅行向け」と明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "ctx_international_travel",
+      "type": "used_in",
+      "rationale_ja": "99.1Wh（100Wh以下ギリギリ）・26800mAh・4ポート。海外旅行記事が「航空機持込可能な最大容量級」として推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro"
+      ]
+    },
+    {
+      "from": "prod_ugreen_strap_20k",
+      "to": "ctx_live_festival",
+      "type": "used_in",
+      "rationale_ja": "ショルダーストラップ付きデザインがフェス・ライブ向けに特化。20000mAhで長時間イベントに対応。",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "ctx_live_festival",
+      "type": "used_in",
+      "rationale_ja": "200g軽量・10000mAhでiPhone約2回分。ライブ遠征記事が「フェスの定番」として推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://zoe-travel.com/mobilebattery-anker/"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "ctx_hiking_camping",
+      "type": "used_in",
+      "rationale_ja": "26800mAh・4ポート・堅牢設計。キャンプ・縦走での複数デバイス長期給電に対応。ただし580gは日帰り登山には重い。",
+      "confidence": "med",
+      "sources": [
+        "https://zendure.co.jp/products/supertankpro"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "ctx_cafe_coworking",
+      "type": "used_in",
+      "rationale_ja": "薄型・ケーブルレスでiPhone背面吸着充電しながらPC作業可能。カフェでのスマート充電スタイルとして複数レビューが推奨。",
+      "confidence": "med",
+      "sources": [
+        "https://note.com/kazu_3734/n/nf47b722f9545"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "tech_pd31_140w",
+      "type": "uses_tech",
+      "rationale_ja": "単ポート最大140W（PD3.1）・合計300W。Anker公式スペック明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a110a"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "tech_pd31_140w",
+      "type": "uses_tech",
+      "rationale_ja": "単ポート最大140W（PD3.1）。Anker公式スペック明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1340"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "tech_pd31_140w",
+      "type": "uses_tech",
+      "rationale_ja": "USB-C1ポートPD3.1 140W。UGREEN公式スペック明示。",
+      "confidence": "high",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_xiaomi_212w_25k",
+      "to": "tech_pd31_140w",
+      "type": "uses_tech",
+      "rationale_ja": "PD3.1プロトコルで単ポート最大140W。Xiaomi公式スペック明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.mi.com/jp/product/xiaomi-212w-hypercharge-power-bank-25000/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "tech_gan",
+      "type": "uses_tech",
+      "rationale_ja": "GaNPrime採用で従来比60%小型化。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "tech_gan",
+      "type": "uses_tech",
+      "rationale_ja": "CIO独自GaN技術（Nova Safety 2.0）採用。CIO公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w2c1a-20000/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "tech_qi2_magsafe",
+      "type": "uses_tech",
+      "rationale_ja": "Qi2認証取得・MagSafe互換・最大15Wワイヤレス充電。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1664"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_slim_wireless",
+      "to": "tech_qi2_magsafe",
+      "type": "uses_tech",
+      "rationale_ja": "Qi2.2（25W）対応。CIO公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_ugreen_magflow_10k",
+      "to": "tech_qi2_magsafe",
+      "type": "uses_tech",
+      "rationale_ja": "Qi2対応・MagSafe互換。UGREEN公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_ecoflow_rapid_mag_10k",
+      "to": "tech_qi2_magsafe",
+      "type": "uses_tech",
+      "rationale_ja": "Qi2.2（25W）認証取得。EcoFlow公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://jp.ecoflow.com/"
+      ]
+    },
+    {
+      "from": "prod_anker_nano_30w",
+      "to": "tech_builtin_cable",
+      "type": "uses_tech",
+      "rationale_ja": "USB-Cケーブル内蔵（固定式）。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1259"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_25k_100w",
+      "to": "tech_builtin_cable",
+      "type": "uses_tech",
+      "rationale_ja": "USB-Cケーブル内蔵＋巻取り式ケーブルの2本内蔵。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1695"
+      ]
+    },
+    {
+      "from": "prod_ecoflow_rapid_mag_10k",
+      "to": "tech_builtin_cable",
+      "type": "uses_tech",
+      "rationale_ja": "USB-Cケーブル内蔵。EcoFlow公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://jp.ecoflow.com/"
+      ]
+    },
+    {
+      "from": "prod_elecom_de_c64_20k",
+      "to": "tech_builtin_cable",
+      "type": "uses_tech",
+      "rationale_ja": "USB-Cケーブル一体型。ELECOM公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.yamada-denkiweb.com/media/21909/"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "tech_smart_display",
+      "type": "uses_tech",
+      "rationale_ja": "TFTスマートディスプレイ搭載で充電状況・残量を精確表示。UGREEN公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "tech_smart_display",
+      "type": "uses_tech",
+      "rationale_ja": "スマートディスプレイ＋Ankerアプリ連携で残量・充電状況管理。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/pages/anker-prime"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "tech_passthrough",
+      "type": "uses_tech",
+      "rationale_ja": "パススルー充電対応。CIO公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w3c-10k-p2/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "tech_passthrough",
+      "type": "uses_tech",
+      "rationale_ja": "パススルー充電対応。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1654"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "tech_ac_plug",
+      "type": "uses_tech",
+      "rationale_ja": "ACプラグ内蔵（コンセント一体型）。CIO公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w3c-10k-p2/"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_fusion_65w",
+      "to": "tech_ac_plug",
+      "type": "uses_tech",
+      "rationale_ja": "折りたたみ式ACプラグ内蔵。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1339"
+      ]
+    },
+    {
+      "from": "prod_anker_fusion_30w",
+      "to": "tech_ac_plug",
+      "type": "uses_tech",
+      "rationale_ja": "折りたたみ式ACプラグ内蔵。Anker公式明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/products/a1636"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "reg_airline_160wh",
+      "type": "limited_by",
+      "rationale_ja": "容量102.3Wh（27650mAh×3.7V÷1000）で100Wh超のため、一部航空会社で事前承認が必要。2026年4月新ルールで2個制限にも該当。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane",
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "reg_airline_160wh",
+      "type": "limited_by",
+      "rationale_ja": "容量99.75Wh（26250mAh×3.8V÷1000）で100Wh以下・航空機持込可。ただし2026年4月新ルールで2個制限が適用。",
+      "confidence": "high",
+      "sources": [
+        "https://www.theverge.com/news/765778/anker-fastest-power-bank-launches-new-prime-family",
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
+    },
+    {
+      "from": "prod_zendure_supertank_pro",
+      "to": "reg_airline_160wh",
+      "type": "limited_by",
+      "rationale_ja": "容量99.1Wh（26800mAh×3.7V÷1000）で100Wh以下ギリギリ。航空機持込可だが2個制限が適用。",
+      "confidence": "high",
+      "sources": [
+        "https://chibimegane.jp/zendure-supertank-pro-spec/",
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
+    },
+    {
+      "from": "prod_ugreen_nexode_25k_200w",
+      "to": "reg_airline_160wh",
+      "type": "limited_by",
+      "rationale_ja": "容量92.5Wh（25000mAh×3.7V÷1000）で100Wh以下・航空機持込可。2個制限が適用。",
+      "confidence": "high",
+      "sources": [
+        "https://ugreen.jp/blogs/articles/2025powerbank"
+      ]
+    },
+    {
+      "from": "prod_xiaomi_212w_25k",
+      "to": "reg_airline_160wh",
+      "type": "limited_by",
+      "rationale_ja": "容量92.5Wh（25000mAh×3.7V÷1000）で100Wh以下・航空機持込可。2個制限が適用。",
+      "confidence": "high",
+      "sources": [
+        "https://www.mlit.go.jp/report/press/content/001995959.pdf"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_250w",
+      "to": "reg_lithium_transport",
+      "type": "limited_by",
+      "rationale_ja": "102.3Whで100Wh超のため、宅配便での航空輸送に制限あり（IATA規則）。",
+      "confidence": "high",
+      "sources": [
+        "https://www.iata.org/contentassets/6fea26dd84d24b26a7a1fd5788561d6e/lithium-battery-vehicles-cargo.pdf"
+      ]
+    },
+    {
+      "from": "prod_anker_pb_10k_22w",
+      "to": "reg_pse",
+      "type": "limited_by",
+      "rationale_ja": "日本国内販売品として丸形PSEマーク取得必須。Anker公式がPSE技術基準適合を明示。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/blogs/magazine/what-is-pse"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "reg_pse",
+      "type": "limited_by",
+      "rationale_ja": "日本国内販売品として丸形PSEマーク取得必須。CIO公式がPSE適合を明示。",
+      "confidence": "high",
+      "sources": [
+        "https://connectinternationalone.co.jp/cioproduct/mobilebattery/smartcoby/cio-mb67w2c1a-20000/"
+      ]
+    },
+    {
+      "from": "seg_business_traveler",
+      "to": "tech_ac_plug",
+      "type": "needs",
+      "rationale_ja": "出張時の荷物最小化ニーズから、充電器不要のACプラグ内蔵型を求める。複数出張向けレビューが「コンセント一体型が出張の正解」と評価。",
+      "confidence": "high",
+      "sources": [
+        "https://03review.com/mobile-battery-plug/",
+        "https://chargenavi.com/travel-powerbank/"
+      ]
+    },
+    {
+      "from": "seg_business_traveler",
+      "to": "tech_passthrough",
+      "type": "needs",
+      "rationale_ja": "ホテルのコンセント1口でバッテリー本体とデバイスを同時充電したいニーズ。出張ユーザーのパススルー活用が複数記事で言及。",
+      "confidence": "high",
+      "sources": [
+        "https://my-best.com/959"
+      ]
+    },
+    {
+      "from": "seg_pc_heavy",
+      "to": "tech_pd31_140w",
+      "type": "needs",
+      "rationale_ja": "MacBook Pro 16インチの充電には最低65W、フルスピードには140W（PD3.1）が必要。PCヘビーユーザー向け記事が140W対応を必須要件として明示。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/orisusarusan/n/n2b9f2c1d09cf",
+        "https://03review.com/usb-charger-pd140w/"
+      ]
+    },
+    {
+      "from": "seg_gadget_enthusiast",
+      "to": "tech_qi2_magsafe",
+      "type": "needs",
+      "rationale_ja": "最新規格への対応を重視するガジェット好きはQi2/MagSafe対応を選択基準にする。ガジェット系レビューがQi2を「次世代標準」として推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://my-best.com/959",
+        "https://note.com/kazu_3734/n/nf47b722f9545"
+      ]
+    },
+    {
+      "from": "seg_gadget_enthusiast",
+      "to": "tech_smart_display",
+      "type": "needs",
+      "rationale_ja": "残量の精確な把握・充電状況の可視化をガジェット好きは重視。TFTディスプレイ・アプリ連携を選択基準にする傾向がレビュー記事から確認できる。",
+      "confidence": "med",
+      "sources": [
+        "https://ugreen.jp/products/nexode-25000mah-200w",
+        "https://www.ankerjapan.com/pages/anker-prime"
+      ]
+    },
+    {
+      "from": "seg_commuter",
+      "to": "tech_builtin_cable",
+      "type": "needs",
+      "rationale_ja": "通勤時のケーブル忘れ防止・荷物削減ニーズからケーブル内蔵型を求める。「ケーブル内蔵型おすすめ」記事が通勤ユーザーを主要ターゲットとして明示。",
+      "confidence": "high",
+      "sources": [
+        "https://my-best.com/959",
+        "https://note.com/mochu_restroom/n/n791b0654417d"
+      ]
+    },
+    {
+      "from": "seg_senior",
+      "to": "tech_builtin_cable",
+      "type": "needs",
+      "rationale_ja": "端子の差し込み方向に迷わないケーブル内蔵型がシニアの操作性向上に貢献。日本メーカー推薦記事がシニア向けにケーブル内蔵を推奨。",
+      "confidence": "high",
+      "sources": [
+        "https://www.yamada-denkiweb.com/media/21909/"
+      ]
+    },
+    {
+      "from": "seg_video_creator",
+      "to": "tech_pd31_140w",
+      "type": "needs",
+      "rationale_ja": "カメラ機材・MacBook・外付けSSDへの高出力給電が必要。動画撮影記事が「100W以上必須」と明示。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614"
+      ]
+    },
+    {
+      "from": "seg_business_traveler",
+      "to": "ctx_shinkansen_business",
+      "type": "fits_scene",
+      "rationale_ja": "出張ビジネスパーソンが最も頻繁に遭遇するシーンが新幹線・国内出張。コンセント争奪問題が顕在化するシーン。",
+      "confidence": "high",
+      "sources": [
+        "https://chargenavi.com/travel-powerbank/"
+      ]
+    },
+    {
+      "from": "seg_business_traveler",
+      "to": "ctx_international_travel",
+      "type": "fits_scene",
+      "rationale_ja": "海外出張での航空機持込規制への対応が出張ビジネスパーソンの重要課題。",
+      "confidence": "high",
+      "sources": [
+        "https://www.ankerjapan.com/blogs/magazine/mobilebattery-ontheplane"
+      ]
+    },
+    {
+      "from": "seg_disaster_prep",
+      "to": "ctx_disaster",
+      "type": "fits_scene",
+      "rationale_ja": "防災備蓄ユーザーの主要利用シーンが災害・停電時。大容量・複数デバイス対応が必須。",
+      "confidence": "high",
+      "sources": [
+        "https://joshinweb.jp/mobile/em_mobb.html"
+      ]
+    },
+    {
+      "from": "seg_video_creator",
+      "to": "ctx_outdoor_shooting",
+      "type": "fits_scene",
+      "rationale_ja": "動画クリエイター・カメラマンの主要利用シーンが屋外撮影・フィールドワーク。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/cos_cameraman1/n/na29e42d9c614"
+      ]
+    },
+    {
+      "from": "seg_outdoor",
+      "to": "ctx_hiking_camping",
+      "type": "fits_scene",
+      "rationale_ja": "アウトドア・登山ユーザーの主要利用シーンが登山・キャンプ。",
+      "confidence": "high",
+      "sources": [
+        "https://hiker-h.com/mountain-mobile-battery/"
+      ]
+    },
+    {
+      "from": "seg_live_fan",
+      "to": "ctx_live_festival",
+      "type": "fits_scene",
+      "rationale_ja": "ライブ・フェスファンの主要利用シーンがライブ・フェス・屋外イベント。",
+      "confidence": "high",
+      "sources": [
+        "https://kyoonlife.com/fes-mobile-battery-guide/"
+      ]
+    },
+    {
+      "from": "seg_commuter",
+      "to": "ctx_cafe_coworking",
+      "type": "fits_scene",
+      "rationale_ja": "通勤・通学ユーザーがカフェ・コワーキングスペースでPCやスマホを充電するシーンも多い。",
+      "confidence": "med",
+      "sources": [
+        "https://note.com/saban_note360/n/n7f3e83906097"
+      ]
+    },
+    {
+      "from": "seg_pc_heavy",
+      "to": "ctx_cafe_coworking",
+      "type": "fits_scene",
+      "rationale_ja": "PCヘビーユーザーがカフェ・コワーキングでコンセントなしにMacBook Proを使うシーンが多い。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/saban_note360/n/n7f3e83906097"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "prod_ugreen_nexode_25k_200w",
+      "type": "competes_with",
+      "rationale_ja": "どちらもPD3.1 140W対応・25000mAh超・PCヘビーユーザー向けハイエンド帯で直接競合。価格帯も近い（Anker約24990円 vs UGREEN同等帯）。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/makuring/n/n21c3497902d6"
+      ]
+    },
+    {
+      "from": "prod_anker_prime_300w",
+      "to": "prod_xiaomi_212w_25k",
+      "type": "competes_with",
+      "rationale_ja": "PD3.1 140W・25000mAh超帯で競合。Xiaomiが12980円でAnkerの約半額のため、コスパ重視ユーザーで競合。",
+      "confidence": "high",
+      "sources": [
+        "https://orefolder.jp/2025/04/xiaomi-212w-hypercharge-power-bank-25000mah-2/"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_trio",
+      "to": "prod_anker_pb_10k_22w",
+      "type": "competes_with",
+      "rationale_ja": "どちらも日本市場の売れ筋10000〜20000mAh帯。CIOは20000mAh・67W・8980円、Ankerは10000mAh・22.5W・3490円で容量帯が異なるが購買検討で比較される。",
+      "confidence": "med",
+      "sources": [
+        "https://my-best.com/959",
+        "https://kakaku.com/kaden/mobile-battery/ranking_3114/"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "prod_cio_smartcoby_slim_wireless",
+      "type": "competes_with",
+      "rationale_ja": "どちらもQi2対応・10000mAh・薄型のMagSafe互換モバイルバッテリーで直接競合。",
+      "confidence": "high",
+      "sources": [
+        "https://note.com/kazu_3734/n/nf47b722f9545"
+      ]
+    },
+    {
+      "from": "prod_anker_maggo_10k",
+      "to": "prod_ugreen_magflow_10k",
+      "type": "competes_with",
+      "rationale_ja": "どちらもQi2対応・10000mAh・薄型のMagSafe互換モバイルバッテリーで直接競合。",
+      "confidence": "high",
+      "sources": [
+        "https://makuring.jp/best-power-bank/"
+      ]
+    },
+    {
+      "from": "prod_cio_smartcoby_plug2",
+      "to": "prod_anker_prime_fusion_65w",
+      "type": "competes_with",
+      "rationale_ja": "どちらもACプラグ内蔵型・出張向けで直接競合。CIOは10000mAh・67W・10800円、Ankerは9600mAh・65W・GaN採用で競合。",
+      "confidence": "high",
+      "sources": [
+        "https://03review.com/mobile-battery-plug/"
+      ]
+    }
+  ],
+  "insights": [
+    {
+      "id": "insight_1",
+      "title_ja": "「100Wh境界線」が製品設計の隠れた最重要パラメータになっている",
+      "title_en": "The '100Wh Boundary' Has Become the Hidden Critical Design Parameter",
+      "body_ja": "Zendure SuperTank Pro（99.1Wh）・Anker Prime 300W（99.75Wh）・Anker Prime 250W（102.3Wh）を並べると、各社が「100Wh以下ギリギリ」に容量を設計していることが浮かび上がる。100Wh以下なら航空機持込時の事前承認が不要になるため、大容量と航空機フリーパスを両立する「設計上の最適解」がこの境界線に集中している。逆に100Whを超えた製品（Anker Prime 250W）は旅行ユーザーから「出張に使えない」と評価が下がるという非対称なペナルティが存在する。2027年以降IATAが100Wh制限を厳格化する可能性があり、現在100〜160Wh帯に設計された製品は市場から淘汰されるリスクがある。",
+      "body_en": "Placing Zendure SuperTank Pro (99.1Wh), Anker Prime 300W (99.75Wh), and Anker Prime 250W (102.3Wh) side by side reveals that manufacturers are deliberately designing capacity to just under 100Wh. Below this threshold, no pre-approval is required for airline carry-on, making it the optimal design sweet spot for maximizing capacity while maintaining airline-friendly status. Products exceeding 100Wh (like Anker Prime 250W) face asymmetric penalties from travel users. IATA may tighten restrictions to 100Wh by 2027, potentially eliminating the 100-160Wh segment.",
+      "affected_nodes": [
+        "prod_anker_prime_300w",
+        "prod_zendure_supertank_pro",
+        "prod_anker_prime_250w",
+        "reg_airline_160wh",
+        "reg_lithium_transport"
+      ],
+      "sources": [
+        "https://www.theverge.com/news/765778/anker-fastest-power-bank-launches-new-prime-family",
+        "https://chibimegane.jp/zendure-supertank-pro-spec/",
+        "https://www.jal.co.jp/jp/ja/info/2026/other/260330/"
+      ]
+    },
+    {
+      "id": "insight_2",
+      "title_ja": "「コンセント一体型」は出張ビジネスパーソンとシニアという一見無関係な2層を同時に解決する",
+      "title_en": "Built-in AC Plug Simultaneously Solves Two Seemingly Unrelated Segments: Business Travelers and Seniors",
+      "body_ja": "CIO SMARTCOBY PLUG IIやAnker Prime Fusionが採用するACプラグ内蔵技術は、表面上は「荷物削減」という出張ビジネスパーソンのニーズに応えているが、実は「充電器とバッテリーを別々に管理しなくていい」という認知負荷の低減がシニア・デジタル初心者にも刺さる。出張族は「USB充電器を忘れた」という体験から、シニアは「どのケーブルをどこに挿すかわからない」という体験から、同じ製品に辿り着く。ただし両層のニーズは「価格感度」「ブランド認知」「購買チャネル」が全く異なるため、マーケティングは分離が必要。",
+      "body_en": "The built-in AC plug technology in CIO SMARTCOBY PLUG II and Anker Prime Fusion ostensibly addresses business travelers' need to reduce luggage, but it also reduces cognitive load for seniors and digital beginners who struggle with 'which cable goes where.' Both segments arrive at the same product from entirely different pain points. However, their price sensitivity, brand awareness, and purchase channels differ significantly, requiring separate marketing strategies.",
+      "affected_nodes": [
+        "tech_ac_plug",
+        "seg_business_traveler",
+        "seg_senior",
+        "prod_cio_smartcoby_plug2",
+        "prod_anker_prime_fusion_65w"
+      ],
+      "sources": [
+        "https://03review.com/mobile-battery-plug/",
+        "https://www.yamada-denkiweb.com/media/21909/"
+      ]
+    },
+    {
+      "id": "insight_3",
+      "title_ja": "Qi2/MagSafeは『iPhone専用ガジェット』ではなく、ユーザー層横断の『ケーブルレス体験』インフラになりつつある",
+      "title_en": "Qi2/MagSafe Is Becoming a Cross-Segment 'Cable-Free Experience' Infrastructure, Not Just an iPhone Gadget",
+      "body_ja": "Anker MagGo・CIO SMARTCOBY SLIM Wireless・UGREEN MagFlow・EcoFlow RAPIDという異なるブランドが2024〜2025年にQi2対応製品を一斉投入した事実は、Qi2が単なる『iPhone向けオプション機能』から『モバイルバッテリーの標準インターフェース』へ移行しつつあることを示す。注目すべきは、Qi2の恩恵を受けるユーザー層が通勤ユーザー（ケーブル不要で歩きながら充電）・ガジェット好き（最新規格）・ライブファン（バッグに入れたまま充電）と全く異なる動機で重なっている点だ。ただし、Qi2.2（25W）への対応はまだ一部製品のみで、AndroidエコシステムのQi2普及率が低いため、現時点ではiPhone 12以降ユーザーに限定される。PSE規制との関係では、ワイヤレス充電機能を持つ製品は電波法・電気用品安全法の両方への適合が必要になる複雑さもある。",
+      "body_en": "The simultaneous launch of Qi2-compatible products by Anker MagGo, CIO SMARTCOBY SLIM Wireless, UGREEN MagFlow, and EcoFlow RAPID in 2024-2025 signals Qi2's transition from an 'iPhone optional feature' to a 'standard mobile battery interface.' Notably, Qi2 benefits overlap across completely different user segments: commuters (charge while walking without cables), gadget enthusiasts (latest standard), and live fans (charge inside bag). However, Qi2.2 (25W) adoption is still limited to select products, and low Qi2 penetration in the Android ecosystem currently restricts benefits to iPhone 12+ users.",
+      "affected_nodes": [
+        "tech_qi2_magsafe",
+        "prod_anker_maggo_10k",
+        "prod_cio_smartcoby_slim_wireless",
+        "prod_ugreen_magflow_10k",
+        "prod_ecoflow_rapid_mag_10k",
+        "seg_commuter",
+        "seg_gadget_enthusiast",
+        "seg_live_fan"
+      ],
+      "sources": [
+        "https://my-best.com/959",
+        "https://makuring.jp/best-power-bank/",
+        "https://www.silicon-power.com/jp/knowledge-detail/magsafe/"
+      ]
+    }
+  ]
+};
+
+const TYPE_COLOR={Product:'#4361ee',Brand:'#e63946',UserSegment:'#2a9d8f',UseContext:'#e9c46a',Technology:'#f472b6',Regulation:'#6b7280'};
+const TYPE_LABEL={ja:{Product:'製品',Brand:'ブランド',UserSegment:'ターゲット層',UseContext:'利用文脈',Technology:'技術',Regulation:'規制'},
+  en:{Product:'Product',Brand:'Brand',UserSegment:'User segment',UseContext:'Use context',Technology:'Technology',Regulation:'Regulation'}};
+const TYPE_SIZE={Product:16,Brand:23,UserSegment:21,UseContext:18,Technology:15,Regulation:14};
+const MEANING=new Set(['suited_for','used_in','needs','limited_by']);
+const EDGE_STYLE={suited_for:{color:'#2a9d8f',width:2.6},used_in:{color:'#e9c46a',width:2.2},needs:{color:'#f472b6',width:2.2,dashes:[5,4]},
+  limited_by:{color:'#ef6b73',width:2,dashes:[2,4]},made_by:{color:'#3a4055',width:1},uses_tech:{color:'#5566aa',width:1.1},
+  competes_with:{color:'#e63946',width:1,dashes:[3,5]},fits_scene:{color:'#7a8199',width:1}};
+const EDGE_LABEL={ja:{made_by:'製造',suited_for:'向いている',used_in:'使われる',uses_tech:'技術採用',competes_with:'競合',needs:'必要',limited_by:'規制で制約',fits_scene:'典型シーン'},
+  en:{made_by:'made by',suited_for:'suited for',used_in:'used in',uses_tech:'uses tech',competes_with:'competes with',needs:'needs',limited_by:'limited by',fits_scene:'fits scene'}};
+const KEY_LABEL={ja:{capacity_mah:'容量(mAh)',capacity_wh:'容量(Wh)',max_output_w:'最大出力(W)',single_port_max_w:'単ポート最大(W)',ports:'ポート',weight_g:'重量(g)',price_jpy:'価格(¥)',wireless:'ワイヤレス',built_in_cable:'ケーブル一体',built_in_ac:'コンセント一体',display:'表示',airline_carry_on:'航空機持込',release_year:'発売',note:'備考',needs:'必要なもの',pain_points:'不満',device_profile:'機器構成',typical_capacity:'標準容量',typical_output:'標準出力',origin:'出自',founded:'設立',market_position:'市場ポジション',positioning:'方針',key_requirement:'要件',benefit:'利点',effect:'影響',key_tech:'主要技術',product_lines:'製品ライン'},
+  en:{capacity_mah:'Capacity(mAh)',capacity_wh:'Capacity(Wh)',max_output_w:'Max output(W)',single_port_max_w:'Single-port max(W)',ports:'Ports',weight_g:'Weight(g)',price_jpy:'Price(¥)',wireless:'Wireless',built_in_cable:'Built-in cable',built_in_ac:'Built-in AC',display:'Display',airline_carry_on:'Airline carry-on',release_year:'Released',note:'Note',needs:'Needs',pain_points:'Pain points',device_profile:'Devices',typical_capacity:'Typ. capacity',typical_output:'Typ. output',origin:'Origin',founded:'Founded',market_position:'Market position',positioning:'Positioning',key_requirement:'Requirement',benefit:'Benefit',effect:'Effect',key_tech:'Key tech',product_lines:'Product lines'}};
+const UI={ja:{title:KG.meta.title,sub:'スペックでなく「意味（誰に・どの場面で・何が要る）」を所有する。',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'メーカー',lt:'テーマ',lf:'機能的特徴',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'製品',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'容量',priceG:'価格',funcG:'機能',foot:'Built by Dave Tanaka · データ: ディープリサーチ (2026-06) · 出典は各ノード参照 · <span style="color:#febd69">Amazonアソシエイト・リンクを含みます</span><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
+  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who it’s for, when it fits, what it needs — not just the specs.',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Brand',lt:'Theme',lf:'Feature',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'products',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Capacity',priceG:'Price',funcG:'Features',foot:'Built by Dave Tanaka · Data: deep research (2026-06) · sources on each node · <span style="color:#febd69">Contains Amazon affiliate links</span><br>Enterprise OS — Proof demo (not theory — already built)'}};
+
+let LANG='ja',LENS=false,filterIds=null,stepIdx=0,autoTimer=null;
+let brandSel='All',themeSel='All',featSel='All';
+const idToNode={}; KG.nodes.forEach(n=>idToNode[n.id]=n);
+const products=KG.nodes.filter(n=>n.type==='Product');
+const brands=KG.nodes.filter(n=>n.type==='Brand');
+const segments=KG.nodes.filter(n=>n.type==='UserSegment');
+const prodBrand={}; KG.edges.filter(e=>e.type==='made_by').forEach(e=>{prodBrand[e.from]=e.to;});
+const segProducts={}; segments.forEach(s=>segProducts[s.id]=new Set());
+KG.edges.filter(e=>e.type==='suited_for').forEach(e=>{ if(segProducts[e.to])segProducts[e.to].add(e.from); });
+function num(v){return typeof v==='number'?v:null;}
+function pname(p){return (p.label_ja||'')+' '+(p.label_en||'');}
+const INSIGHT_SET={
+  insight_1:p=>num(p.attrs.capacity_wh)!=null&&p.attrs.capacity_wh>=95,
+  insight_2:p=>p.attrs.built_in_ac===true||/PLUG|Fusion/i.test(pname(p)),
+  insight_3:p=>!!p.attrs.wireless
+};
+const INSIGHT_SHORT={ja:{insight_1:'⚡ 100Wh境界線',insight_2:'🔌 コンセント一体(2層)',insight_3:'📶 Qi2/MagSafe移行'},
+  en:{insight_1:'⚡ 100Wh boundary',insight_2:'🔌 Built-in AC (2 segments)',insight_3:'📶 Qi2/MagSafe shift'}};
+const FEATURES=[
+  {id:'air',g:'funcG',ja:'✈️ 航空機OK',en:'✈️ Airline OK',pred:p=>p.attrs.airline_carry_on===true},
+  {id:'cap_s',g:'capG',ja:'〜10,000mAh',en:'≤10,000mAh',pred:p=>num(p.attrs.capacity_mah)!=null&&p.attrs.capacity_mah<=10000},
+  {id:'cap_m',g:'capG',ja:'10,001〜20,000mAh',en:'10,001–20,000mAh',pred:p=>num(p.attrs.capacity_mah)>10000&&p.attrs.capacity_mah<=20000},
+  {id:'cap_l',g:'capG',ja:'20,001mAh+',en:'20,001mAh+',pred:p=>num(p.attrs.capacity_mah)>20000},
+  {id:'pr_e',g:'priceG',ja:'エントリー(〜¥6,000)',en:'Entry (≤¥6,000)',pred:p=>num(p.attrs.price_jpy)!=null&&p.attrs.price_jpy<6000},
+  {id:'pr_m',g:'priceG',ja:'ミドル(¥6,000〜15,000)',en:'Mid (¥6k–15k)',pred:p=>num(p.attrs.price_jpy)>=6000&&p.attrs.price_jpy<=15000},
+  {id:'pr_h',g:'priceG',ja:'ハイエンド(¥15,000+)',en:'High (¥15k+)',pred:p=>num(p.attrs.price_jpy)>15000},
+  {id:'hi',g:'funcG',ja:'高出力 100W+',en:'High output 100W+',pred:p=>num(p.attrs.max_output_w)>=100},
+  {id:'pd',g:'funcG',ja:'単ポート高出力(PD3.1)',en:'Single-port 100W+ (PD3.1)',pred:p=>num(p.attrs.single_port_max_w)>=100},
+  {id:'wl',g:'funcG',ja:'Qi2・ワイヤレス',en:'Qi2 / Wireless',pred:p=>!!p.attrs.wireless},
+  {id:'cb',g:'funcG',ja:'ケーブル一体',en:'Built-in cable',pred:p=>p.attrs.built_in_cable===true},
+  {id:'ac',g:'funcG',ja:'コンセント一体',en:'Built-in AC plug',pred:p=>p.attrs.built_in_ac===true||/PLUG|Fusion/i.test(pname(p))},
+  {id:'disp',g:'funcG',ja:'残量表示',en:'Battery readout',pred:p=>p.attrs.display!=null&&p.attrs.display!==false},
+  {id:'new',g:'funcG',ja:'2025年〜 新製品',en:'2025+ new',pred:p=>num(p.attrs.release_year)>=2025},
+  {id:'pt',g:'funcG',ja:'パススルー',en:'Pass-through',pred:p=>/パススルー|pass.?through/i.test((p.attrs.note||'')+' '+JSON.stringify(p.attrs))},
+  {id:'wh100',g:'funcG',ja:'⚡ 100Wh級(航空機の壁)',en:'⚡ ~100Wh (airline wall)',pred:INSIGHT_SET.insight_1}
+];
+// 機能的特徴 → 対応する洞察ストーリー（選択時にⓘ詳しくで物語を出す）
+const FEAT_INSIGHT={wh100:'insight_1',ac:'insight_2',wl:'insight_3'};
+const featById={}; FEATURES.forEach(f=>featById[f.id]=f);
+
+function themeSet(key){
+  if(segProducts[key]) return segProducts[key];
+  if(INSIGHT_SET[key]){ const s=new Set(); products.forEach(p=>{if(INSIGHT_SET[key](p))s.add(p.id);}); return s; }
+  return new Set();
+}
+function computeResult(){
+  let r=products.slice();
+  if(brandSel!=='All') r=r.filter(p=>prodBrand[p.id]===brandSel);
+  if(themeSel!=='All'){const s=themeSet(themeSel); r=r.filter(p=>s.has(p.id));}
+  if(featSel!=='All') r=r.filter(p=>featById[featSel].pred(p));
+  return r.map(p=>p.id);
+}
+function anyFilter(){return !(brandSel==='All'&&themeSel==='All'&&featSel==='All');}
+
+function nodeColor(t){return TYPE_COLOR[t]||'#888';}
+function hexA(hex,a){if(a>=1)return hex;const m=hex.replace('#','');return `rgba(${parseInt(m.slice(0,2),16)},${parseInt(m.slice(2,4),16)},${parseInt(m.slice(4,6),16)},${a})`;}
+function edgeBase(t){const b=EDGE_STYLE[t]||{color:'#444b66',width:1};return {color:b.color||'#444b66',width:b.width||1,dashes:b.dashes||false};}
+
+function buildNodes(){
+  const fs=filterIds?new Set(filterIds):null;
+  return KG.nodes.map(n=>{
+    const dim=fs&&!fs.has(n.id);
+    const hot=fs&&fs.has(n.id);
+    return {id:n.id,label:(LANG==='ja'?n.label_ja:n.label_en)||n.label_ja,
+      color:{background:dim?'#262c44':nodeColor(n.type),border:dim?'#262c44':nodeColor(n.type),highlight:{background:'#fff',border:nodeColor(n.type)}},
+      size:hot?TYPE_SIZE[n.type]+8:TYPE_SIZE[n.type],shape:'dot',
+      font:{color:dim?'rgba(150,160,180,.10)':'#dfe3ee',size:hot?15:13,face:'Inter, Noto Sans JP',strokeWidth:3,strokeColor:'#14172a'}};
+  });
+}
+function buildEdges(){
+  const fs=filterIds?new Set(filterIds):null;
+  return KG.edges.map((e,i)=>{
+    const s=edgeBase(e.type),meaning=MEANING.has(e.type); let w=s.width,a=1;
+    if(LENS){if(!meaning){a=.07;w=.6;}else w+=.8;}
+    if(fs){const touch=fs.has(e.from)||fs.has(e.to); if(!touch)a=Math.min(a,.05); else w+=.6;}
+    return {id:'e'+i,from:e.from,to:e.to,_idx:i,color:{color:hexA(s.color,a),highlight:s.color,hover:s.color},
+      width:w,dashes:s.dashes,smooth:{type:'continuous',roundness:.2},
+      arrows:{to:{enabled:e.type!=='competes_with',scaleFactor:.4}},title:KG.edges[i].rationale_ja||undefined};
+  });
+}
+
+const nodes=new vis.DataSet(buildNodes());
+const edges=new vis.DataSet(buildEdges());
+// Anker実証レシピ: DEFAULT(収束)とPULSE(バネ感)の二段。focus/選択時にPULSE再励起→周りがゆら！
+// Anker忠実レシピ: 弱い長距離反発＋強い重なり回避＋centralGravityで結束＝飛ばない＆局所うにうに
+const DEFAULT_PHYSICS={barnesHut:{gravitationalConstant:-2400,centralGravity:.06,springLength:125,springConstant:.03,damping:.5,avoidOverlap:.6},minVelocity:.01,timestep:.4,stabilization:{iterations:200,fit:true}};
+const PULSE_PHYSICS={barnesHut:{gravitationalConstant:-2800,centralGravity:.2,springLength:125,springConstant:.05,damping:.42,avoidOverlap:.45},minVelocity:.01,timestep:.4,stabilization:false};
+const network=new vis.Network(document.getElementById('net'),{nodes,edges},{
+  physics:DEFAULT_PHYSICS,
+  interaction:{hover:true,tooltipDelay:120},nodes:{borderWidth:2}});
+let pulseTimer=null;
+function pulse(){
+  network.setOptions({physics:{enabled:true,...PULSE_PHYSICS}});
+  network.startSimulation();
+  if(pulseTimer)clearTimeout(pulseTimer);
+  pulseTimer=setTimeout(()=>network.setOptions({physics:{enabled:true,...DEFAULT_PHYSICS,stabilization:false}}),1400);
+}
+
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function fmtVal(k,v){if(v===true)return LANG==='ja'?'✓ あり':'✓ Yes';if(v===false)return LANG==='ja'?'— なし':'— No';
+  if(v===null||v==='')return '—';if(Array.isArray(v))return v.map(esc).join('、');if(k==='price_jpy')return '¥'+Number(v).toLocaleString();return esc(v);}
+function klabel(k){return (KEY_LABEL[LANG]&&KEY_LABEL[LANG][k])||k;}
+// Amazonアソシエイト（tag=davetanaka-22）。全23製品リンク化
+const AFF_TAG='davetanaka-22';
+const AFFILIATE={"prod_anker_maggo_10k":"B0DB17C63X","prod_anker_nano_30w":"B0CDBY9P5Q","prod_ugreen_nexode_25k_200w":"B0CXHM5RY2","prod_anker_prime_300w":"B0FKN98246","prod_anker_prime_250w":"B0BZ3D6GGH","prod_anker_prime_220w":"B0FKNC153X","prod_anker_prime_fusion_65w":"B0D7D8JP6Q","prod_anker_pb_10k_22w":"B0CQMSZBXZ","prod_anker_fusion_30w":"B0CL8S3WMX","prod_cio_smartcoby_trio":"B0GMWZ9MWK","prod_cio_smartcoby_plug2":"B0DG51V4G3","prod_ugreen_magflow_10k":"B0F6NC41DZ","prod_zendure_supertank_pro":"B09D76H8J7","prod_xiaomi_212w_25k":"B0DKFWMBT6","prod_baseus_blade_100w":"B0CNT2KBBH","prod_anker_pb_25k_100w":"B0DT4RGDSJ","prod_anker_zolo_10k":"B0FF42H4QX","prod_ugreen_strap_20k":"B0D9GQMMSV","prod_anker_maggo_applewatch":"B0D9BBHD6M","prod_cio_smartcoby_slim_wireless":"B0FTYZXTMK","prod_belkin_boostcharge_20k":"B0F4VMBBST","prod_ecoflow_rapid_mag_10k":"B0G7FJF7VJ","prod_elecom_de_c64_20k":"B0FCMDX72M"};
+function affUrl(id){const a=AFFILIATE[id];return a?`https://www.amazon.co.jp/dp/${a}?tag=${AFF_TAG}`:null;}
+function showNode(n){
+  pulse();
+  const p=document.getElementById('panel'),c=nodeColor(n.type),aff=affUrl(n.id);let kv='';
+  Object.entries(n.attrs||{}).forEach(([k,v])=>{if(v===undefined)return;
+    let vv=fmtVal(k,v);
+    if(k==='price_jpy'&&aff&&v!=null&&v!=='')vv=`<a href="${aff}" target="_blank" rel="sponsored noopener" style="color:#e9c46a;text-decoration:underline">${vv}</a>`;
+    kv+=`<div class="k">${esc(klabel(k))}</div><div class="v">${vv}</div>`;});
+  let src='';if(n.sources&&n.sources.length)src='<div class="srch">'+(LANG==='ja'?'出典':'Sources')+'</div><div class="src">'+n.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,''))}</a>`).join('')+'</div>';
+  const title=esc(LANG==='ja'?n.label_ja:n.label_en);
+  const titleHtml=aff?`<a href="${aff}" target="_blank" rel="sponsored noopener" style="color:#fff;text-decoration:none">${title} <span style="color:#4361ee;font-size:12px">↗</span></a>`:title;
+  const cta=aff?`<a href="${aff}" target="_blank" rel="sponsored noopener" style="display:inline-flex;align-items:center;gap:5px;margin:0 0 12px;background:#febd69;color:#1a1208;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:8px;text-decoration:none">🛒 ${LANG==='ja'?'Amazonで見る':'View on Amazon'} ↗</a>`:'';
+  p.innerHTML=`<span class="x" onclick="hidePanel()">×</span><span class="badge" style="background:${c}">${esc(TYPE_LABEL[LANG][n.type]||n.type)}</span>`+
+    `<h3>${titleHtml}</h3><div class="sub2">${esc(LANG==='ja'?(n.label_en||''):(n.label_ja||''))}</div>`+(kv?`<div class="kv">${kv}</div>`:'')+cta+src;
+  p.classList.add('show');
+}
+function showEdge(e){const r=KG.edges[e._idx];if(!r)return;const p=document.getElementById('panel'),a=idToNode[r.from],b=idToNode[r.to];
+  const lbl=(EDGE_LABEL[LANG]&&EDGE_LABEL[LANG][r.type])||r.type;let src='';
+  if(r.sources&&r.sources.length)src='<div class="srch">'+(LANG==='ja'?'出典':'Sources')+'</div><div class="src">'+r.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,''))}</a>`).join('')+'</div>';
+  p.innerHTML=`<span class="x" onclick="hidePanel()">×</span><span class="badge" style="background:${MEANING.has(r.type)?'#2a9d8f':'#6b7280'}">${esc(lbl)}${r.confidence?' · '+esc(r.confidence):''}</span>`+
+    `<h3 style="font-size:14px">${esc(LANG==='ja'?a.label_ja:a.label_en)} <span style="color:#6b7280">→</span> ${esc(LANG==='ja'?b.label_ja:b.label_en)}</h3>`+(r.rationale_ja?`<div class="rat" style="margin-top:10px">${esc(r.rationale_ja)}</div>`:'')+src;
+  p.classList.add('show');
+}
+function hidePanel(){document.getElementById('panel').classList.remove('show');}
+window.hidePanel=hidePanel;
+network.on('click',p=>{stopAuto();if(p.nodes.length)showNode(idToNode[p.nodes[0]]);else if(p.edges.length)showEdge(edges.get(p.edges[0]));else hidePanel();});
+
+/* ---- selects ---- */
+function opt(v,label,sel){return `<option value="${v}"${v===sel?' selected':''}>${esc(label)}</option>`;}
+function fillSelects(){
+  const u=UI[LANG];
+  document.getElementById('sel-brand').innerHTML=opt('All',u.all,brandSel)+brands.map(b=>opt(b.id,LANG==='ja'?b.label_ja:b.label_en,brandSel)).join('');
+  let th=opt('All',u.all,themeSel);
+  th+=`<optgroup label="${esc(u.segG)}">`+segments.map(s=>opt(s.id,LANG==='ja'?s.label_ja:s.label_en,themeSel)).join('')+`</optgroup>`;
+  document.getElementById('sel-theme').innerHTML=th;
+  const groups={funcG:[],capG:[],priceG:[]};
+  FEATURES.forEach(f=>groups[f.g].push(f));
+  let ft=opt('All',u.all,featSel);
+  ['funcG','capG','priceG'].forEach(g=>{ft+=`<optgroup label="${esc(u[g])}">`+groups[g].map(f=>opt(f.id,LANG==='ja'?f.ja:f.en,featSel)).join('')+`</optgroup>`;});
+  document.getElementById('sel-feat').innerHTML=ft;
+}
+document.getElementById('sel-brand').onchange=e=>{brandSel=e.target.value;refresh(true);};
+document.getElementById('sel-theme').onchange=e=>{themeSel=e.target.value;refresh(true);};
+document.getElementById('sel-feat').onchange=e=>{featSel=e.target.value;refresh(true);};
+document.getElementById('clr').onclick=()=>{brandSel=themeSel=featSel='All';fillSelects();refresh(false);};
+
+/* ---- breadcrumb ---- */
+function crumbLabel(kind,val){
+  if(kind==='brand')return idToNode[val]?(LANG==='ja'?idToNode[val].label_ja:idToNode[val].label_en):val;
+  if(kind==='theme'){if(idToNode[val])return LANG==='ja'?idToNode[val].label_ja:idToNode[val].label_en;return INSIGHT_SHORT[LANG][val]||val;}
+  if(kind==='feat')return LANG==='ja'?featById[val].ja:featById[val].en;
+}
+function renderCrumb(count){
+  const c=document.getElementById('crumb'),u=UI[LANG];
+  if(!anyFilter()){c.classList.remove('show');c.innerHTML='';return;}
+  let h='';const parts=[];
+  if(brandSel!=='All')parts.push(['brand',brandSel]);
+  if(themeSel!=='All')parts.push(['theme',themeSel]);
+  if(featSel!=='All')parts.push(['feat',featSel]);
+  parts.forEach((p,i)=>{if(i)h+=`<span class="op">×</span>`;
+    h+=`<span class="cc">${esc(crumbLabel(p[0],p[1]))}<span class="x" data-k="${p[0]}">✕</span></span>`;});
+  h+=count>0?`<span class="cnt">${count} ${esc(u.products)}</span>`:`<span class="cnt zero">${esc(u.zero)}</span>`;
+  c.innerHTML=h;c.classList.add('show');
+  c.querySelectorAll('.x').forEach(x=>x.onclick=()=>{const k=x.dataset.k;if(k==='brand')brandSel='All';if(k==='theme')themeSel='All';if(k==='feat')featSel='All';fillSelects();refresh(true);});
+}
+
+/* ---- stepper ---- */
+function setupStepper(){
+  const el=document.getElementById('step');
+  if(!filterIds||!filterIds.length){el.classList.remove('show');stopAuto();renderInsightBox();return;}
+  el.classList.add('show');stepIdx=Math.min(stepIdx,filterIds.length-1);updateStep(false);renderInsightBox();
+}
+function updateStep(focus){
+  if(!filterIds||!filterIds.length)return;
+  if(stepIdx<0)stepIdx=filterIds.length-1;if(stepIdx>=filterIds.length)stepIdx=0;
+  const id=filterIds[stepIdx],n=idToNode[id];
+  document.getElementById('step-now').textContent=(LANG==='ja'?n.label_ja:n.label_en);
+  document.getElementById('step-c').textContent=(stepIdx+1)+' / '+filterIds.length;
+  if(focus){network.focus(id,{scale:1.05,animation:{duration:550},offset:{x:-130,y:0}});showNode(n);}
+}
+document.getElementById('step-prev').onclick=()=>{stopAuto();stepIdx--;updateStep(true);};
+document.getElementById('step-next').onclick=()=>{stopAuto();stepIdx++;updateStep(true);};
+document.getElementById('step-auto').onclick=()=>{ if(autoTimer)stopAuto(); else startAuto(); };
+function startAuto(){const b=document.getElementById('step-auto');b.classList.add('on');b.textContent='⏸';
+  autoTimer=setInterval(()=>{stepIdx++;updateStep(true);},3600);updateStep(true);}
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}const b=document.getElementById('step-auto');if(b){b.classList.remove('on');b.textContent='▶';}}
+
+/* ---- insight box (folded into theme) ---- */
+function renderInsightBox(){
+  const box=document.getElementById('ins');
+  const ins=(KG.insights||[]).find(o=>o.id===FEAT_INSIGHT[featSel]);
+  if(!ins){box.classList.remove('show','open');return;}
+  box.classList.add('show');
+  document.getElementById('ins-t').textContent=LANG==='ja'?(ins.title_ja||ins.title):(ins.title_en||ins.title_ja);
+  document.getElementById('ins-b').textContent=LANG==='ja'?(ins.body_ja||''):(ins.body_en||ins.body_ja||'');
+  document.getElementById('ins-more').textContent=UI[LANG].more;
+}
+document.getElementById('ins-more').onclick=()=>{const b=document.getElementById('ins');b.classList.toggle('open');
+  document.getElementById('ins-more').textContent=b.classList.contains('open')?UI[LANG].less:UI[LANG].more;};
+
+/* ---- refresh (recompute + repaint) ---- */
+function refresh(fit){
+  filterIds=anyFilter()?computeResult():null;
+  if(!filterIds||!filterIds.length)stepIdx=0;
+  nodes.update(buildNodes());edges.update(buildEdges());
+  renderCrumb(filterIds?filterIds.length:0);
+  setupStepper();
+  pulse();
+  if(fit&&filterIds&&filterIds.length)network.fit({nodes:filterIds,animation:{duration:650}});
+  if(fit&&!anyFilter())network.fit({animation:{duration:650}});
+}
+
+/* ---- legend / lang / lens ---- */
+function renderLegend(){document.getElementById('leg-row').innerHTML=Object.keys(TYPE_COLOR).map(t=>`<div class="it"><span class="dot" style="background:${TYPE_COLOR[t]}"></span>${esc(TYPE_LABEL[LANG][t])}</div>`).join('');}
+function setLang(l){LANG=l;document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.dataset.l===l));document.documentElement.lang=l;
+  const u=UI[l];document.getElementById('t-title').textContent=u.title;document.getElementById('t-sub').textContent=u.sub;
+  document.getElementById('t-lens').textContent=u.lens;document.getElementById('t-leg').textContent=u.leg;
+  document.getElementById('t-navh').textContent=u.navh;document.getElementById('t-lb').textContent=u.lb;
+  document.getElementById('t-lt').textContent=u.lt;document.getElementById('t-lf').textContent=u.lf;document.getElementById('t-clr').textContent=u.clr;
+  document.getElementById('t-foot').innerHTML=u.foot;
+  fillSelects();nodes.update(buildNodes());renderLegend();renderCrumb(filterIds?filterIds.length:0);setupStepper();}
+document.querySelectorAll('#lang span').forEach(s=>s.onclick=()=>setLang(s.dataset.l));
+document.getElementById('lens').onclick=()=>{LENS=!LENS;document.getElementById('lens').classList.toggle('on',LENS);edges.update(buildEdges());};
+
+fillSelects();renderLegend();setLang('ja');
+// うにうに継続：停止しかけたら再励起（Anker式パルス）＝止まらない
+setTimeout(()=>network.fit({animation:{duration:700}}),1100);
+// 永続うにうに：定期的に数ノードを微小に揺らして物理を生かし続ける（Anker的に止まらない）
+setInterval(()=>{
+  if(document.hidden)return;
+  const ids=nodes.getIds(),pos=network.getPositions();const upd=[];
+  for(let k=0;k<5;k++){const id=ids[Math.floor(Math.random()*ids.length)];if(!pos[id])continue;
+    upd.push({id,x:pos[id].x+(Math.random()*32-16),y:pos[id].y+(Math.random()*32-16)});}
+  if(upd.length){nodes.update(upd);network.startSimulation();}
+},1500);
+</script>
+</body>
+</html>

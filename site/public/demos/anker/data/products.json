@@ -1,0 +1,2180 @@
+{
+  "schema_version": "0.1",
+  "project": "Anker Power Conference 2026 Event Graph",
+  "last_updated": "2026-05-27",
+  "source_policy": {
+    "public_copy": "公開版では公式公開資料と現地参加メモをもとに構造化した旨を表示する。録音・文字起こしは内部制作ソース扱いにする。",
+    "classes": {
+      "official_fact": "公式PDF、プレスリリース、公式特設ページで確認できた事実",
+      "field_note": "Daveの現地参加メモ、展示会場写真、体験に基づく記録",
+      "interpretation": "Dave/Codexによる戦略仮説、読み解き、記事の主張"
+    }
+  },
+  "sources": [
+    {
+      "id": "new_products_pdf",
+      "type": "official_pdf",
+      "path": "APC2026_新製品表all.pdf",
+      "label": "APC2026 新製品表 all"
+    },
+    {
+      "id": "comparison_pdf",
+      "type": "official_pdf",
+      "path": "APC2026Spring_比較表all.pdf",
+      "label": "APC2026 Spring 比較表 all"
+    },
+    {
+      "id": "press_nlb",
+      "type": "official_pdf",
+      "path": "安全性_Neo Lithium-ion Battery/Press Release_Safety & A1113.pdf",
+      "label": "Press Release: Safety & A1113"
+    },
+    {
+      "id": "press_starflyer",
+      "type": "official_pdf",
+      "path": "スターフライヤーとの連携実施/Press Release_スターフライヤーとの連携実施.pdf",
+      "label": "Press Release: スターフライヤーとの連携実施"
+    },
+    {
+      "id": "transcript_internal",
+      "type": "internal_transcript",
+      "path": "Ankerセッション聞き起こし/Anker聞き起こし.txt",
+      "label": "Ankerセッション聞き起こし",
+      "public_use": "do_not_quote_directly"
+    }
+  ],
+  "products": [
+    {
+      "id": "anker_style_pouch",
+      "brand_at_event": "Anker",
+      "name": "Anker Style Pouch",
+      "category": "gadget_pouch",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 4990,
+      "sales_start": "2026-05-27",
+      "key_facts": [
+        "ポーチ内側に難燃性素材を採用",
+        "UL 94 V-0適合はポーチ内部のみ",
+        "約180 x 100 x 60mm、約130g",
+        "ガジェットやパスポートなどを収納可能"
+      ],
+      "strategy_tags": [
+        "safety_as_accessory",
+        "travel_context"
+      ],
+      "source_ids": [
+        "new_products_pdf",
+        "press_nlb"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "安全思想がアクセサリーまで広がっている例として扱える。",
+      "specs": {
+        "size_mm": {
+          "value": "180x100x60",
+          "unit": "mm",
+          "raw": "約180 × 100 × 60mm"
+        },
+        "weight_g": {
+          "value": 130,
+          "unit": "g",
+          "raw": "約130g"
+        },
+        "flame_retardant_standard": "UL 94 V-0 (ポーチ内部のみ。ファスナー、メッシュ、縫製糸は除く)"
+      },
+      "images": [
+        "assets/IMG_2893.jpg"
+      ]
+    },
+    {
+      "id": "anker_nano_power_bank_maggo_plus",
+      "brand_at_event": "Anker",
+      "name": "Anker Nano Power Bank (MagGo, Plus)",
+      "category": "mobile_battery",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 11990,
+      "sales_start": "予約販売開始: 2026-05-27 / 一般販売開始: 2026年夏頃",
+      "key_facts": [
+        "Neo Lithium-ion Battery (NLB) 採用",
+        "約104 x 71 x 15mm、約215g",
+        "USB-C入力最大30W",
+        "USB-C出力最大30W、ワイヤレス出力最大15W",
+        "ブラックのみ先行、ホワイトは2026年秋頃発売予定"
+      ],
+      "technology_ids": [
+        "neo_lithium_ion_battery",
+        "battery_management_system",
+        "flame_retardant_body"
+      ],
+      "strategy_tags": [
+        "true_safety",
+        "no_single_material_magic",
+        "portable_safety"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/anker-nlb-maggoplus",
+      "source_ids": [
+        "new_products_pdf",
+        "press_nlb"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "安全思想を最初に製品化した中心ノード。",
+      "specs": {
+        "size_mm": {
+          "value": "104x71x15",
+          "unit": "mm",
+          "raw": "約104 × 71 × 15mm"
+        },
+        "weight_g": {
+          "value": 215,
+          "unit": "g",
+          "raw": "約215g"
+        },
+        "input": "USB-C：5V/3A, 9V/3A, 15V/2A (最大30W)",
+        "max_input_w": {
+          "value": 30,
+          "unit": "W",
+          "raw": "最大30W"
+        },
+        "output": "USB-C：5V/3A, 9V/3A, 12V/2.5A, 15V/2A, 20V/1.5A (最大30W) / ワイヤレス出力：最大15W",
+        "max_output_w": {
+          "value": 30,
+          "unit": "W",
+          "raw": "最大30W (USB-C)"
+        },
+        "wireless_charge_w": {
+          "value": 15,
+          "unit": "W",
+          "raw": "ワイヤレス出力：最大15W"
+        },
+        "total_output_w": {
+          "value": 17,
+          "unit": "W",
+          "raw": "合計最大：17W (USB-C：最大12W / ワイヤレス出力：最大5W)"
+        },
+        "wireless_charging": true,
+        "battery_chemistry": "Neo Lithium-ion Battery (NLB)"
+      }
+    },
+    {
+      "id": "anker_nano_power_strip_10in1_70w_clamp",
+      "brand_at_event": "Anker",
+      "name": "Anker Nano Power Strip (10-in-1, 70W, クランプ式)",
+      "category": "power_strip",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 9990,
+      "sales_start": "2026年夏頃",
+      "key_facts": [
+        "デスクに挟むだけで設置可能な電源タップ",
+        "合計10ポート搭載",
+        "単ポート最大70W、合計最大70W",
+        "AC差込口 x 6、USB-C x 2、USB-A x 2"
+      ],
+      "strategy_tags": [
+        "desktop_power_platform",
+        "workspace"
+      ],
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLでは未掲載。全イベントGraphでは追加対象。",
+      "specs": {
+        "size_mm": {
+          "value": "153x101x52",
+          "unit": "mm",
+          "raw": "約153 × 101 × 52mm"
+        },
+        "weight_g": {
+          "value": 698,
+          "unit": "g",
+          "raw": "約698g"
+        },
+        "ac_input_rating": "100-125V~, 50 / 60Hz, 11A",
+        "max_output_w": {
+          "value": 70,
+          "unit": "W",
+          "raw": "単ポート最大70W"
+        },
+        "total_output_w": {
+          "value": 70,
+          "unit": "W",
+          "raw": "合計最大70W"
+        },
+        "port_count": {
+          "value": 10,
+          "unit": "ports",
+          "raw": "10"
+        },
+        "ports_detail": "AC差込口 × 6 / USB-C × 2 / USB-A × 2",
+        "clamp_mount": true
+      },
+      "images": [
+        "assets/IMG_2904.jpg"
+      ]
+    },
+    {
+      "id": "anker_nano_usb_c_hub_10in1_240hz_display",
+      "brand_at_event": "Anker",
+      "name": "Anker Nano USB-C ハブ (10-in-1, 240Hz, Smart Display)",
+      "category": "usb_c_hub",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 16990,
+      "sales_start": "2026年秋頃",
+      "key_facts": [
+        "ディスプレイ搭載の10-in-1 USB-Cハブ",
+        "最大240Hzの高リフレッシュレートに対応",
+        "HDMI 2.1最大4K@144Hz、DisplayPort 1.4最大4K@144Hz",
+        "PD対応USB-C充電ポート最大入力100W"
+      ],
+      "strategy_tags": [
+        "desktop_power_platform",
+        "visualized_io"
+      ],
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLでは未掲載。Ankerのデスク/仕事領域拡張として扱える。",
+      "specs": {
+        "size_mm": {
+          "value": "130x56x50",
+          "unit": "mm",
+          "raw": "約130 × 56 × 50mm"
+        },
+        "weight_g": {
+          "value": 300,
+          "unit": "g",
+          "raw": "約300g"
+        },
+        "max_input_w": {
+          "value": 100,
+          "unit": "W",
+          "raw": "USB-C 入力 最大100W"
+        },
+        "max_output_w": {
+          "value": 7.5,
+          "unit": "W",
+          "raw": "単ポート最大7.5W (合計最大95W) ※100W以上の充電器を使用した場合のみ"
+        },
+        "total_output_w": {
+          "value": 95,
+          "unit": "W",
+          "raw": "合計最大95W"
+        },
+        "port_count": {
+          "value": 10,
+          "unit": "ports",
+          "raw": "10"
+        },
+        "ports_detail": "USB-Cポート(最大10Gbps)×1 / SDカードスロット(最大104MB/s)×1 / microSDカードスロット(最大104MB/s)×1 / PD対応USB-C充電ポート(最大入力100W)×1 / USB-Aポート(最大10Gbps)×1 / USB-Aポート(最大5Gbps)×2 / HDMI 2.1ポート(最大4K@144Hz)×1 / DisplayPort 1.4(最大4K@144Hz)×1 / イーサネットポート(最大1Gbps)×1",
+        "display": true,
+        "max_refresh_rate_hz": {
+          "value": 240,
+          "unit": "Hz",
+          "raw": "最大240Hz"
+        },
+        "video_output": "HDMI 2.1 最大4K@144Hz / DisplayPort 1.4 最大4K@144Hz"
+      },
+      "images": [
+        "assets/Add/Anker Nano USB-C ハブ (10-in-1, 240Hz, Display).png"
+      ]
+    },
+    {
+      "id": "anker_solix_s2000",
+      "brand_at_event": "Anker",
+      "name": "Anker Solix S2000 Portable Power Station",
+      "category": "portable_power_station",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 179900,
+      "sales_start": "2026-09-23",
+      "key_facts": [
+        "2010Wh",
+        "約20.8 x 28.2 x 32.3cm、約16.2kg",
+        "2000Wh帯で世界最小・最軽量 (2026年5月時点 Anker調べ)",
+        "角柱型リン酸鉄リチウムイオン電池を採用",
+        "バッテリーセル寿命は6,000回以上",
+        "電子部品寿命は約50,000時間",
+        "最短充電時間は超急速充電モードで約108分",
+        "OptiSave搭載"
+      ],
+      "technology_ids": [
+        "optisave",
+        "prismatic_lfp_cell",
+        "infinipower"
+      ],
+      "strategy_tags": [
+        "home_backup",
+        "disaster_resilience",
+        "power_platform"
+      ],
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLの価格未発表、パウチ型、4000回は修正対象。",
+      "specs": {
+        "size_cm": {
+          "value": "20.8x28.2x32.3",
+          "unit": "cm",
+          "raw": "約20.8 × 28.2 × 32.3cm"
+        },
+        "weight_kg": {
+          "value": 16.2,
+          "unit": "kg",
+          "raw": "約16.2kg"
+        },
+        "battery_capacity_wh": {
+          "value": 2010,
+          "unit": "Wh",
+          "raw": "2010Wh"
+        },
+        "ac_rated_output_w": {
+          "value": 1500,
+          "unit": "W",
+          "raw": "単ポート：1500W (100V 15A, 50Hz / 60Hz)"
+        },
+        "min_charge_time_min": {
+          "value": 108,
+          "unit": "min",
+          "raw": "超急速充電モード：約108分"
+        },
+        "normal_charge_time_min": {
+          "value": 132,
+          "unit": "min",
+          "raw": "通常モード：約132分"
+        },
+        "port_count": {
+          "value": 8,
+          "unit": "ports",
+          "raw": "8ポート (AC × 5、USB-C × 2、USB-A × 1)"
+        },
+        "ports_detail": "AC × 5 / USB-C × 2 / USB-A × 1",
+        "battery_cycle_life": {
+          "value": 6000,
+          "unit": "cycles",
+          "raw": "6,000回以上"
+        },
+        "electronics_lifespan_h": {
+          "value": 50000,
+          "unit": "h",
+          "raw": "約50,000時間"
+        },
+        "battery_chemistry": "角柱型リン酸鉄リチウムイオン電池",
+        "lfp_battery": true,
+        "technologies": [
+          "InfiniPower",
+          "OptiSave"
+        ],
+        "expansion_battery": false,
+        "app_support": true
+      }
+    },
+    {
+      "id": "soundcore_liberty_5_pro_max",
+      "brand_at_event": "Soundcore",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Soundcore Liberty 5 Pro Max",
+      "category": "true_wireless_earbuds",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 36990,
+      "sales_start": "2026-05-27",
+      "key_facts": [
+        "AIボイスレコーダー搭載の次世代ビジネスイヤホン",
+        "1.78インチ大型ディスプレイ操作に対応",
+        "ウルトラノイズキャンセリング4.0搭載",
+        "8基のマイクと骨伝導センサー搭載",
+        "SBC/AAC/LDAC対応",
+        "約5.9g (片耳)、約85.5g (充電ケース込み)",
+        "ミッドナイトブラック、シャンパンゴールド"
+      ],
+      "technology_ids": [
+        "thus",
+        "ultra_noise_cancelling_4_0",
+        "azure_ai_speech"
+      ],
+      "strategy_tags": [
+        "business_earbuds",
+        "ai_voice_recorder",
+        "soundcore_to_anker"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/soundcore-liberty-5-pro-series",
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "Daveの実機取得ノードはfield_noteとして別途付ける。",
+      "specs": {
+        "size_cm": {
+          "value": "5.8x5.8x2.9",
+          "unit": "cm",
+          "raw": "約5.8 × 5.8 × 2.9cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 5.9,
+          "unit": "g",
+          "raw": "約5.9g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 85.5,
+          "unit": "g",
+          "raw": "約85.5g (充電ケース込み)"
+        },
+        "colors": [
+          "ミッドナイトブラック",
+          "シャンパンゴールド"
+        ],
+        "color_count": {
+          "value": 2,
+          "unit": "colors",
+          "raw": "2色"
+        },
+        "driver": "9.2mmダイナミックドライバー ＋ デュアル低音増強ダクト ＋ AIサウンド補正",
+        "noise_cancelling": "ウルトラノイズキャンセリング 4.0",
+        "mic_count": {
+          "value": 8,
+          "unit": "mics",
+          "raw": "8-Mic"
+        },
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "spatial_audio": "Dolby Atmos",
+        "playtime_anc_off_h": {
+          "value": 12,
+          "unit": "h",
+          "raw": "最大12時間 / 50時間 (ANC OFF)"
+        },
+        "playtime_anc_on_h": {
+          "value": 6.5,
+          "unit": "h",
+          "raw": "最大6.5時間 / 28時間 (ANC ON)"
+        },
+        "playtime_case_anc_off_h": {
+          "value": 50,
+          "unit": "h",
+          "raw": "最大50時間 (ケース込み, ANC OFF)"
+        },
+        "playtime_case_anc_on_h": {
+          "value": 28,
+          "unit": "h",
+          "raw": "最大28時間 (ケース込み, ANC ON)"
+        },
+        "quick_charge": "約5分充電で最大4時間再生",
+        "multipoint": "3台対応 / 優先設定可 / LDAC併用可",
+        "ambient_sound": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 6.1",
+        "control": "タッチ ＋ スワイプ",
+        "display": true,
+        "ai_voice_recorder": true
+      }
+    },
+    {
+      "id": "soundcore_liberty_5_pro",
+      "brand_at_event": "Soundcore",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Soundcore Liberty 5 Pro",
+      "category": "true_wireless_earbuds",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 26990,
+      "sales_start": "2026-05-27",
+      "key_facts": [
+        "静寂・音質・通話のすべてにProレベルの性能を搭載",
+        "ウルトラノイズキャンセリング4.0搭載",
+        "Dolby Atmosに最適化されたオーディオ",
+        "8基のマイクと骨伝導センサー搭載",
+        "SBC/AAC/LDAC対応",
+        "ミッドナイトブラック、パールホワイト、スカイブルー、シルバーピンク"
+      ],
+      "technology_ids": [
+        "thus",
+        "ultra_noise_cancelling_4_0"
+      ],
+      "strategy_tags": [
+        "flagship_audio",
+        "soundcore_to_anker"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/soundcore-liberty-5-pro-series",
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "ギネス世界記録の対象表現は公式注記で再確認してから公開文に反映。",
+      "specs": {
+        "size_cm": {
+          "value": "6.2x6.2x2.2",
+          "unit": "cm",
+          "raw": "約6.2 × 6.2 × 2.2cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 5.9,
+          "unit": "g",
+          "raw": "約5.9g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 68.5,
+          "unit": "g",
+          "raw": "約68.5g (充電ケース込み)"
+        },
+        "colors": [
+          "ミッドナイトブラック",
+          "パールホワイト",
+          "スカイブルー",
+          "シルバーピンク"
+        ],
+        "color_count": {
+          "value": 4,
+          "unit": "colors",
+          "raw": "4色"
+        },
+        "driver": "9.2mmダイナミックドライバー ＋ デュアル低音増強ダクト ＋ AIサウンド補正",
+        "noise_cancelling": "ウルトラノイズキャンセリング 4.0",
+        "mic_count": {
+          "value": 8,
+          "unit": "mics",
+          "raw": "8-Mic"
+        },
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "spatial_audio": "Dolby Atmos",
+        "playtime_anc_off_h": {
+          "value": 12,
+          "unit": "h",
+          "raw": "最大12時間 / 50時間 (ANC OFF)"
+        },
+        "playtime_anc_on_h": {
+          "value": 6.5,
+          "unit": "h",
+          "raw": "最大6.5時間 / 28時間 (ANC ON)"
+        },
+        "playtime_case_anc_off_h": {
+          "value": 50,
+          "unit": "h",
+          "raw": "最大50時間 (ケース込み, ANC OFF)"
+        },
+        "playtime_case_anc_on_h": {
+          "value": 28,
+          "unit": "h",
+          "raw": "最大28時間 (ケース込み, ANC ON)"
+        },
+        "quick_charge": "約5分充電で最大4時間再生",
+        "multipoint": "3台対応 / 優先設定可 / LDAC併用可",
+        "ambient_sound": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 6.1",
+        "control": "タッチ ＋ スワイプ",
+        "display": true,
+        "ai_voice_recorder": false
+      }
+    },
+    {
+      "id": "soundcore_aerofit_2_pro",
+      "brand_at_event": "Soundcore",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Soundcore AeroFit 2 Pro",
+      "category": "open_ear_earbuds",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 26990,
+      "sales_start": "2026-05-27 (ライトパープルは2026年6月下旬予定)",
+      "key_facts": [
+        "オープンイヤーとインナーイヤーを両立する2-in-1モデル",
+        "5段階に角度調整可能なイヤーフック",
+        "11.8mmダイナミックドライバーとLCP振動板",
+        "IP55",
+        "SBC/AAC/LDAC対応"
+      ],
+      "strategy_tags": [
+        "wearable_audio",
+        "two_modes"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/soundcore-openear-series",
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_cm": {
+          "value": "10.7x5.7x3.0",
+          "unit": "cm",
+          "raw": "約10.7 × 5.7 × 3.0cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 10.5,
+          "unit": "g",
+          "raw": "約10.5g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 109,
+          "unit": "g",
+          "raw": "約109g (充電ケース込み)"
+        },
+        "colors": [
+          "ミッドナイトブラック",
+          "パールホワイト",
+          "ディープブルー",
+          "ライトパープル"
+        ],
+        "color_count": {
+          "value": 4,
+          "unit": "colors",
+          "raw": "4色"
+        },
+        "driver": "11.8mmダイナミックドライバー (LCP振動板)",
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "playtime_openear_h": {
+          "value": 7,
+          "unit": "h",
+          "raw": "オープンイヤー使用時：最大7時間 / 34時間"
+        },
+        "playtime_innerear_h": {
+          "value": 5,
+          "unit": "h",
+          "raw": "インナーイヤー使用時：最大5時間 / 24時間"
+        },
+        "playtime_case_h": {
+          "value": 34,
+          "unit": "h",
+          "raw": "最大34時間 (ケース込み, オープンイヤー)"
+        },
+        "quick_charge": "約10分充電で最大3.5時間再生",
+        "equalizer": "20種類以上のプリセット / カスタム",
+        "call_noise_reduction": "4-Mic AI",
+        "multipoint": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 6.1",
+        "control": "ボタン",
+        "ai_features": [
+          "リスニング翻訳",
+          "対話翻訳",
+          "AIアシスタント"
+        ],
+        "ear_hook_adjustment": "5段階に角度調整可能",
+        "two_in_one_mode": true
+      },
+      "images": [
+        "assets/Add/Soundcore AeroFit 2 Pro.png"
+      ]
+    },
+    {
+      "id": "soundcore_boom_go_3i",
+      "brand_at_event": "Soundcore",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Soundcore Boom Go 3i",
+      "category": "portable_speaker",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 8990,
+      "sales_start": "販売中 (2026-05-12新発売)",
+      "key_facts": [
+        "コンパクトスピーカー",
+        "15W",
+        "BassUp 2.0",
+        "通常最大24時間、エコモード最大40時間再生",
+        "IP68",
+        "Bluetooth 6.0",
+        "4800mAhモバイルバッテリー機能"
+      ],
+      "strategy_tags": [
+        "portable_audio",
+        "entry_expansion"
+      ],
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLでは未掲載。戦略Graphでは補助ノード扱いで十分。",
+      "specs": {
+        "size_mm": {
+          "value": "102x106x46",
+          "unit": "mm",
+          "raw": "約102 × 106 × 46mm"
+        },
+        "weight_g": {
+          "value": 380,
+          "unit": "g",
+          "raw": "約380g"
+        },
+        "audio_output_w": {
+          "value": 15,
+          "unit": "W",
+          "raw": "15W"
+        },
+        "playtime_normal_h": {
+          "value": 24,
+          "unit": "h",
+          "raw": "通常：最大24時間"
+        },
+        "playtime_eco_h": {
+          "value": 40,
+          "unit": "h",
+          "raw": "エコモード：最大40時間"
+        },
+        "water_resistance": "IP68",
+        "codecs": [
+          "SBC",
+          "AAC"
+        ],
+        "frequency_range": "80Hz-20kHz",
+        "colors": [
+          "ブラック",
+          "オフホワイト",
+          "ブルー",
+          "ピンク"
+        ],
+        "color_count": {
+          "value": 4,
+          "unit": "colors",
+          "raw": "4色"
+        },
+        "bluetooth": "Bluetooth 6.0",
+        "charging": "USB-C",
+        "bassup": "BassUp 2.0",
+        "dual_pairing": true,
+        "power_bank_function": true,
+        "battery_capacity_mah": {
+          "value": 4800,
+          "unit": "mAh",
+          "raw": "モバイルバッテリー機能 (容量：4800mAh)"
+        }
+      },
+      "images": [
+        "assets/Add/Soundcore Boom Go 3i 4colors.png"
+      ]
+    },
+    {
+      "id": "soundcore_work_64gb",
+      "brand_at_event": "Soundcore",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Soundcore Work (64GB)",
+      "category": "ai_voice_recorder",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 26990,
+      "sales_start": "2026年6月上旬",
+      "key_facts": [
+        "世界最小・最軽量のAIボイスレコーダー (マイク本体のみ、2026年5月時点 Anker調べ)",
+        "AIによる文字起こし・要約が可能",
+        "本体ストレージ64GB",
+        "MEMS x 2",
+        "連続録音最大8時間、充電ケース込み最大32時間",
+        "150以上の言語に対応",
+        "AIモデルはGPT-5.2 (2026年5月時点、順次アップデート予定)"
+      ],
+      "technology_ids": [
+        "azure_ai_speech"
+      ],
+      "strategy_tags": [
+        "ai_voice_recorder",
+        "business_productivity",
+        "azure_platform"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "medium",
+      "public_note": "現行HTMLでは未掲載。AI活用発信との接続が強いので追加価値が高い。AIモデル表記は公開前に公式資料で再確認。",
+      "specs": {
+        "size_mm": {
+          "value": "23x23x13",
+          "unit": "mm",
+          "raw": "約23 × 23 × 13mm (マイク本体)"
+        },
+        "size_case_mm": {
+          "value": "60x60x15",
+          "unit": "mm",
+          "raw": "約60 × 60 × 15mm (カード型充電ケース含む)"
+        },
+        "weight_mic_g": {
+          "value": 10,
+          "unit": "g",
+          "raw": "約10g (マイク本体)"
+        },
+        "weight_case_g": {
+          "value": 48,
+          "unit": "g",
+          "raw": "約48g (カード型充電ケース含む)"
+        },
+        "colors": [
+          "ブラック",
+          "ホワイト"
+        ],
+        "color_count": {
+          "value": 2,
+          "unit": "colors",
+          "raw": "2色"
+        },
+        "ai_model": "GPT-5.2",
+        "multilingual": "150以上の言語",
+        "mic": "MEMS × 2",
+        "recording_time_h": {
+          "value": 8,
+          "unit": "h",
+          "raw": "最大8時間 (マイク本体)"
+        },
+        "recording_time_case_h": {
+          "value": 32,
+          "unit": "h",
+          "raw": "最大32時間 (カード型充電ケース含む)"
+        },
+        "standby_days": {
+          "value": 10,
+          "unit": "days",
+          "raw": "10日間 (マイク本体のみ)"
+        },
+        "standby_case_days": {
+          "value": 25,
+          "unit": "days",
+          "raw": "25日間 (カード型充電ケース含む)"
+        },
+        "storage_gb": {
+          "value": 64,
+          "unit": "GB",
+          "raw": "64GB"
+        },
+        "ai_features": [
+          "文字起こし",
+          "要約"
+        ]
+      }
+    },
+    {
+      "id": "eufy_robot_vacuum_omni_s2",
+      "brand_at_event": "Eufy",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Eufy Robot Vacuum Omni S2",
+      "category": "robot_vacuum",
+      "graph_role": "primary_product",
+      "price_jpy_tax_in": 249900,
+      "sales_start": "2026-05-27",
+      "key_facts": [
+        "Anker史上最高峰のロボット掃除機",
+        "最大30000Pa (サイクロン)",
+        "伸縮・加圧式ローラーモップ (約1.5kg)",
+        "CleanMind AIシステム",
+        "3D MatrixEye 2.0",
+        "ロボット掃除機本体 約32.6 x 35.8 x 9.8cm、約5.2kg"
+      ],
+      "technology_ids": [
+        "cleanmind_ai",
+        "three_d_matrixeye_2_0",
+        "hydrojet_2_0",
+        "aeroturbo_system"
+      ],
+      "strategy_tags": [
+        "smart_home_high_end",
+        "spatial_ai",
+        "eufy_to_anker"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/eufy-s2",
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLの3D MatrixI表記は3D MatrixEye 2.0へ修正対象。",
+      "specs": {
+        "size_robot_cm": {
+          "value": "32.6x35.8x9.8",
+          "unit": "cm",
+          "raw": "ロボット掃除機本体：約32.6 × 35.8 × 9.8cm"
+        },
+        "size_station_cm": {
+          "value": "38.7x47.6x67.0",
+          "unit": "cm",
+          "raw": "ステーション：約38.7 × 47.6 × 67.0cm"
+        },
+        "weight_robot_kg": {
+          "value": 5.2,
+          "unit": "kg",
+          "raw": "ロボット掃除機本体：約5.2kg"
+        },
+        "weight_station_kg": {
+          "value": 9.5,
+          "unit": "kg",
+          "raw": "ステーション：約9.5kg"
+        },
+        "suction_pa": {
+          "value": 30000,
+          "unit": "Pa",
+          "raw": "最大30000Pa (サイクロン)"
+        },
+        "mop_type": "伸縮 加圧式ローラーモップ (約1.5kg)",
+        "navigation": "CleanMind AIシステム",
+        "obstacle_avoidance": "3D MatrixEye 2.0",
+        "auto_dust_collection": true,
+        "mop_auto_wash_dry": "温水洗浄・温風乾燥",
+        "mop_lift_mm": {
+          "value": 28.0,
+          "unit": "mm",
+          "raw": "28.0mm"
+        },
+        "mop_wash_while_running": true,
+        "anti_tangle": "DuoSpiral ブラシ",
+        "extendable_side_brush": true,
+        "auto_detergent": true,
+        "ozone_water_sanitizing": true,
+        "matter_support": true,
+        "cleaning_time_min": {
+          "value": 260,
+          "unit": "min",
+          "raw": "最大260分"
+        },
+        "charge_time_min": {
+          "value": 260,
+          "unit": "min",
+          "raw": "約260分"
+        }
+      }
+    },
+    {
+      "id": "eufy_eufycam_c37",
+      "brand_at_event": "Eufy",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Eufy eufyCam C37",
+      "category": "security_camera",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 14990,
+      "sales_start": "販売中 (2026-05-14新発売)",
+      "key_facts": [
+        "360度撮影、自動追尾機能搭載のセキュリティカメラ",
+        "2K (約300万画素)",
+        "内蔵バッテリーとソーラーパネル",
+        "IP65",
+        "microSDカード最大256GB"
+      ],
+      "strategy_tags": [
+        "smart_home_security",
+        "eufy_to_anker"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "現行HTMLでは未掲載。Eufyの幅を示す補助ノード。",
+      "specs": {
+        "size_mm": {
+          "value": "94x94x125",
+          "unit": "mm",
+          "raw": "約94 × 94 × 125mm (カメラ本体のみ)"
+        },
+        "weight_g": {
+          "value": 416,
+          "unit": "g",
+          "raw": "約416g (カメラ本体のみ)"
+        },
+        "camera_resolution": "2K (約300万画素)",
+        "field_of_view_deg": {
+          "value": 127,
+          "unit": "deg",
+          "raw": "127°"
+        },
+        "pan_tilt": "360° / 90° (自動追尾対応)",
+        "battery_capacity_mah": {
+          "value": 6700,
+          "unit": "mAh",
+          "raw": "6700mAh"
+        },
+        "solar_panel": true,
+        "storage_media": "microSDカード (最大256GB)",
+        "water_resistance": "IP65"
+      },
+      "images": [
+        "assets/Add/Eufy eufyCam C37.png"
+      ]
+    },
+    {
+      "id": "eufy_smarttrack_card_e40",
+      "brand_at_event": "Eufy",
+      "future_brand_note": "年内Anker統合の文脈で扱う",
+      "name": "Eufy SmartTrack Card E40",
+      "category": "tracker_card",
+      "graph_role": "supporting_product",
+      "price_jpy_tax_in": 5990,
+      "sales_start": "2026-05-27",
+      "key_facts": [
+        "iOS・Android両方のOSで使える",
+        "薄さ約1.7mm、重さ約12.0g",
+        "ワイヤレス充電対応",
+        "Bluetooth最大接続距離80m",
+        "1回の充電で最大5ヶ月"
+      ],
+      "strategy_tags": [
+        "cross_platform",
+        "smart_home_accessory"
+      ],
+      "official_url": "https://www.ankerjapan.com/pages/eufy-smarttrack",
+      "source_ids": [
+        "new_products_pdf",
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_mm": {
+          "value": "85x54x1.7",
+          "unit": "mm",
+          "raw": "約85 × 54 × 1.7mm"
+        },
+        "weight_g": {
+          "value": 12.0,
+          "unit": "g",
+          "raw": "約12.0g"
+        },
+        "supported_os": [
+          "iOS",
+          "Android"
+        ],
+        "bluetooth_range_m": {
+          "value": 80,
+          "unit": "m",
+          "raw": "最大80m"
+        },
+        "alarm_volume_db": {
+          "value": 80,
+          "unit": "dB",
+          "raw": "80dB"
+        },
+        "battery_life": "1回の充電で最大5ヶ月",
+        "charging": "ワイヤレス充電",
+        "wireless_charging": true
+      },
+      "images": [
+        "assets/IMG_2885.jpg"
+      ]
+    },
+    {
+      "id": "soundcore_c50i_pokemon",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore C50i ピカチュウモデル / イーブイモデル",
+      "category": "pokemon_collab_earbuds",
+      "graph_role": "collaboration_product",
+      "price_jpy_tax_in": 13990,
+      "sales_start": "2026年7月上旬",
+      "key_facts": [
+        "イヤーカフ型ワイヤレスイヤホン",
+        "12mmダイナミックドライバー",
+        "IP55",
+        "SBC/AAC/LDAC対応",
+        "最大7時間、充電ケース使用時最大28時間"
+      ],
+      "strategy_tags": [
+        "pokemon_collaboration",
+        "emotional_value",
+        "daily_adventure"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_cm": {
+          "value": "6.2x3.1x4.1",
+          "unit": "cm",
+          "raw": "約6.2 × 3.1 × 4.1cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 5.5,
+          "unit": "g",
+          "raw": "約5.5g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 44.5,
+          "unit": "g",
+          "raw": "約44.5g (充電ケース込み)"
+        },
+        "driver": "12mmダイナミックドライバー",
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "control": "ボタン",
+        "playtime_h": {
+          "value": 7,
+          "unit": "h",
+          "raw": "最大7時間 (イヤホン本体のみ)"
+        },
+        "playtime_case_h": {
+          "value": 28,
+          "unit": "h",
+          "raw": "最大28時間 (充電ケース使用時)"
+        },
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ]
+      },
+      "images": [
+        "assets/Frame 6.png"
+      ]
+    },
+    {
+      "id": "anker_usb_charger_70w_pikachu",
+      "brand_at_event": "Anker",
+      "name": "Anker USB急速充電器 70W ピカチュウモデル",
+      "category": "pokemon_collab_charger",
+      "graph_role": "collaboration_product",
+      "price_jpy_tax_in": 7990,
+      "sales_start": "2026年7月上旬",
+      "key_facts": [
+        "単ポート最大70W",
+        "3ポート搭載",
+        "約53 x 43 x 32mm、約120g",
+        "ピカチュウとモンスターボールの特別デザイン"
+      ],
+      "strategy_tags": [
+        "pokemon_collaboration",
+        "power_meets_pop_culture"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_mm": {
+          "value": "53x43x32",
+          "unit": "mm",
+          "raw": "約53 × 43 × 32mm (プラグ部を除く)"
+        },
+        "weight_g": {
+          "value": 120,
+          "unit": "g",
+          "raw": "約120g"
+        },
+        "input": "100-240V~, 1.8A, 50 / 60Hz",
+        "max_output_w": {
+          "value": 70,
+          "unit": "W",
+          "raw": "単ポート最大70W"
+        },
+        "port_count": {
+          "value": 3,
+          "unit": "ports",
+          "raw": "3ポート (USB-C × 2, USB-A × 1)"
+        },
+        "ports_detail": "USB-C × 2 / USB-A × 1"
+      },
+      "images": [
+        "assets/Frame 25.png"
+      ]
+    },
+    {
+      "id": "anker_travel_adapter_pikachu",
+      "brand_at_event": "Anker",
+      "name": "Anker トラベルアダプタ ピカチュウモデル",
+      "category": "pokemon_collab_travel_adapter",
+      "graph_role": "collaboration_product",
+      "price_jpy_tax_in": 5990,
+      "sales_start": "2026年7月上旬",
+      "key_facts": [
+        "200以上の国と地域で使用可能",
+        "通電時にモンスターボール部分が光る",
+        "約86 x 51 x 31mm、約128g",
+        "複数ポート利用時は合計最大15W"
+      ],
+      "strategy_tags": [
+        "pokemon_collaboration",
+        "travel_context"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_mm": {
+          "value": "86x51x31",
+          "unit": "mm",
+          "raw": "約86 × 51 × 31mm (プラグ部を除く)"
+        },
+        "weight_g": {
+          "value": 128,
+          "unit": "g",
+          "raw": "約128g"
+        },
+        "input": "日本：100-125V~, 50/60Hz, 8A / イギリス・イタリア：230V~, 50/60Hz, 8A",
+        "single_port_max_w": {
+          "value": 20,
+          "unit": "W",
+          "raw": "USB-C1：最大20W"
+        },
+        "total_output_w": {
+          "value": 15,
+          "unit": "W",
+          "raw": "複数ポート利用時 合計最大：15W"
+        },
+        "ports_detail": "USB-C × 2 / USB-A × 2",
+        "country_coverage": "200以上の国と地域"
+      },
+      "images": [
+        "assets/Frame 25.png"
+      ]
+    },
+    {
+      "id": "anker_travel_pouch_pikachu",
+      "brand_at_event": "Anker",
+      "name": "Anker トラベルポーチ ピカチュウモデル",
+      "category": "pokemon_collab_travel_pouch",
+      "graph_role": "collaboration_product",
+      "price_jpy_tax_in": 3990,
+      "sales_start": "2026年7月上旬",
+      "key_facts": [
+        "ポケモンとモンスターボールの特別デザイン",
+        "約180 x 100 x 80mm、約101g",
+        "ポケモンデザインの充電器やイヤホンを収納可能",
+        "パスポートなどの収納に便利な背面ポケット付き"
+      ],
+      "strategy_tags": [
+        "pokemon_collaboration",
+        "travel_context"
+      ],
+      "source_ids": [
+        "new_products_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "specs": {
+        "size_mm": {
+          "value": "180x100x80",
+          "unit": "mm",
+          "raw": "約180 × 100 × 80mm"
+        },
+        "weight_g": {
+          "value": 101,
+          "unit": "g",
+          "raw": "約101g"
+        }
+      },
+      "images": [
+        "assets/Frame 25.png"
+      ]
+    },
+    {
+      "id": "anker_usb_c_hub_10in1_dual_display",
+      "brand_at_event": "Anker",
+      "name": "Anker USB-C ハブ (10-in-1, Dual Display)",
+      "category": "usb_c_hub",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "anker_nano_usb_c_hub_10in1_240hz_display",
+      "price_jpy_tax_in": 5990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "127x54x13",
+          "unit": "mm",
+          "raw": "約127 × 54 × 13mm"
+        },
+        "weight_g": {
+          "value": 111,
+          "unit": "g",
+          "raw": "約111g"
+        },
+        "max_output_w": {
+          "value": 85,
+          "unit": "W",
+          "raw": "単ポート最大85W (合計最大85W)"
+        },
+        "total_output_w": {
+          "value": 85,
+          "unit": "W",
+          "raw": "合計最大85W"
+        },
+        "port_count": {
+          "value": 10,
+          "unit": "ports",
+          "raw": "10"
+        },
+        "ports_detail": "USB PD対応USB-Cポート(最大入力100W)×1 / データ転送用USB-Cポート(5Gbps)×1 / データ転送用USB-Aポート(5Gbps)×3 / HDMIポート(最大4K 30Hz)×1 / VGAポート(最大1080p 60Hz)×1 / イーサネットポート(最大1Gbps)×1 / SDカードスロット×1 / microSDカードスロット×1",
+        "display": false,
+        "video_output": "HDMI 最大4K 30Hz / VGA 最大1080p 60Hz"
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "anker_nano_charging_station_7in1_100w",
+      "brand_at_event": "Anker",
+      "name": "Anker Nano Charging Station (7-in-1, 100W, 巻取り式 USB-Cケーブル)",
+      "category": "power_strip",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "anker_nano_power_strip_10in1_70w_clamp",
+      "price_jpy_tax_in": 9990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "121x73x53",
+          "unit": "mm",
+          "raw": "約121 × 73 × 53mm"
+        },
+        "weight_g": {
+          "value": 570,
+          "unit": "g",
+          "raw": "約570g"
+        },
+        "ac_input_rating": "100-125V~, 50 / 60Hz, 11A",
+        "max_output_w": {
+          "value": 100,
+          "unit": "W",
+          "raw": "単ポート最大100W"
+        },
+        "total_output_w": {
+          "value": 100,
+          "unit": "W",
+          "raw": "合計最大100W"
+        },
+        "port_count": {
+          "value": 10,
+          "unit": "ports",
+          "raw": "10"
+        },
+        "ports_detail": "AC差込口 × 3 / 巻取り式USB-Cケーブル × 2 / USB-C × 1 / USB-A × 1",
+        "clamp_mount": false
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "anker_nano_charging_station_6in1_67w",
+      "brand_at_event": "Anker",
+      "name": "Anker Nano Charging Station (6-in-1, 67W)",
+      "category": "power_strip",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 6990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "100x93x19",
+          "unit": "mm",
+          "raw": "約100 × 93 × 19mm"
+        },
+        "weight_g": {
+          "value": 298,
+          "unit": "g",
+          "raw": "約298g"
+        },
+        "ac_input_rating": "100-125V~, 50 / 60Hz, 11A",
+        "max_output_w": {
+          "value": 67,
+          "unit": "W",
+          "raw": "単ポート最大67W"
+        },
+        "total_output_w": {
+          "value": 65,
+          "unit": "W",
+          "raw": "合計最大65W"
+        },
+        "port_count": {
+          "value": 6,
+          "unit": "ports",
+          "raw": "6"
+        },
+        "ports_detail": "AC差込口 × 2 / USB-C × 2 / USB-A × 2",
+        "clamp_mount": false
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "anker_solix_c2000_gen2",
+      "brand_at_event": "Anker",
+      "name": "Anker Solix C2000 Gen 2 Portable Power Station",
+      "category": "portable_power_station",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "anker_solix_s2000",
+      "price_jpy_tax_in": 199900,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "45.9x25.0x25.7",
+          "unit": "cm",
+          "raw": "約45.9 × 25.0 × 25.7cm"
+        },
+        "weight_kg": {
+          "value": 18.9,
+          "unit": "kg",
+          "raw": "約18.9kg"
+        },
+        "battery_capacity_wh": {
+          "value": 2048,
+          "unit": "Wh",
+          "raw": "2048Wh"
+        },
+        "ac_rated_output_w": {
+          "value": 1500,
+          "unit": "W",
+          "raw": "1500W (単ポート)"
+        },
+        "min_charge_time_min": {
+          "value": 99,
+          "unit": "min",
+          "raw": "約99分 (超急速充電モード)"
+        },
+        "port_count": {
+          "value": 9,
+          "unit": "ports",
+          "raw": "9"
+        },
+        "battery_cycle_life": {
+          "value": 4000,
+          "unit": "cycles",
+          "raw": "4,000回以上"
+        },
+        "electronics_lifespan_h": {
+          "value": 50000,
+          "unit": "h",
+          "raw": "約50,000時間"
+        },
+        "lfp_battery": true,
+        "technologies": [
+          "InfiniPower",
+          "OptiSave"
+        ],
+        "expansion_battery": true,
+        "app_support": true
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "anker_solix_c1000_gen2",
+      "brand_at_event": "Anker",
+      "name": "Anker Solix C1000 Gen 2 Portable Power Station",
+      "category": "portable_power_station",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 99990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "38.4x20.8x24.4",
+          "unit": "cm",
+          "raw": "約38.4 × 20.8 × 24.4cm"
+        },
+        "weight_kg": {
+          "value": 11.3,
+          "unit": "kg",
+          "raw": "約11.3kg"
+        },
+        "battery_capacity_wh": {
+          "value": 1024,
+          "unit": "Wh",
+          "raw": "1024Wh"
+        },
+        "ac_rated_output_w": {
+          "value": 1500,
+          "unit": "W",
+          "raw": "1500W (単ポート)"
+        },
+        "min_charge_time_min": {
+          "value": 54,
+          "unit": "min",
+          "raw": "約54分 (超急速充電モード)"
+        },
+        "port_count": {
+          "value": 10,
+          "unit": "ports",
+          "raw": "10"
+        },
+        "battery_cycle_life": {
+          "value": 4000,
+          "unit": "cycles",
+          "raw": "4,000回以上"
+        },
+        "electronics_lifespan_h": {
+          "value": 50000,
+          "unit": "h",
+          "raw": "約50,000時間"
+        },
+        "lfp_battery": true,
+        "technologies": [
+          "InfiniPower"
+        ],
+        "expansion_battery": false,
+        "app_support": true
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "soundcore_liberty_4_pro",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore Liberty 4 Pro",
+      "category": "true_wireless_earbuds",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "soundcore_liberty_5_pro",
+      "price_jpy_tax_in": 19990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "6.5x6.2x3.0",
+          "unit": "cm",
+          "raw": "約6.5 × 6.2 × 3.0cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 5.5,
+          "unit": "g",
+          "raw": "約5.5g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 62.3,
+          "unit": "g",
+          "raw": "約62.3g (充電ケース込み)"
+        },
+        "driver": "A.C.A.A 4.0 (10.5mm ＋ 4.6mm ダイナミックドライバー) ＋ デジタルクロスオーバーテクノロジー",
+        "noise_cancelling": "ウルトラノイズキャンセリング 3.5",
+        "mic_count": {
+          "value": 6,
+          "unit": "mics",
+          "raw": "6-Mic"
+        },
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "spatial_audio": "3Dオーディオ",
+        "playtime_anc_off_h": {
+          "value": 10,
+          "unit": "h",
+          "raw": "最大10時間 / 40時間 (ANC OFF)"
+        },
+        "playtime_anc_on_h": {
+          "value": 7.5,
+          "unit": "h",
+          "raw": "最大7.5時間 / 30時間 (ANC ON)"
+        },
+        "playtime_case_anc_off_h": {
+          "value": 40,
+          "unit": "h",
+          "raw": "最大40時間 (ケース込み, ANC OFF)"
+        },
+        "playtime_case_anc_on_h": {
+          "value": 30,
+          "unit": "h",
+          "raw": "最大30時間 (ケース込み, ANC ON)"
+        },
+        "quick_charge": "約5分充電で最大4時間再生",
+        "call_noise_reduction": "6-Mic AI",
+        "multipoint": "LDAC併用可",
+        "ambient_sound": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 5.3",
+        "control": "感圧 ＋ スワイプ",
+        "display": true,
+        "ai_voice_recorder": false
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "soundcore_liberty_5",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore Liberty 5",
+      "category": "true_wireless_earbuds",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 14990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "5.7x5.7x2.8",
+          "unit": "cm",
+          "raw": "約5.7 × 5.7 × 2.8cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 5.2,
+          "unit": "g",
+          "raw": "約5.2g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 59.0,
+          "unit": "g",
+          "raw": "約59.0g (充電ケース込み)"
+        },
+        "driver": "9.2mmダイナミックドライバー ＋ デュアル低音増強ダクト",
+        "noise_cancelling": "ウルトラノイズキャンセリング 3.5",
+        "mic_count": {
+          "value": 4,
+          "unit": "mics",
+          "raw": "4-Mic"
+        },
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "spatial_audio": "Dolby Audio",
+        "playtime_anc_off_h": {
+          "value": 12,
+          "unit": "h",
+          "raw": "最大12時間 / 48時間 (ANC OFF)"
+        },
+        "playtime_anc_on_h": {
+          "value": 8,
+          "unit": "h",
+          "raw": "最大8時間 / 32時間 (ANC ON)"
+        },
+        "playtime_case_anc_off_h": {
+          "value": 48,
+          "unit": "h",
+          "raw": "最大48時間 (ケース込み, ANC OFF)"
+        },
+        "playtime_case_anc_on_h": {
+          "value": 32,
+          "unit": "h",
+          "raw": "最大32時間 (ケース込み, ANC ON)"
+        },
+        "quick_charge": "約10分充電で最大5時間再生",
+        "call_noise_reduction": "6-Mic AI",
+        "multipoint": "LDAC併用可",
+        "ambient_sound": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 5.4",
+        "control": "感圧",
+        "display": false,
+        "ai_voice_recorder": false
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "soundcore_aerofit_2_ai_assistant",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore AeroFit 2 AI Assistant",
+      "category": "open_ear_earbuds",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "soundcore_aerofit_2_pro",
+      "price_jpy_tax_in": 18990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "8.0x6.7x2.5",
+          "unit": "cm",
+          "raw": "約8.0 × 6.7 × 2.5cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 10,
+          "unit": "g",
+          "raw": "約10g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 85,
+          "unit": "g",
+          "raw": "約85g (充電ケース込み)"
+        },
+        "driver": "20mm × 11.5mm ダイナミックドライバー",
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "playtime_h": {
+          "value": 8.5,
+          "unit": "h",
+          "raw": "最大8.5時間 / 35時間 (ウェイクワードON時)"
+        },
+        "playtime_case_h": {
+          "value": 35,
+          "unit": "h",
+          "raw": "最大35時間 (ケース込み)"
+        },
+        "quick_charge": "約10分充電で最大4時間再生",
+        "equalizer": "20種類以上のプリセット / カスタム",
+        "call_noise_reduction": "4-Mic AI",
+        "multipoint": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 5.4",
+        "control": "タッチ",
+        "ai_features": [
+          "AI機能のハンズフリー操作",
+          "リスニング翻訳",
+          "対話翻訳",
+          "AIアシスタント"
+        ]
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "soundcore_aerofit_2",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore AeroFit 2",
+      "category": "open_ear_earbuds",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 16990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_cm": {
+          "value": "8.0x6.7x2.5",
+          "unit": "cm",
+          "raw": "約8.0 × 6.7 × 2.5cm (充電ケース)"
+        },
+        "weight_earbud_g": {
+          "value": 10,
+          "unit": "g",
+          "raw": "約10g (片耳)"
+        },
+        "weight_case_g": {
+          "value": 85,
+          "unit": "g",
+          "raw": "約85g (充電ケース込み)"
+        },
+        "driver": "20mm × 11.5mm ダイナミックドライバー",
+        "codecs": [
+          "SBC",
+          "AAC",
+          "LDAC"
+        ],
+        "hires_audio": true,
+        "playtime_h": {
+          "value": 10,
+          "unit": "h",
+          "raw": "最大10時間 / 42時間"
+        },
+        "playtime_case_h": {
+          "value": 42,
+          "unit": "h",
+          "raw": "最大42時間 (ケース込み)"
+        },
+        "quick_charge": "約10分充電で最大4時間再生",
+        "equalizer": "20種類以上のプリセット / カスタム",
+        "call_noise_reduction": "4-Mic AI",
+        "multipoint": true,
+        "water_resistance": "IP55 (イヤホン本体のみ)",
+        "bluetooth": "Bluetooth 5.4",
+        "control": "タッチ",
+        "ai_features": [
+          "リスニング翻訳",
+          "対話翻訳",
+          "AIアシスタント"
+        ],
+        "ear_hook_adjustment": "4段階に調整可能"
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "anker_soundcore_2",
+      "brand_at_event": "Soundcore",
+      "name": "Anker SoundCore 2",
+      "category": "portable_speaker",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "soundcore_boom_go_3i",
+      "price_jpy_tax_in": 5990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "165x45x54",
+          "unit": "mm",
+          "raw": "約165 × 45 × 54mm"
+        },
+        "weight_g": {
+          "value": 400,
+          "unit": "g",
+          "raw": "約400g"
+        },
+        "audio_output_w": {
+          "value": 12,
+          "unit": "W",
+          "raw": "12W"
+        },
+        "codecs": [
+          "SBC"
+        ],
+        "bassup": "BassUp",
+        "frequency_range": "70Hz-20kHz",
+        "water_resistance": "IPX7",
+        "bluetooth": "Bluetooth 5.0",
+        "playtime_normal_h": {
+          "value": 24,
+          "unit": "h",
+          "raw": "最大24時間"
+        },
+        "dual_pairing": true
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "soundcore_select_4_go",
+      "brand_at_event": "Soundcore",
+      "name": "Soundcore Select 4 Go",
+      "category": "portable_speaker",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 3990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "121x83x49",
+          "unit": "mm",
+          "raw": "約121 × 83 × 49mm"
+        },
+        "weight_g": {
+          "value": 265,
+          "unit": "g",
+          "raw": "約265g"
+        },
+        "audio_output_w": {
+          "value": 5,
+          "unit": "W",
+          "raw": "5W"
+        },
+        "codecs": [
+          "SBC",
+          "AAC"
+        ],
+        "frequency_range": "90Hz-20kHz",
+        "water_resistance": "IP67",
+        "bluetooth": "Bluetooth 5.4",
+        "playtime_normal_h": {
+          "value": 20,
+          "unit": "h",
+          "raw": "最大20時間"
+        },
+        "dual_pairing": true
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "eufy_robot_vacuum_omni_e25",
+      "brand_at_event": "Eufy",
+      "name": "Eufy Robot Vacuum Omni E25",
+      "category": "robot_vacuum",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "eufy_robot_vacuum_omni_s2",
+      "price_jpy_tax_in": 149900,
+      "sales_status": "販売中",
+      "specs": {
+        "size_robot_cm": {
+          "value": "32.7x34.6x11.1",
+          "unit": "cm",
+          "raw": "ロボット掃除機本体：約32.7 × 34.6 × 11.1cm"
+        },
+        "size_station_cm": {
+          "value": "37.0x46.2x43.7",
+          "unit": "cm",
+          "raw": "ステーション：約37.0 × 46.2 × 43.7cm"
+        },
+        "weight_robot_kg": {
+          "value": 5.2,
+          "unit": "kg",
+          "raw": "ロボット掃除機本体：約5.2kg"
+        },
+        "weight_station_kg": {
+          "value": 7.1,
+          "unit": "kg",
+          "raw": "ステーション：約7.1kg"
+        },
+        "suction_pa": {
+          "value": 20000,
+          "unit": "Pa",
+          "raw": "20000Pa"
+        },
+        "mop_type": "加圧式ローラーモップ (約1.5kg)",
+        "auto_dust_collection": true,
+        "mop_auto_wash_dry": "温風乾燥",
+        "mop_lift_mm": {
+          "value": 10.5,
+          "unit": "mm",
+          "raw": "10.5mm"
+        },
+        "mop_wash_while_running": true,
+        "anti_tangle": "DuoSpiral ブラシ",
+        "extendable_side_brush": true,
+        "auto_detergent": true,
+        "ozone_water_sanitizing": false,
+        "matter_support": true,
+        "cleaning_time_min": {
+          "value": 210,
+          "unit": "min",
+          "raw": "最大210分"
+        },
+        "charge_time_min": {
+          "value": 210,
+          "unit": "min",
+          "raw": "約210分"
+        }
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "eufy_robot_vacuum_omni_c28",
+      "brand_at_event": "Eufy",
+      "name": "Eufy Robot Vacuum Omni C28",
+      "category": "robot_vacuum",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 99990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_robot_cm": {
+          "value": "32.7x35.0x11.1",
+          "unit": "cm",
+          "raw": "ロボット掃除機本体：約32.7 × 35.0 × 11.1cm"
+        },
+        "size_station_cm": {
+          "value": "35.3x43.7x43.0",
+          "unit": "cm",
+          "raw": "ステーション：約35.3 × 43.7 × 43.0cm"
+        },
+        "weight_robot_kg": {
+          "value": 5.1,
+          "unit": "kg",
+          "raw": "ロボット掃除機本体：約5.1kg"
+        },
+        "weight_station_kg": {
+          "value": 6.3,
+          "unit": "kg",
+          "raw": "ステーション：約6.3kg"
+        },
+        "suction_pa": {
+          "value": 15000,
+          "unit": "Pa",
+          "raw": "15000Pa"
+        },
+        "mop_type": "加圧式ローラーモップ (約1.0kg)",
+        "auto_dust_collection": true,
+        "mop_auto_wash_dry": "温風乾燥",
+        "mop_lift_mm": {
+          "value": 10.8,
+          "unit": "mm",
+          "raw": "10.8mm"
+        },
+        "mop_wash_while_running": true,
+        "anti_tangle": "DuoSpiral ブラシ",
+        "extendable_side_brush": false,
+        "auto_detergent": false,
+        "ozone_water_sanitizing": false,
+        "matter_support": false,
+        "cleaning_time_min": {
+          "value": 250,
+          "unit": "min",
+          "raw": "最大250分"
+        },
+        "charge_time_min": {
+          "value": 210,
+          "unit": "min",
+          "raw": "約210分"
+        }
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "eufy_robot_vacuum_auto_empty_c10",
+      "brand_at_event": "Eufy",
+      "name": "Eufy Robot Vacuum Auto-Empty C10",
+      "category": "robot_vacuum",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "price_jpy_tax_in": 29990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_robot_cm": {
+          "value": "32.5x32.3x7.2",
+          "unit": "cm",
+          "raw": "ロボット掃除機本体：約32.5 × 32.3 × 7.2cm"
+        },
+        "size_station_cm": {
+          "value": "27.5x19.1x21.2",
+          "unit": "cm",
+          "raw": "ステーション：約27.5 × 19.1 × 21.2cm"
+        },
+        "weight_robot_kg": {
+          "value": 2.5,
+          "unit": "kg",
+          "raw": "ロボット掃除機本体：約2.5kg"
+        },
+        "weight_station_kg": {
+          "value": 1.8,
+          "unit": "kg",
+          "raw": "ステーション：約1.8kg"
+        },
+        "suction_pa": {
+          "value": 4000,
+          "unit": "Pa",
+          "raw": "4000Pa"
+        },
+        "mop_type": "なし (水拭き非対応)",
+        "auto_dust_collection": true,
+        "anti_tangle": "毛がらみ除去対応",
+        "extendable_side_brush": true,
+        "auto_detergent": false,
+        "ozone_water_sanitizing": false,
+        "matter_support": false,
+        "cleaning_time_min": {
+          "value": 120,
+          "unit": "min",
+          "raw": "最大120分"
+        },
+        "charge_time_min": {
+          "value": 240,
+          "unit": "min",
+          "raw": "約240分"
+        }
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    },
+    {
+      "id": "eufy_smarttrack_card",
+      "brand_at_event": "Eufy",
+      "name": "Eufy SmartTrack Card",
+      "category": "tracker_card",
+      "graph_role": "predecessor",
+      "is_predecessor": true,
+      "predecessor_of": "eufy_smarttrack_card_e40",
+      "price_jpy_tax_in": 3990,
+      "sales_status": "販売中",
+      "specs": {
+        "size_mm": {
+          "value": "85x54x2.4",
+          "unit": "mm",
+          "raw": "約85 × 54 × 2.4mm"
+        },
+        "weight_g": {
+          "value": 12.4,
+          "unit": "g",
+          "raw": "約12.4g"
+        },
+        "supported_os": [
+          "iOS"
+        ],
+        "bluetooth_range_m": {
+          "value": 80,
+          "unit": "m",
+          "raw": "最大80m"
+        },
+        "alarm_volume_db": {
+          "value": 80,
+          "unit": "dB",
+          "raw": "80dB"
+        },
+        "battery_life": "最大3年間",
+        "charging": "充電不可",
+        "wireless_charging": false
+      },
+      "source_ids": [
+        "comparison_pdf"
+      ],
+      "source_class": "official_fact",
+      "confidence": "high",
+      "public_note": "比較表PDFの前モデル/旧製品列から抽出。新製品との差分比較用ノード。"
+    }
+  ],
+  "known_html_corrections": [
+    {
+      "target": "prod_solixs2000",
+      "issue": "現HTMLは価格未発表、パウチ型セル、4000サイクルと書いている",
+      "correction": "公式表では179,900円、2026年9月23日発売予定、角柱型リン酸鉄リチウムイオン電池、6,000回以上"
+    },
+    {
+      "target": "tech_3dmatrix",
+      "issue": "現HTMLは3D MatrixI 2.0",
+      "correction": "公式表では3D MatrixEye 2.0"
+    },
+    {
+      "target": "product_coverage",
+      "issue": "現HTMLに一部製品が未掲載",
+      "correction": "Power Strip、USB-C Hub、Boom Go 3i、Soundcore Work、eufyCam C37を追加候補にする"
+    }
+  ]
+}
