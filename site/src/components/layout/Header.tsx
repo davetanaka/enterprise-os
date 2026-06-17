@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { key: "problem", href: "#problem" },
   { key: "concept", href: "#concept" },
+  { key: "proof", href: "#proof" },
   { key: "howItWorks", href: "#how-it-works" },
   { key: "whyNow", href: "#why-now" },
   { key: "about", href: "#about" },
