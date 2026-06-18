@@ -355,7 +355,7 @@ function renderCrumb(count){
 function setupStepper(){
   const el=document.getElementById('step');
   if(!filterIds||!filterIds.length){el.classList.remove('show');stopAuto();renderInsightBox();return;}
-  el.classList.add('show');stepIdx=Math.min(stepIdx,filterIds.length-1);updateStep(false);renderInsightBox();
+  el.classList.add('show');stepIdx=Math.min(stepIdx,filterIds.length-1);if(stepIdx<0)stepIdx=0;updateStep(false);showNode(idToNode[filterIds[stepIdx]]);renderInsightBox();
 }
 function updateStep(focus){
   if(!filterIds||!filterIds.length)return;
