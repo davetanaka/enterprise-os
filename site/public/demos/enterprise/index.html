@@ -101,6 +101,16 @@
     .panel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:52%;border-radius:14px 14px 0 0}
     .legend{display:none} .foot{display:none}
   }
+  .howto{position:absolute;top:84px;left:50%;transform:translateX(-50%);width:min(440px,90vw);z-index:55;background:rgba(30,34,53,.97);border:1px solid #4361ee;border-radius:14px;padding:18px 20px 16px;box-shadow:0 12px 40px rgba(0,0,0,.5);backdrop-filter:blur(8px)}
+  .howto.hide{display:none}
+  .howto .hx{position:absolute;top:9px;right:13px;cursor:pointer;color:#9ca3af;font-size:18px;line-height:1}
+  .howto h4{font-size:14px;font-weight:800;color:#fff;margin-bottom:6px}
+  .howto .hi{font-size:12px;color:#9ca3af;margin-bottom:10px}
+  .howto ol{margin:0 0 12px;padding-left:20px}
+  .howto li{font-size:12.5px;color:#dfe3ee;line-height:1.5;margin-bottom:8px}
+  .howto .hgo{text-align:center;background:#4361ee;color:#fff;font-weight:700;font-size:12.5px;padding:8px;border-radius:8px;cursor:pointer}
+  .howto .hgo:hover{background:#3550d8}
+  @media(max-width:760px){.howto{top:auto;bottom:8px;left:8px;right:8px;width:auto;transform:none}}
 </style>
 </head>
 <body>
@@ -117,7 +127,16 @@
 
   <div class="ctrl">
     <div class="seg" id="lang"><span data-l="ja" class="on">日本語</span><span data-l="en">EN</span></div>
+    <div class="btn" id="howto-btn"><span id="t-howbtn">💡 使い方</span></div>
     <div class="btn" id="lens"><span id="t-lens">意味レンズ</span></div>
+  </div>
+
+  <div class="howto" id="howto">
+    <div class="hx" id="howto-x">×</div>
+    <h4 id="t-howh">💡 この地図の歩き方</h4>
+    <p class="hi" id="t-howi"></p>
+    <ol><li id="t-how1"></li><li id="t-how2"></li><li id="t-how3"></li></ol>
+    <div class="hgo" id="howto-go">閉じて触る</div>
   </div>
 
   <div class="crumb" id="crumb"></div>
@@ -178,8 +197,8 @@ const EDGE_LABEL={ja:{belongs_to:'所属',knows:'知っている',owns:'保有',
   en:{belongs_to:'belongs to',knows:'knows',owns:'owns',sold_in:'sold in',used_by:'used by',located_in:'located in',about:'about',answers:'answers',approved_in:'approved in',governs:'governs',reuses:'reuses',owns_knowledge:'owned by'}};
 const KEY_LABEL={ja:{kind:'種別',owner:'主担当',owner_dept:'統治部門',regions:'関連市場',unapproved_regions:'未承認の市場',sole_owner_retiring:'退職予定の唯一保有者',role:'役割',expertise:'専門',department:'部門',retiring:'退職予定',line:'製品ライン',region:'地域',segment:'業界'},
   en:{kind:'Kind',owner:'Owner',owner_dept:'Governing dept',regions:'Markets',unapproved_regions:'Unapproved markets',sole_owner_retiring:'Sole owner retiring',role:'Role',expertise:'Expertise',department:'Department',retiring:'Retiring',line:'Product line',region:'Region',segment:'Segment'}};
-const UI={ja:{title:KG.meta.title,sub:'組織図やDBでなく、意味（誰が何を知り・どう繋がり・どう統治されるか）を所有する。',claim:'⚠️ 架空企業の合成データ。実在の企業・人物とは無関係。<b>ただしこの"形"は、私が実在のグローバル製造業で実際に構築したものに忠実です（本物は守秘でお見せできません）。</b>',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'部門',lt:'地域',lf:'知識の種別・リスク',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'件',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'統治・リスク',priceG:'価格',funcG:'種別',govH:'🔗 所有・統治',govL:'用語の市場別承認も、この形で統治する。commit=変化 / PR=レビュー / fork=自社版。',govO:'↗ 統治モデル (ONTOLOGY.md)',govP:'↗ 例：意味を統治した PR #1',foot:'Built by Dave Tanaka · 合成デモ（架空企業 Meridian・実在の企業/人物とは無関係） · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">意味の正本＝GitHub（commit/PR/forkで統治）</a><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
-  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who knows what, how it connects, how it’s governed — not an org chart or a database.',claim:'Synthetic data for a fictional company; any resemblance is coincidental. <b>The shape is faithful to one I actually built for a real enterprise (the real one is under NDA).</b>',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Department',lt:'Region',lf:'Knowledge type & risk',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'items',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Governance & Risk',priceG:'Price',funcG:'Kind',govH:'🔗 Owned & Governed',govL:'Per-market approval of meaning is governed here too. commit=change / PR=review / fork=your own version.',govO:'↗ Governance model (ONTOLOGY.md)',govP:'↗ Example: the governed-meaning PR #1',foot:'Built by Dave Tanaka · Synthetic demo (fictional company Meridian; any resemblance is coincidental) · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">Meaning owned on GitHub (governed via commit/PR/fork)</a><br>Enterprise OS — Proof demo (not theory — already built)'}};
+const UI={ja:{title:KG.meta.title,sub:'組織図やDBでなく、意味（誰が何を知り・どう繋がり・どう統治されるか）を所有する。',claim:'⚠️ 架空企業の合成データ。実在の企業・人物とは無関係。<b>ただしこの"形"は、私が実在のグローバル製造業で実際に構築したものに忠実です（本物は守秘でお見せできません）。</b>',howBtn:'💡 使い方',howH:'💡 この地図の歩き方',howI:'スペック表でなく「意味」を辿る地図。まず試してみて：',how1:'絞り込み→「知識の種別・リスク」→⚠️退職で消えるリスク → 後継者のいない知が光る（人が辞めると消える意味）',how2:'「地域=欧州」＋「⚖️規制/ポリシー」→ EU規制の影響範囲（製品・責任者）が一発',how3:'右上🔍意味レンズで「誰が何を知り・どこで承認されているか」だけ浮かす → ノードをクリックで詳細＋GitHubの正本へ',howGo:'閉じて触る',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'部門',lt:'地域',lf:'知識の種別・リスク',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'件',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'統治・リスク',priceG:'価格',funcG:'種別',govH:'🔗 所有・統治',govL:'用語の市場別承認も、この形で統治する。commit=変化 / PR=レビュー / fork=自社版。',govO:'↗ 統治モデル (ONTOLOGY.md)',govP:'↗ 例：意味を統治した PR #1',foot:'Built by Dave Tanaka · 合成デモ（架空企業 Meridian・実在の企業/人物とは無関係） · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">意味の正本＝GitHub（commit/PR/forkで統治）</a><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
+  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who knows what, how it connects, how it’s governed — not an org chart or a database.',claim:'Synthetic data for a fictional company; any resemblance is coincidental. <b>The shape is faithful to one I actually built for a real enterprise (the real one is under NDA).</b>',howBtn:'💡 How to',howH:'💡 How to read this map',howI:'A map of meaning, not a spec sheet. Try these:',how1:'Filter → Knowledge type/risk → ⚠️ Knowledge-loss risk → see the know-how no one else owns (meaning that walks out when people retire).',how2:'Region = Europe + ⚖️ Regulation/policy → the EU rule’s blast radius (products + who’s responsible) in one move.',how3:'Top-right 🔍 Meaning lens shows only who-knows-what / approved-where → click a node for details + the GitHub source of truth.',howGo:'Got it — explore',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Department',lt:'Region',lf:'Knowledge type & risk',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'items',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Governance & Risk',priceG:'Price',funcG:'Kind',govH:'🔗 Owned & Governed',govL:'Per-market approval of meaning is governed here too. commit=change / PR=review / fork=your own version.',govO:'↗ Governance model (ONTOLOGY.md)',govP:'↗ Example: the governed-meaning PR #1',foot:'Built by Dave Tanaka · Synthetic demo (fictional company Meridian; any resemblance is coincidental) · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">Meaning owned on GitHub (governed via commit/PR/fork)</a><br>Enterprise OS — Proof demo (not theory — already built)'}};
 
 let LANG='ja',LENS=false,filterIds=null,stepIdx=0,autoTimer=null;
 let brandSel='All',themeSel='All',featSel='All';
@@ -383,7 +402,7 @@ function refresh(fit){
 function renderLegend(){document.getElementById('leg-row').innerHTML=Object.keys(TYPE_COLOR).map(t=>`<div class="it"><span class="dot" style="background:${TYPE_COLOR[t]}"></span>${esc(TYPE_LABEL[LANG][t])}</div>`).join('');}
 function setLang(l){LANG=l;document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.dataset.l===l));document.documentElement.lang=l;
   const u=UI[l];document.getElementById('t-title').textContent=u.title;document.getElementById('t-sub').textContent=u.sub;document.getElementById('t-claim').innerHTML=u.claim;
-  document.getElementById('t-lens').textContent=u.lens;document.getElementById('t-leg').textContent=u.leg;
+  document.getElementById('t-lens').textContent=u.lens;document.getElementById('t-leg').textContent=u.leg;document.getElementById('t-howbtn').textContent=u.howBtn;document.getElementById('t-howh').textContent=u.howH;document.getElementById('t-howi').textContent=u.howI;document.getElementById('t-how1').textContent=u.how1;document.getElementById('t-how2').textContent=u.how2;document.getElementById('t-how3').textContent=u.how3;document.getElementById('howto-go').textContent=u.howGo;
   document.getElementById('t-govh').textContent=u.govH;document.getElementById('t-govl').textContent=u.govL;document.getElementById('t-govo').textContent=u.govO;document.getElementById('t-govp').textContent=u.govP;
   document.getElementById('t-navh').textContent=u.navh;document.getElementById('t-lb').textContent=u.lb;
   document.getElementById('t-lt').textContent=u.lt;document.getElementById('t-lf').textContent=u.lf;document.getElementById('t-clr').textContent=u.clr;
@@ -393,6 +412,7 @@ document.querySelectorAll('#lang span').forEach(s=>s.onclick=()=>setLang(s.datas
 document.getElementById('lens').onclick=()=>{LENS=!LENS;document.getElementById('lens').classList.toggle('on',LENS);edges.update(buildEdges());};
 
 fillSelects();renderLegend();setLang('ja');
+const howto=document.getElementById('howto');document.getElementById('howto-x').onclick=()=>{howto.classList.add('hide');try{localStorage.setItem('eos_howto_seen','1');}catch(e){}};document.getElementById('howto-go').onclick=()=>{howto.classList.add('hide');try{localStorage.setItem('eos_howto_seen','1');}catch(e){}};document.getElementById('howto-btn').onclick=()=>howto.classList.toggle('hide');try{if(localStorage.getItem('eos_howto_seen'))howto.classList.add('hide');}catch(e){}
 // うにうに継続：停止しかけたら再励起（Anker式パルス）＝止まらない
 setTimeout(()=>network.fit({animation:{duration:700}}),1100);
 // 永続うにうに：定期的に数ノードを微小に揺らして物理を生かし続ける（Anker的に止まらない）
