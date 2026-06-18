@@ -49,15 +49,25 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <a
-              key={item.key}
-              href={item.href}
-              className="text-text-secondary hover:text-text-primary transition-colors text-sm"
-            >
-              {t(item.key)}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isDemo = item.key === "proof";
+            return (
+              <a
+                key={item.key}
+                href={item.href}
+                className={
+                  isDemo
+                    ? "inline-flex items-center gap-1.5 text-accent-teal hover:text-accent-teal/80 transition-colors text-sm font-semibold"
+                    : "text-text-secondary hover:text-text-primary transition-colors text-sm"
+                }
+              >
+                {isDemo && (
+                  <span className="w-2 h-2 rounded-full bg-accent-teal animate-pulse" />
+                )}
+                {t(item.key)}
+              </a>
+            );
+          })}
           <ThemeToggle />
           <LanguageToggle />
         </div>
@@ -107,16 +117,26 @@ export default function Header() {
             className="md:hidden bg-bg-secondary border-b border-text-muted/20"
           >
             <div className="px-4 py-4 space-y-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.key}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-text-secondary hover:text-text-primary transition-colors py-2"
-                >
-                  {t(item.key)}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const isDemo = item.key === "proof";
+                return (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={
+                      isDemo
+                        ? "flex items-center gap-2 text-accent-teal font-semibold transition-colors py-2"
+                        : "block text-text-secondary hover:text-text-primary transition-colors py-2"
+                    }
+                  >
+                    {isDemo && (
+                      <span className="w-2 h-2 rounded-full bg-accent-teal animate-pulse" />
+                    )}
+                    {t(item.key)}
+                  </a>
+                );
+              })}
             </div>
           </motion.div>
         )}
