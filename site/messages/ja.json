@@ -172,6 +172,21 @@
       "fork": { "term": "fork", "description": "パートナーのカスタマイズを可能に" }
     }
   },
+  "pathway": {
+    "sectionTitle": "どう始め、誰が担うのか",
+    "subtitle": "海を沸かす必要はない。1つの痛点から始め、意味を所有し、統治し、AIに繋ぐ——そして、それを担う人がいる。",
+    "stepsTitle": "実装の道筋",
+    "steps": [
+      { "n": "01", "title": "地図化", "desc": "自社のエンティティと関係を洗い出す——何が、どう繋がるか。ナレッジの断片化が一番痛む1つのワークフローから。" },
+      { "n": "02", "title": "所有", "desc": "意味の正本をリポジトリに置く。借りるのではなく、持つ。" },
+      { "n": "03", "title": "統治", "desc": "commit／branch／pull request で、意味の変化をレビューし版管理する。地域・部門の差異はbranchで。" },
+      { "n": "04", "title": "接続", "desc": "AIをその正本に繋ぐ。文脈・履歴・関係を持った、本当に役立つAIに変わる。" },
+      { "n": "05", "title": "拡大", "desc": "1部門の成功が次を呼ぶ。接続されたワークフローごとに、プラットフォームは賢くなる。" }
+    ],
+    "fdeTitle": "誰が作るのか — Forward Deployed Engineer",
+    "fdeBody": "オントロジーは、AIだけでは作れない。ドメイン専門家とAIを繋ぐ「埋め込み型の人」が要る——現場から意味を引き出し、構造化し、統治を回す。Palantirが Forward Deployed Engineer（FDE）と呼ぶ、市場で実証されたロールだ。「AIが構造を作り、人が信頼性を守る」——その\"人\"が、これ。",
+    "fdeBridge": "私はこれを、日本拠点のグローバル製造業で、実際にやってきた。"
+  },
   "faq": {
     "sectionTitle": "実現に向けて：よくある3つの質問",
     "subtitle": "おそらくあなたが抱いている3つの質問——そして正直な回答",
@@ -443,7 +458,8 @@
           "Zhamak Dehghani, Data Mesh — ドメインによるデータ所有 (martinfowler.com 2019 / O'Reilly 2022)",
           "Andrew Jones, Driving Data Quality with Data Contracts (Packt 2023) — 意味と責任境界を明文化するデータ契約",
           "MIT Sloan Management Review (2023) — AIモデル自体は持続的競争優位を生まない；優位は自社固有の意味構造の側にある",
-          "dbt Labs / AtScale — セマンティックレイヤー：指標の意味を全社で単一化する層"
+          "dbt Labs / AtScale — セマンティックレイヤー：指標の意味を全社で単一化する層",
+          "Palantir「A Day in the Life of a Forward Deployed Engineer」(公式ブログ) — オントロジーを顧客先で構築・統治する埋め込み型ロール（FDE＝Forward Deployed Engineer、Foundry Docsで明記）"
         ]
       },
       "githubEnterprise": {

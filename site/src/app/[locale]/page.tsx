@@ -8,6 +8,7 @@ import RootCause from "@/components/sections/RootCause";
 import Concept from "@/components/sections/Concept";
 import Proof from "@/components/sections/Proof";
 import HowItWorks from "@/components/sections/HowItWorks";
+import Pathway from "@/components/sections/Pathway";
 import FAQ from "@/components/sections/FAQ";
 import Comparison from "@/components/sections/Comparison";
 import UseCases from "@/components/sections/UseCases";
@@ -35,6 +36,7 @@ export default async function HomePage({ params }: Props) {
         <Concept />
         <Proof />
         <HowItWorks />
+        <Pathway />
         <FAQ />
         <Comparison />
         <UseCases />

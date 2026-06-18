@@ -172,6 +172,21 @@
       "fork": { "term": "fork", "description": "Enables partner customization" }
     }
   },
+  "pathway": {
+    "sectionTitle": "The path — and who walks it with you",
+    "subtitle": "You don't have to boil the ocean. Start with one pain point: map the meaning, own it, govern it, connect AI — and know there's a role that drives it.",
+    "stepsTitle": "The implementation path",
+    "steps": [
+      { "n": "01", "title": "Map", "desc": "Surface your entities and relationships — what things are and how they connect. Start with the one workflow where knowledge fragmentation hurts most." },
+      { "n": "02", "title": "Own", "desc": "Put the source of truth of your meaning in a repository. Don't rent it — hold it." },
+      { "n": "03", "title": "Govern", "desc": "Review and version every change to meaning via commit / branch / pull request. Regional and departmental variants live on branches." },
+      { "n": "04", "title": "Connect", "desc": "Connect AI to that source of truth. It gains context, history and relationships — and becomes genuinely useful." },
+      { "n": "05", "title": "Scale", "desc": "One team's success pulls in the next. Every connected workflow makes the platform smarter." }
+    ],
+    "fdeTitle": "Who builds it — the Forward Deployed Engineer",
+    "fdeBody": "An ontology can't be built by AI alone. It needs an embedded person who pairs domain experts with AI — drawing meaning out of the front line, structuring it, and running its governance. Palantir calls this role the Forward Deployed Engineer (FDE), a market-proven pattern. \"AI builds the structure; humans keep it trustworthy\" — this is that human.",
+    "fdeBridge": "I've actually done this, for a Japan-based global manufacturer."
+  },
   "faq": {
     "sectionTitle": "Making It Real: Three Questions You're Probably Asking",
     "subtitle": "Three questions you're probably asking — and honest answers",
@@ -443,7 +458,8 @@
           "Zhamak Dehghani, Data Mesh — domain ownership of data (martinfowler.com 2019 / O'Reilly 2022)",
           "Andrew Jones, Driving Data Quality with Data Contracts (Packt 2023) — data contracts that make meaning and responsibility boundaries explicit",
           "MIT Sloan Management Review (2023) — AI models alone confer no sustainable advantage; the edge lies in proprietary meaning structures",
-          "dbt Labs / AtScale — the semantic layer: a single shared meaning for metrics across the company"
+          "dbt Labs / AtScale — the semantic layer: a single shared meaning for metrics across the company",
+          "Palantir, \"A Day in the Life of a Forward Deployed Engineer\" (official blog) — the embedded role that builds and governs the ontology on-site (FDE = Forward Deployed Engineer, per Palantir Foundry docs)"
         ]
       },
       "githubEnterprise": {
