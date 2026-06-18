@@ -81,6 +81,11 @@
   .panel .srch{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:6px 0 2px}
 
   .legend{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .gov{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .gov h4{font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+  .gov .gl{font-size:10.5px;color:#9ca3af;line-height:1.5;margin-bottom:6px}
+  .gov a{display:block;font-size:10.5px;color:var(--teal);text-decoration:none;margin-top:2px}
+  .gov a:hover{text-decoration:underline}
   .legend h4{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
   .legend .row{display:flex;flex-wrap:wrap;gap:8px 12px}
   .legend .it{display:flex;align-items:center;gap:5px;font-size:11px;color:#cbd2e0}
@@ -144,6 +149,13 @@
       <h4 id="t-leg">凡例 / Node types</h4>
       <div class="row" id="leg-row"></div>
     </div>
+
+    <div class="gov">
+      <h4 id="t-govh">🔗 所有・統治</h4>
+      <div class="gl" id="t-govl">この意味の正本は GitHub にある。commit=変化 / PR=レビュー / fork=自社版。</div>
+      <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" id="t-govo">↗ 統治モデル (ONTOLOGY.md)</a>
+      <a href="https://github.com/davetanaka/enterprise-os/pull/1" target="_blank" rel="noopener" id="t-govp">↗ 例：意味を統治した PR #1</a>
+    </div>
   </div>
 
   <div class="panel" id="panel"></div>
@@ -165,8 +177,8 @@ const EDGE_LABEL={ja:{made_by:'製造',suited_for:'向いている',used_in:'使
   en:{made_by:'made by',suited_for:'suited for',used_in:'used in',uses_tech:'uses tech',competes_with:'competes with',needs:'needs',limited_by:'limited by',fits_scene:'fits scene'}};
 const KEY_LABEL={ja:{capacity_mah:'容量(mAh)',capacity_wh:'容量(Wh)',max_output_w:'最大出力(W)',single_port_max_w:'単ポート最大(W)',ports:'ポート',weight_g:'重量(g)',price_jpy:'価格(¥)',wireless:'ワイヤレス',built_in_cable:'ケーブル一体',built_in_ac:'コンセント一体',display:'表示',airline_carry_on:'航空機持込',release_year:'発売',note:'備考',needs:'必要なもの',pain_points:'不満',device_profile:'機器構成',typical_capacity:'標準容量',typical_output:'標準出力',origin:'出自',founded:'設立',market_position:'市場ポジション',positioning:'方針',key_requirement:'要件',benefit:'利点',effect:'影響',key_tech:'主要技術',product_lines:'製品ライン'},
   en:{capacity_mah:'Capacity(mAh)',capacity_wh:'Capacity(Wh)',max_output_w:'Max output(W)',single_port_max_w:'Single-port max(W)',ports:'Ports',weight_g:'Weight(g)',price_jpy:'Price(¥)',wireless:'Wireless',built_in_cable:'Built-in cable',built_in_ac:'Built-in AC',display:'Display',airline_carry_on:'Airline carry-on',release_year:'Released',note:'Note',needs:'Needs',pain_points:'Pain points',device_profile:'Devices',typical_capacity:'Typ. capacity',typical_output:'Typ. output',origin:'Origin',founded:'Founded',market_position:'Market position',positioning:'Positioning',key_requirement:'Requirement',benefit:'Benefit',effect:'Effect',key_tech:'Key tech',product_lines:'Product lines'}};
-const UI={ja:{title:KG.meta.title,sub:'スペックでなく「意味（誰に・どの場面で・何が要る）」を所有する。',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'メーカー',lt:'テーマ',lf:'機能的特徴',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'製品',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'容量',priceG:'価格',funcG:'機能',foot:'Built by Dave Tanaka · データ: ディープリサーチ (2026-06) · 出典は各ノード参照 · <span style="color:#febd69">Amazonアソシエイト・リンクを含みます</span> · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">意味の正本＝GitHub（commit/PR/forkで統治・<span style="text-decoration:underline">PR #1</span>）</a><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
-  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who it’s for, when it fits, what it needs — not just the specs.',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Brand',lt:'Theme',lf:'Feature',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'products',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Capacity',priceG:'Price',funcG:'Features',foot:'Built by Dave Tanaka · Data: deep research (2026-06) · sources on each node · <span style="color:#febd69">Contains Amazon affiliate links</span> · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">Meaning owned on GitHub (governed via commit/PR/fork · <span style="text-decoration:underline">PR #1</span>)</a><br>Enterprise OS — Proof demo (not theory — already built)'}};
+const UI={ja:{title:KG.meta.title,sub:'スペックでなく「意味（誰に・どの場面で・何が要る）」を所有する。',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'メーカー',lt:'テーマ',lf:'機能的特徴',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'製品',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'容量',priceG:'価格',funcG:'機能',govH:'🔗 所有・統治',govL:'この意味の正本は GitHub にある。commit=変化 / PR=レビュー / fork=自社版。',govO:'↗ 統治モデル (ONTOLOGY.md)',govP:'↗ 例：意味を統治した PR #1',foot:'Built by Dave Tanaka · データ: ディープリサーチ (2026-06) · 出典は各ノード参照 · <span style="color:#febd69">Amazonアソシエイト・リンクを含みます</span> · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">意味の正本＝GitHub（commit/PR/forkで統治・<span style="text-decoration:underline">PR #1</span>）</a><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
+  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who it’s for, when it fits, what it needs — not just the specs.',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Brand',lt:'Theme',lf:'Feature',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'products',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Capacity',priceG:'Price',funcG:'Features',govH:'🔗 Owned & Governed',govL:'This meaning is owned on GitHub. commit=change / PR=review / fork=your own version.',govO:'↗ Governance model (ONTOLOGY.md)',govP:'↗ Example: the governed-meaning PR #1',foot:'Built by Dave Tanaka · Data: deep research (2026-06) · sources on each node · <span style="color:#febd69">Contains Amazon affiliate links</span> · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">Meaning owned on GitHub (governed via commit/PR/fork · <span style="text-decoration:underline">PR #1</span>)</a><br>Enterprise OS — Proof demo (not theory — already built)'}};
 
 let LANG='ja',LENS=false,filterIds=null,stepIdx=0,autoTimer=null;
 let brandSel='All',themeSel='All',featSel='All';
@@ -390,6 +402,7 @@ function renderLegend(){document.getElementById('leg-row').innerHTML=Object.keys
 function setLang(l){LANG=l;document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.dataset.l===l));document.documentElement.lang=l;
   const u=UI[l];document.getElementById('t-title').textContent=u.title;document.getElementById('t-sub').textContent=u.sub;
   document.getElementById('t-lens').textContent=u.lens;document.getElementById('t-leg').textContent=u.leg;
+  document.getElementById('t-govh').textContent=u.govH;document.getElementById('t-govl').textContent=u.govL;document.getElementById('t-govo').textContent=u.govO;document.getElementById('t-govp').textContent=u.govP;
   document.getElementById('t-navh').textContent=u.navh;document.getElementById('t-lb').textContent=u.lb;
   document.getElementById('t-lt').textContent=u.lt;document.getElementById('t-lf').textContent=u.lf;document.getElementById('t-clr').textContent=u.clr;
   document.getElementById('t-foot').innerHTML=u.foot;
