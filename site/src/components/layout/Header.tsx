@@ -57,12 +57,12 @@ export default function Header() {
                 href={item.href}
                 className={
                   isDemo
-                    ? "inline-flex items-center gap-1.5 text-accent-teal hover:text-accent-teal/80 transition-colors text-sm font-semibold"
+                    ? "inline-flex items-center gap-1.5 text-accent-gold hover:text-accent-gold/80 transition-colors text-sm font-semibold"
                     : "text-text-secondary hover:text-text-primary transition-colors text-sm"
                 }
               >
                 {isDemo && (
-                  <span className="w-2 h-2 rounded-full bg-accent-teal animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                 )}
                 {t(item.key)}
               </a>
@@ -126,12 +126,12 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={
                       isDemo
-                        ? "flex items-center gap-2 text-accent-teal font-semibold transition-colors py-2"
+                        ? "flex items-center gap-2 text-accent-gold font-semibold transition-colors py-2"
                         : "block text-text-secondary hover:text-text-primary transition-colors py-2"
                     }
                   >
                     {isDemo && (
-                      <span className="w-2 h-2 rounded-full bg-accent-teal animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                     )}
                     {t(item.key)}
                   </a>
