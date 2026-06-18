@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Meridian Manufacturing — Enterprise Intelligence (synthetic demo)</title>
+<meta name="description" content="スペックでなく『意味（誰に・どの場面で・何が要る）』を所有する。モバイルバッテリー市場のEntity Graph。Enterprise OS Proof demo by Dave Tanaka." />
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  :root{--bg:#14172a;--bg2:#1e2235;--card:#222843;--line:#2c3352;--txt:#fff;--mut:#9ca3af;--dim:#6b7280;
+    --blue:#4361ee;--red:#e63946;--teal:#2a9d8f;--gold:#e9c46a;--pink:#f472b6;--grey:#6b7280}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Inter','Noto Sans JP',system-ui,-apple-system,sans-serif}
+  #app{position:fixed;inset:0}
+  #net{position:absolute;inset:0;background:radial-gradient(ellipse 1000px 700px at 70% 30%,rgba(67,97,238,.10),transparent 60%),radial-gradient(ellipse 800px 600px at 25% 85%,rgba(42,157,143,.08),transparent 60%),linear-gradient(135deg,#1e2235,#14172a 60%)}
+  .topbar{position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);z-index:40}
+
+  .hdr{position:absolute;top:16px;left:20px;z-index:20;pointer-events:none;max-width:42%}
+  .hdr .eos{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--teal);letter-spacing:1px;margin-bottom:4px}
+  .hdr .eos b{color:var(--gold)}
+  .hdr h1{font-size:19px;font-weight:800;letter-spacing:-.3px}
+  .hdr .sub{font-size:12px;color:var(--mut);margin-top:3px}
+  .hdr .claim{margin-top:8px;font-size:11px;color:#cbd2e0;line-height:1.55;background:rgba(233,196,106,.10);border-left:3px solid #e9c46a;padding:7px 11px;border-radius:6px}
+  .hdr .claim b{color:#e9c46a}
+
+  .ctrl{position:absolute;top:16px;right:20px;z-index:35;display:flex;gap:8px;align-items:center}
+  .seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg span{padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--mut)}
+  .seg span.on{background:var(--blue);color:#fff}
+  .btn{cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--txt);font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;user-select:none}
+  .btn:hover{border-color:var(--blue)} .btn.on{background:var(--blue);border-color:var(--blue)}
+
+  /* breadcrumb (top-center) */
+  .crumb{position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:30;display:none;
+    align-items:center;gap:7px;flex-wrap:wrap;justify-content:center;max-width:46%}
+  .crumb.show{display:flex}
+  .crumb .cc{display:inline-flex;align-items:center;gap:6px;background:rgba(67,97,238,.16);border:1px solid var(--blue);
+    color:#dfe3ee;font-size:12px;font-weight:600;padding:4px 6px 4px 10px;border-radius:20px}
+  .crumb .cc .x{cursor:pointer;color:#9fb0ff;font-weight:800;padding:0 2px}
+  .crumb .cnt{font-size:12px;font-weight:800;color:var(--gold);background:rgba(233,196,106,.12);border:1px solid rgba(233,196,106,.4);padding:4px 11px;border-radius:20px}
+  .crumb .zero{color:var(--red);border-color:var(--red);background:rgba(230,57,70,.12)}
+  .crumb .op{color:var(--dim);font-size:12px}
+
+  /* right nav panel (always visible) */
+  .nav{position:absolute;top:88px;left:20px;width:248px;max-height:calc(100% - 110px);overflow:auto;z-index:30;background:rgba(30,34,53,.92);
+    border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);padding:13px 14px}
+  .nav h4{font-size:10.5px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin:2px 0 10px}
+  .nav label{display:block;font-size:11px;color:var(--mut);margin:9px 0 3px;font-weight:600}
+  .nav select{width:100%;background:var(--card);color:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:7px 9px;font-size:12.5px;font-family:inherit;cursor:pointer}
+  .nav select:focus{outline:none;border-color:var(--blue)}
+  .nav .clr{margin-top:10px;text-align:center;font-size:11.5px;color:var(--mut);cursor:pointer;user-select:none}
+  .nav .clr:hover{color:#fff}
+  /* stepper (right under selects) */
+  .step{margin-top:12px;border-top:1px solid var(--line);padding-top:11px;display:none}
+  .step.show{display:block}
+  .step .now{font-size:12.5px;font-weight:700;color:#fff;line-height:1.3;min-height:32px;margin-bottom:8px}
+  .step .row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .step .b{cursor:pointer;font-size:13px;font-weight:800;color:#cbd2e0;padding:5px 11px;border-radius:8px;background:var(--card);border:1px solid var(--line);user-select:none}
+  .step .b:hover{border-color:var(--blue);color:#fff} .step .b.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .step .c{font-size:12px;color:var(--mut);min-width:42px;text-align:center}
+  /* insight box */
+  .ins{margin-top:11px;border-top:1px solid var(--line);padding-top:10px;display:none}
+  .ins.show{display:block}
+  .ins .it{font-size:12px;font-weight:700;color:var(--gold);line-height:1.35;margin-bottom:4px}
+  .ins .ib{font-size:11.5px;color:#aab2c5;line-height:1.55;max-height:0;overflow:hidden;transition:max-height .3s}
+  .ins.open .ib{max-height:340px;overflow:auto}
+  .ins .more{font-size:11px;color:var(--teal);cursor:pointer;margin-top:4px;user-select:none}
+
+  /* detail panel (left, under header) */
+  .panel{position:absolute;top:54px;right:20px;width:300px;max-height:calc(100% - 90px);z-index:24;
+    background:rgba(34,40,67,.95);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);overflow:auto;padding:15px 17px;display:none}
+  .panel.show{display:block}
+  .panel .x{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--mut);font-size:18px;line-height:1}
+  .panel .badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;color:#0d1020;margin-bottom:8px}
+  .panel h3{font-size:15px;font-weight:800;line-height:1.25;margin-bottom:4px;padding-right:16px}
+  .panel .sub2{font-size:11px;color:var(--mut);margin-bottom:11px}
+  .panel .kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:12px;margin-bottom:11px}
+  .panel .kv .k{color:var(--mut)} .panel .kv .v{color:#e8eaf2}
+  .panel .rat{font-size:12px;color:#dfe3ee;line-height:1.5;background:rgba(67,97,238,.10);border-left:3px solid var(--blue);padding:8px 10px;border-radius:6px;margin-bottom:10px}
+  .panel .src a{display:block;font-size:10.5px;color:var(--teal);text-decoration:none;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .panel .src a:hover{text-decoration:underline}
+  .panel .srch{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:6px 0 2px}
+
+  .legend{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .gov{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .gov h4{font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+  .gov .gl{font-size:10.5px;color:#9ca3af;line-height:1.5;margin-bottom:6px}
+  .gov a{display:block;font-size:10.5px;color:var(--teal);text-decoration:none;margin-top:2px}
+  .gov a:hover{text-decoration:underline}
+  .legend h4{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+  .legend .row{display:flex;flex-wrap:wrap;gap:8px 12px}
+  .legend .it{display:flex;align-items:center;gap:5px;font-size:11px;color:#cbd2e0}
+  .legend .dot{width:9px;height:9px;border-radius:50%}
+  .foot{position:absolute;right:20px;bottom:14px;z-index:18;font-size:10px;color:var(--dim);text-align:right;line-height:1.5;pointer-events:none}
+
+  @media (max-width:820px){
+    .hdr{max-width:64%} .hdr .sub{display:none} .hdr .claim{font-size:10px}
+    .crumb{max-width:92%;top:auto;bottom:128px;left:10px;right:10px;transform:none}
+    .nav{top:auto;left:8px;right:8px;width:auto;bottom:8px;max-height:46vh;overflow:auto}
+    .panel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:52%;border-radius:14px 14px 0 0}
+    .legend{display:none} .foot{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar"></div>
+  <div id="net"></div>
+
+  <div class="hdr">
+    <div class="eos">&lt;enterprise-graph&gt; <b>$_</b> own the meaning</div>
+    <h1 id="t-title">Meridian Manufacturing — 企業のインテリジェンス（合成デモ）</h1>
+    <div class="sub" id="t-sub">組織図やDBでなく、意味を所有する。</div>
+    <div class="claim" id="t-claim"></div>
+  </div>
+
+  <div class="ctrl">
+    <div class="seg" id="lang"><span data-l="ja" class="on">日本語</span><span data-l="en">EN</span></div>
+    <div class="btn" id="lens"><span id="t-lens">意味レンズ</span></div>
+  </div>
+
+  <div class="crumb" id="crumb"></div>
+
+  <div class="nav">
+    <h4 id="t-navh">絞り込み（掛け算）</h4>
+    <label id="t-lb">メーカー</label>
+    <select id="sel-brand"></select>
+    <label id="t-lt">テーマ</label>
+    <select id="sel-theme"></select>
+    <label id="t-lf">機能的特徴</label>
+    <select id="sel-feat"></select>
+    <div class="clr" id="clr">✕ <span id="t-clr">すべて解除</span></div>
+
+    <div class="step" id="step">
+      <div class="now" id="step-now"></div>
+      <div class="row">
+        <span class="b" id="step-prev">◀</span>
+        <span class="c" id="step-c">1 / 1</span>
+        <span class="b" id="step-next">▶</span>
+        <span class="b" id="step-auto" title="auto">▶</span>
+      </div>
+    </div>
+
+    <div class="ins" id="ins">
+      <div class="it" id="ins-t"></div>
+      <div class="ib" id="ins-b"></div>
+      <div class="more" id="ins-more"></div>
+    </div>
+
+    <div class="legend">
+      <h4 id="t-leg">凡例 / Node types</h4>
+      <div class="row" id="leg-row"></div>
+    </div>
+
+    <div class="gov">
+      <h4 id="t-govh">🔗 所有・統治</h4>
+      <div class="gl" id="t-govl">この意味の正本は GitHub にある。commit=変化 / PR=レビュー / fork=自社版。</div>
+      <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" id="t-govo">↗ 統治モデル (ONTOLOGY.md)</a>
+      <a href="https://github.com/davetanaka/enterprise-os/pull/1" target="_blank" rel="noopener" id="t-govp">↗ 例：意味を統治した PR #1</a>
+    </div>
+  </div>
+
+  <div class="panel" id="panel"></div>
+  <div class="foot" id="t-foot"></div>
+</div>
+
+<script>
+const KG = {"meta": {"title": "Meridian Manufacturing — 企業のインテリジェンス（合成デモ）", "title_en": "Meridian Manufacturing — Enterprise Intelligence (synthetic demo)", "company": "Meridian Manufacturing (fictional)", "version": "1.0.0", "synthetic": true, "node_count": 69, "edge_count": 155, "insights": [{"id": "insight_1", "title_ja": "退職で消える知 — 後継者のいない重要知識", "title_en": "Knowledge Walking Out the Door", "body_ja": "接着強度の定義(森田)・光学透過率(山本)・医療認証クラス(渡辺)は、いずれも2026年に退職予定の社員が【唯一の保有者】。後継者なしで退職すれば、その意味は永久に失われる。誰が何を知っているかをグラフで所有していれば、退職前に移管できる。", "body_en": "Bond Strength (Morita), Optical Transmittance (Yamamoto) and Medical Cert Class (Watanabe) each have a single owner — all retiring in 2026. Without succession, the meaning is lost forever. Owning who-knows-what as a graph lets you transfer it before they leave."}, {"id": "insight_2", "title_ja": "意味の統治 — 用語が市場ごとに未承認のまま", "title_en": "Governing Meaning Across Markets", "body_ja": "「医療認証クラス」は北米・日本でのみ承認済みで、欧州・APAC・中南米は未承認。用語(意味)の市場別承認は commit/PR で統治すべき作業。グラフが【どこで未承認か】を一発で示す。", "body_en": "'Medical Cert Class' is approved only in North America and Japan — Europe, APAC and Latin America are not. Per-market approval of meaning is governed work (commit/PR). The graph shows exactly where the gaps are."}, {"id": "insight_3", "title_ja": "コンプラ横断 — 規制の影響範囲と責任者が一発", "title_en": "Compliance, End to End", "body_ja": "架空のEU製品環境指令2026は、防護マスク・コーティング剤・接着フィルム・医療ドレッシングと欧州市場を規制対象とし、責任は法務のMüller。規制Xの影響製品と責任者をグラフで即特定できる。", "body_en": "The (fictional) EU Eco Directive 2026 governs Respirator Mask, Coating Agent, Adhesive Film and Medical Dressing across Europe, owned by Müller in Legal. The graph instantly maps a regulation's blast radius and its owner."}]}, "nodes": [{"id": "reg_na", "type": "Region", "label_ja": "北米", "label_en": "North America", "attrs": {}}, {"id": "reg_eu", "type": "Region", "label_ja": "欧州", "label_en": "Europe", "attrs": {}}, {"id": "reg_apac", "type": "Region", "label_ja": "APAC", "label_en": "APAC", "attrs": {}}, {"id": "reg_jp", "type": "Region", "label_ja": "日本", "label_en": "Japan", "attrs": {}}, {"id": "reg_latam", "type": "Region", "label_ja": "中南米", "label_en": "Latin America", "attrs": {}}, {"id": "dept_rnd", "type": "Department", "label_ja": "研究開発 (R&D)", "label_en": "R&D", "attrs": {}}, {"id": "dept_mktg", "type": "Department", "label_ja": "マーケティング", "label_en": "Marketing", "attrs": {}}, {"id": "dept_sales", "type": "Department", "label_ja": "営業", "label_en": "Sales", "attrs": {}}, {"id": "dept_support", "type": "Department", "label_ja": "カスタマーサポート", "label_en": "Support", "attrs": {}}, {"id": "dept_legal", "type": "Department", "label_ja": "法務・コンプライアンス", "label_en": "Legal & Compliance", "attrs": {}}, {"id": "dept_ops", "type": "Department", "label_ja": "地域オペレーション", "label_en": "Regional Ops", "attrs": {}}, {"id": "p_morita", "type": "Person", "label_ja": "森田 (R&D リード)", "label_en": "A. Morita (R&D Lead)", "attrs": {"role": "R&D Lead", "expertise": "接着化学", "department": "研究開発 (R&D)", "retiring": 2026}}, {"id": "p_chen", "type": "Person", "label_ja": "Chen (APAC 営業部長)", "label_en": "M. Chen (APAC Sales Dir.)", "attrs": {"role": "APAC Sales Dir.", "expertise": "半導体顧客", "department": "営業", "retiring": false}}, {"id": "p_muller", "type": "Person", "label_ja": "Müller (欧州コンプラ)", "label_en": "L. Müller (EU Compliance)", "attrs": {"role": "EU Compliance", "expertise": "EU規制", "department": "法務・コンプライアンス", "retiring": false}}, {"id": "p_sato", "type": "Person", "label_ja": "佐藤 (研磨材スペシャリスト)", "label_en": "K. Sato (Abrasives SME)", "attrs": {"role": "Abrasives SME", "expertise": "研磨材プロセス", "department": "研究開発 (R&D)", "retiring": 2027}}, {"id": "p_dubois", "type": "Person", "label_ja": "Dubois (マーケ)", "label_en": "C. Dubois (Marketing)", "attrs": {"role": "Marketing", "expertise": "ブランド用語", "department": "マーケティング", "retiring": false}}, {"id": "p_tanaka", "type": "Person", "label_ja": "田中 (サポート)", "label_en": "H. Tanaka (Support)", "attrs": {"role": "Support", "expertise": "医療顧客対応", "department": "カスタマーサポート", "retiring": false}}, {"id": "p_okafor", "type": "Person", "label_ja": "Okafor (地域オペ NA)", "label_en": "N. Okafor (Ops NA)", "attrs": {"role": "Ops NA", "expertise": "北米物流", "department": "地域オペレーション", "retiring": false}}, {"id": "p_yamamoto", "type": "Person", "label_ja": "山本 (光学 主任)", "label_en": "T. Yamamoto (Optics Lead)", "attrs": {"role": "Optics Lead", "expertise": "光学フィルター", "department": "研究開発 (R&D)", "retiring": 2026}}, {"id": "p_rossi", "type": "Person", "label_ja": "Rossi (営業 EU)", "label_en": "G. Rossi (Sales EU)", "attrs": {"role": "Sales EU", "expertise": "自動車OEM", "department": "営業", "retiring": false}}, {"id": "p_kim", "type": "Person", "label_ja": "Kim (R&D センサー)", "label_en": "J. Kim (R&D Sensors)", "attrs": {"role": "R&D Sensors", "expertise": "センサー", "department": "研究開発 (R&D)", "retiring": false}}, {"id": "p_garcia", "type": "Person", "label_ja": "García (営業 中南米)", "label_en": "P. García (Sales LATAM)", "attrs": {"role": "Sales LATAM", "expertise": "建設業界", "department": "営業", "retiring": false}}, {"id": "p_schmidt", "type": "Person", "label_ja": "Schmidt (品質保証)", "label_en": "R. Schmidt (QA)", "attrs": {"role": "QA", "expertise": "製品安全", "department": "法務・コンプライアンス", "retiring": 2028}}, {"id": "p_nakamura", "type": "Person", "label_ja": "中村 (マーケ JP)", "label_en": "S. Nakamura (Marketing JP)", "attrs": {"role": "Marketing JP", "expertise": "日本市場", "department": "マーケティング", "retiring": false}}, {"id": "p_brown", "type": "Person", "label_ja": "Brown (サポート NA)", "label_en": "D. Brown (Support NA)", "attrs": {"role": "Support NA", "expertise": "産業顧客", "department": "カスタマーサポート", "retiring": false}}, {"id": "p_li", "type": "Person", "label_ja": "Li (R&D コーティング)", "label_en": "W. Li (R&D Coatings)", "attrs": {"role": "R&D Coatings", "expertise": "コーティング", "department": "研究開発 (R&D)", "retiring": false}}, {"id": "p_andersson", "type": "Person", "label_ja": "Andersson (営業 北欧)", "label_en": "E. Andersson (Sales Nordics)", "attrs": {"role": "Sales Nordics", "expertise": "エネルギー", "department": "営業", "retiring": false}}, {"id": "p_costa", "type": "Person", "label_ja": "Costa (地域オペ LATAM)", "label_en": "F. Costa (Ops LATAM)", "attrs": {"role": "Ops LATAM", "expertise": "中南米通関", "department": "地域オペレーション", "retiring": false}}, {"id": "p_watanabe", "type": "Person", "label_ja": "渡辺 (医療RA)", "label_en": "Y. Watanabe (Medical RA)", "attrs": {"role": "Medical RA", "expertise": "医療認証", "department": "カスタマーサポート", "retiring": 2026}}, {"id": "prod_film", "type": "Product", "label_ja": "高性能接着フィルム", "label_en": "High-performance Adhesive Film", "attrs": {"line": "高性能接着フィルム"}}, {"id": "prod_abrasive", "type": "Product", "label_ja": "産業用研磨材", "label_en": "Industrial Abrasive", "attrs": {"line": "産業用研磨材"}}, {"id": "prod_mask", "type": "Product", "label_ja": "防護マスク", "label_en": "Respirator Mask", "attrs": {"line": "防護マスク"}}, {"id": "prod_optical", "type": "Product", "label_ja": "光学フィルター", "label_en": "Optical Filter", "attrs": {"line": "光学フィルター"}}, {"id": "prod_tape", "type": "Product", "label_ja": "工業用テープ", "label_en": "Industrial Tape", "attrs": {"line": "工業用テープ"}}, {"id": "prod_insulation", "type": "Product", "label_ja": "断熱材", "label_en": "Insulation Material", "attrs": {"line": "断熱材"}}, {"id": "prod_sensor", "type": "Product", "label_ja": "センサーモジュール", "label_en": "Sensor Module", "attrs": {"line": "センサーモジュール"}}, {"id": "prod_coating", "type": "Product", "label_ja": "コーティング剤", "label_en": "Coating Agent", "attrs": {"line": "コーティング剤"}}, {"id": "prod_dressing", "type": "Product", "label_ja": "医療用ドレッシング", "label_en": "Medical Dressing", "attrs": {"line": "医療用ドレッシング"}}, {"id": "prod_bonding", "type": "Product", "label_ja": "電子部品接続材", "label_en": "Electronic Bonding", "attrs": {"line": "電子部品接続材"}}, {"id": "cust_auto", "type": "Customer", "label_ja": "アクメ自動車 (OEM)", "label_en": "Acme Automotive (OEM)", "attrs": {"region": "欧州", "segment": "自動車"}}, {"id": "cust_elec", "type": "Customer", "label_ja": "Northwind Electronics", "label_en": "Northwind Electronics", "attrs": {"region": "APAC", "segment": "電子"}}, {"id": "cust_hosp", "type": "Customer", "label_ja": "セントラル病院ネットワーク", "label_en": "Central Hospital Network", "attrs": {"region": "北米", "segment": "医療"}}, {"id": "cust_constr", "type": "Customer", "label_ja": "BuildCorp 建設", "label_en": "BuildCorp Construction", "attrs": {"region": "中南米", "segment": "建設"}}, {"id": "cust_aero", "type": "Customer", "label_ja": "Skyline Aerospace", "label_en": "Skyline Aerospace", "attrs": {"region": "北米", "segment": "航空宇宙"}}, {"id": "cust_semi", "type": "Customer", "label_ja": "Quantum Fab (半導体)", "label_en": "Quantum Fab", "attrs": {"region": "APAC", "segment": "半導体"}}, {"id": "cust_energy", "type": "Customer", "label_ja": "Nordic Energy", "label_en": "Nordic Energy", "attrs": {"region": "欧州", "segment": "エネルギー"}}, {"id": "cust_appliance", "type": "Customer", "label_ja": "ホクト家電", "label_en": "Hokuto Appliances", "attrs": {"region": "日本", "segment": "家電"}}, {"id": "cust_logi", "type": "Customer", "label_ja": "TransGlobal 物流", "label_en": "TransGlobal Logistics", "attrs": {"region": "中南米", "segment": "物流"}}, {"id": "cust_consumer", "type": "Customer", "label_ja": "Maple Consumer Goods", "label_en": "Maple Consumer Goods", "attrs": {"region": "北米", "segment": "消費財"}}, {"id": "k_grade", "type": "Knowledge", "label_ja": "用語: 製品グレード命名規則", "label_en": "Glossary: Product Grade Naming", "attrs": {"kind": "glossary_term", "owner_dept": "マーケティング", "owner": "p_dubois", "sole_owner_retiring": false, "regions": ["北米", "欧州", "APAC", "日本"], "unapproved_regions": ["中南米"]}}, {"id": "k_bond", "type": "Knowledge", "label_ja": "用語: 接着強度の定義", "label_en": "Glossary: Bond Strength Definition", "attrs": {"kind": "glossary_term", "owner_dept": "研究開発 (R&D)", "owner": "p_morita", "sole_owner_retiring": true, "regions": ["北米", "欧州", "日本"], "unapproved_regions": ["APAC", "中南米"]}}, {"id": "k_medclass", "type": "Knowledge", "label_ja": "用語: 医療認証クラス", "label_en": "Glossary: Medical Cert Class", "attrs": {"kind": "glossary_term", "owner_dept": "カスタマーサポート", "owner": "p_watanabe", "sole_owner_retiring": true, "regions": ["北米", "日本"], "unapproved_regions": ["欧州", "APAC", "中南米"]}}, {"id": "k_abrgrit", "type": "Knowledge", "label_ja": "用語: 研磨グリット規格", "label_en": "Glossary: Abrasive Grit Spec", "attrs": {"kind": "glossary_term", "owner_dept": "研究開発 (R&D)", "owner": "p_sato", "sole_owner_retiring": false, "regions": ["北米", "欧州", "APAC", "日本", "中南米"], "unapproved_regions": []}}, {"id": "k_optspec", "type": "Knowledge", "label_ja": "用語: 光学透過率定義", "label_en": "Glossary: Optical Transmittance", "attrs": {"kind": "glossary_term", "owner_dept": "研究開発 (R&D)", "owner": "p_yamamoto", "sole_owner_retiring": true, "regions": ["日本", "APAC"], "unapproved_regions": ["北米", "欧州", "中南米"]}}, {"id": "k_brandvoice", "type": "Knowledge", "label_ja": "用語: ブランドボイス指針", "label_en": "Glossary: Brand Voice Guide", "attrs": {"kind": "glossary_term", "owner_dept": "マーケティング", "owner": "p_nakamura", "sole_owner_retiring": false, "regions": ["日本"], "unapproved_regions": ["北米", "欧州", "APAC", "中南米"]}}, {"id": "k_filmspec", "type": "Knowledge", "label_ja": "仕様書: 接着フィルム技術仕様", "label_en": "Doc: Adhesive Film Spec", "attrs": {"kind": "doc", "owner_dept": "研究開発 (R&D)", "owner": "p_morita", "sole_owner_retiring": false, "regions": ["欧州", "APAC", "日本"]}}, {"id": "k_sensorspec", "type": "Knowledge", "label_ja": "仕様書: センサー較正手順", "label_en": "Doc: Sensor Calibration", "attrs": {"kind": "doc", "owner_dept": "研究開発 (R&D)", "owner": "p_kim", "sole_owner_retiring": false, "regions": ["北米", "欧州", "APAC", "中南米", "日本"]}}, {"id": "k_coatspec", "type": "Knowledge", "label_ja": "仕様書: コーティング適用基準", "label_en": "Doc: Coating Application", "attrs": {"kind": "doc", "owner_dept": "研究開発 (R&D)", "owner": "p_li", "sole_owner_retiring": false, "regions": ["日本", "APAC", "中南米"]}}, {"id": "k_maskspec", "type": "Knowledge", "label_ja": "仕様書: 防護マスク試験規格", "label_en": "Doc: Respirator Test Std", "attrs": {"kind": "doc", "owner_dept": "法務・コンプライアンス", "owner": "p_schmidt", "sole_owner_retiring": false, "regions": ["中南米", "欧州", "APAC", "日本", "北米"]}}, {"id": "k_optsop", "type": "Knowledge", "label_ja": "仕様書: 光学検査SOP", "label_en": "Doc: Optical Inspection SOP", "attrs": {"kind": "doc", "owner_dept": "研究開発 (R&D)", "owner": "p_yamamoto", "sole_owner_retiring": false, "regions": ["北米", "APAC"]}}, {"id": "k_salesplay", "type": "Knowledge", "label_ja": "プレイブック: 半導体顧客攻略", "label_en": "Playbook: Semiconductor Accounts", "attrs": {"kind": "playbook", "owner_dept": "営業", "owner": "p_chen", "sole_owner_retiring": false, "regions": ["APAC", "北米", "日本"]}}, {"id": "k_supportplay", "type": "Knowledge", "label_ja": "プレイブック: 医療サポート対応", "label_en": "Playbook: Medical Support", "attrs": {"kind": "playbook", "owner_dept": "カスタマーサポート", "owner": "p_tanaka", "sole_owner_retiring": false, "regions": ["APAC", "欧州", "中南米", "日本", "北米"]}}, {"id": "k_emeaplay", "type": "Knowledge", "label_ja": "プレイブック: 欧州自動車提案", "label_en": "Playbook: EU Automotive Pitch", "attrs": {"kind": "playbook", "owner_dept": "営業", "owner": "p_rossi", "sole_owner_retiring": false, "regions": ["日本", "欧州", "中南米", "北米", "APAC"]}}, {"id": "k_eudir", "type": "Knowledge", "label_ja": "ポリシー: EU製品環境指令2026 (架空)", "label_en": "Policy: EU Eco Directive 2026 (fictional)", "attrs": {"kind": "policy", "owner_dept": "法務・コンプライアンス", "owner": "p_muller", "sole_owner_retiring": false, "regions": ["中南米", "APAC", "日本", "欧州", "北米"]}}, {"id": "k_safety", "type": "Knowledge", "label_ja": "ポリシー: グローバル製品安全基準", "label_en": "Policy: Global Product Safety", "attrs": {"kind": "policy", "owner_dept": "法務・コンプライアンス", "owner": "p_schmidt", "sole_owner_retiring": false, "regions": ["欧州", "中南米", "APAC"]}}, {"id": "k_dataprot", "type": "Knowledge", "label_ja": "ポリシー: 顧客データ保護", "label_en": "Policy: Customer Data Protection", "attrs": {"kind": "policy", "owner_dept": "法務・コンプライアンス", "owner": "p_muller", "sole_owner_retiring": false, "regions": ["北米", "中南米", "日本"]}}, {"id": "k_camp24", "type": "Knowledge", "label_ja": "キャンペーン: 2024 産業EXPO", "label_en": "Campaign: 2024 Industrial Expo", "attrs": {"kind": "campaign", "owner_dept": "マーケティング", "owner": "p_dubois", "sole_owner_retiring": false, "regions": ["欧州", "日本"]}}, {"id": "k_camp25", "type": "Knowledge", "label_ja": "キャンペーン: 2025 医療フォーラム", "label_en": "Campaign: 2025 Medical Forum", "attrs": {"kind": "campaign", "owner_dept": "マーケティング", "owner": "p_nakamura", "sole_owner_retiring": false, "regions": ["北米", "日本", "欧州", "APAC", "中南米"]}}, {"id": "k_camp23", "type": "Knowledge", "label_ja": "キャンペーン: 2023 接着技術ローンチ", "label_en": "Campaign: 2023 Adhesive Launch", "attrs": {"kind": "campaign", "owner_dept": "マーケティング", "owner": "p_dubois", "sole_owner_retiring": false, "regions": ["北米", "中南米", "APAC", "欧州", "日本"]}}], "edges": [{"from": "p_morita", "to": "dept_rnd", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_chen", "to": "dept_sales", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_muller", "to": "dept_legal", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_sato", "to": "dept_rnd", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_dubois", "to": "dept_mktg", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_tanaka", "to": "dept_support", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_okafor", "to": "dept_ops", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_yamamoto", "to": "dept_rnd", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_rossi", "to": "dept_sales", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_kim", "to": "dept_rnd", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_garcia", "to": "dept_sales", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_schmidt", "to": "dept_legal", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_nakamura", "to": "dept_mktg", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_brown", "to": "dept_support", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_li", "to": "dept_rnd", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_andersson", "to": "dept_sales", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_costa", "to": "dept_ops", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "p_watanabe", "to": "dept_support", "type": "belongs_to", "rationale_ja": "所属部門"}, {"from": "prod_film", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_film", "to": "reg_apac", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_abrasive", "to": "reg_eu", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_abrasive", "to": "reg_latam", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_mask", "to": "reg_latam", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_mask", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_optical", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_optical", "to": "reg_latam", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_optical", "to": "reg_jp", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_tape", "to": "reg_eu", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_tape", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_insulation", "to": "reg_latam", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_insulation", "to": "reg_jp", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_sensor", "to": "reg_jp", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_sensor", "to": "reg_apac", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_coating", "to": "reg_eu", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_coating", "to": "reg_jp", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_dressing", "to": "reg_apac", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_dressing", "to": "reg_eu", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_dressing", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_bonding", "to": "reg_na", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_bonding", "to": "reg_latam", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "prod_bonding", "to": "reg_eu", "type": "sold_in", "rationale_ja": "販売市場"}, {"from": "cust_auto", "to": "reg_eu", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_elec", "to": "reg_apac", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_hosp", "to": "reg_na", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_constr", "to": "reg_latam", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_aero", "to": "reg_na", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_semi", "to": "reg_apac", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_energy", "to": "reg_eu", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_appliance", "to": "reg_jp", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_logi", "to": "reg_latam", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "cust_consumer", "to": "reg_na", "type": "located_in", "rationale_ja": "所在地域"}, {"from": "prod_film", "to": "cust_semi", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_abrasive", "to": "cust_consumer", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_abrasive", "to": "cust_aero", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_mask", "to": "cust_appliance", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_optical", "to": "cust_elec", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_optical", "to": "cust_energy", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_optical", "to": "cust_consumer", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_tape", "to": "cust_aero", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_tape", "to": "cust_semi", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_tape", "to": "cust_constr", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_insulation", "to": "cust_elec", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_insulation", "to": "cust_auto", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_insulation", "to": "cust_constr", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_sensor", "to": "cust_elec", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_sensor", "to": "cust_constr", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_coating", "to": "cust_energy", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_dressing", "to": "cust_appliance", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_dressing", "to": "cust_semi", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "prod_bonding", "to": "cust_semi", "type": "used_by", "rationale_ja": "採用顧客"}, {"from": "dept_mktg", "to": "k_grade", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_dubois", "to": "k_grade", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_rnd", "to": "k_bond", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_morita", "to": "k_bond", "type": "knows", "rationale_ja": "主担当として知る"}, {"from": "dept_support", "to": "k_medclass", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_watanabe", "to": "k_medclass", "type": "knows", "rationale_ja": "主担当として知る"}, {"from": "dept_rnd", "to": "k_abrgrit", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_sato", "to": "k_abrgrit", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_rnd", "to": "k_optspec", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_yamamoto", "to": "k_optspec", "type": "knows", "rationale_ja": "主担当として知る"}, {"from": "dept_mktg", "to": "k_brandvoice", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_nakamura", "to": "k_brandvoice", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_rnd", "to": "k_filmspec", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_morita", "to": "k_filmspec", "type": "knows", "rationale_ja": "知る"}, {"from": "k_filmspec", "to": "prod_film", "type": "about", "rationale_ja": "対象製品"}, {"from": "dept_rnd", "to": "k_sensorspec", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_kim", "to": "k_sensorspec", "type": "knows", "rationale_ja": "知る"}, {"from": "k_sensorspec", "to": "prod_sensor", "type": "about", "rationale_ja": "対象製品"}, {"from": "dept_rnd", "to": "k_coatspec", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_li", "to": "k_coatspec", "type": "knows", "rationale_ja": "知る"}, {"from": "k_coatspec", "to": "prod_coating", "type": "about", "rationale_ja": "対象製品"}, {"from": "dept_legal", "to": "k_maskspec", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_schmidt", "to": "k_maskspec", "type": "knows", "rationale_ja": "知る"}, {"from": "k_maskspec", "to": "prod_mask", "type": "about", "rationale_ja": "対象製品"}, {"from": "dept_rnd", "to": "k_optsop", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_yamamoto", "to": "k_optsop", "type": "knows", "rationale_ja": "知る"}, {"from": "k_optsop", "to": "prod_optical", "type": "about", "rationale_ja": "対象製品"}, {"from": "dept_sales", "to": "k_salesplay", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_chen", "to": "k_salesplay", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_support", "to": "k_supportplay", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_tanaka", "to": "k_supportplay", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_sales", "to": "k_emeaplay", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_rossi", "to": "k_emeaplay", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_legal", "to": "k_eudir", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_muller", "to": "k_eudir", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_legal", "to": "k_safety", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_schmidt", "to": "k_safety", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_legal", "to": "k_dataprot", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_muller", "to": "k_dataprot", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_mktg", "to": "k_camp24", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_dubois", "to": "k_camp24", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_mktg", "to": "k_camp25", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_nakamura", "to": "k_camp25", "type": "knows", "rationale_ja": "知る"}, {"from": "dept_mktg", "to": "k_camp23", "type": "owns_knowledge", "rationale_ja": "部門が統治"}, {"from": "p_dubois", "to": "k_camp23", "type": "knows", "rationale_ja": "知る"}, {"from": "p_brown", "to": "k_filmspec", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_rossi", "to": "k_salesplay", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_garcia", "to": "k_emeaplay", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_kim", "to": "k_sensorspec", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_li", "to": "k_coatspec", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_schmidt", "to": "k_safety", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "p_andersson", "to": "k_salesplay", "type": "knows", "rationale_ja": "副次的に知る"}, {"from": "k_grade", "to": "reg_na", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_grade", "to": "reg_eu", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_grade", "to": "reg_apac", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_grade", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_bond", "to": "reg_na", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_bond", "to": "reg_eu", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_bond", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_medclass", "to": "reg_na", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_medclass", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_abrgrit", "to": "reg_na", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_abrgrit", "to": "reg_eu", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_abrgrit", "to": "reg_apac", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_abrgrit", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_abrgrit", "to": "reg_latam", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_optspec", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_optspec", "to": "reg_apac", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_brandvoice", "to": "reg_jp", "type": "approved_in", "rationale_ja": "承認済み市場"}, {"from": "k_eudir", "to": "prod_mask", "type": "governs", "rationale_ja": "EU指令の規制対象"}, {"from": "k_eudir", "to": "prod_coating", "type": "governs", "rationale_ja": "EU指令の規制対象"}, {"from": "k_eudir", "to": "prod_film", "type": "governs", "rationale_ja": "EU指令の規制対象"}, {"from": "k_eudir", "to": "prod_dressing", "type": "governs", "rationale_ja": "EU指令の規制対象"}, {"from": "k_eudir", "to": "reg_eu", "type": "governs", "rationale_ja": "適用市場"}, {"from": "k_safety", "to": "prod_mask", "type": "governs", "rationale_ja": "安全基準の対象"}, {"from": "k_safety", "to": "prod_dressing", "type": "governs", "rationale_ja": "安全基準の対象"}, {"from": "k_safety", "to": "prod_abrasive", "type": "governs", "rationale_ja": "安全基準の対象"}, {"from": "k_salesplay", "to": "cust_semi", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_supportplay", "to": "cust_hosp", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_emeaplay", "to": "cust_auto", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_medclass", "to": "cust_hosp", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_filmspec", "to": "cust_auto", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_camp25", "to": "cust_hosp", "type": "answers", "rationale_ja": "この顧客の課題に答える"}, {"from": "k_camp25", "to": "k_camp23", "type": "reuses", "rationale_ja": "過去キャンペーンを再利用"}, {"from": "k_camp24", "to": "k_camp23", "type": "reuses", "rationale_ja": "過去キャンペーンを再利用"}]};
+
+const TYPE_COLOR={Department:'#4361ee',Person:'#2a9d8f',Product:'#e9c46a',Customer:'#f472b6',Region:'#6b7280',Knowledge:'#e63946'};
+const TYPE_LABEL={ja:{Department:'部門',Person:'社員',Product:'製品',Customer:'顧客',Region:'地域',Knowledge:'知識資産'},
+  en:{Department:'Department',Person:'Person',Product:'Product',Customer:'Customer',Region:'Region',Knowledge:'Knowledge'}};
+const TYPE_SIZE={Department:22,Person:15,Product:17,Customer:16,Region:20,Knowledge:18};
+const MEANING=new Set(['knows','owns','used_by','approved_in','governs','answers']);
+const EDGE_STYLE={knows:{color:'#2a9d8f',width:2.4},owns:{color:'#2a9d8f',width:2.4,dashes:[5,4]},used_by:{color:'#f472b6',width:2},approved_in:{color:'#e9c46a',width:2.2},governs:{color:'#e63946',width:2.2,dashes:[2,4]},answers:{color:'#e9c46a',width:1.8},belongs_to:{color:'#3a4055',width:1},sold_in:{color:'#5566aa',width:1.1},located_in:{color:'#5566aa',width:1},about:{color:'#7a8199',width:1},owns_knowledge:{color:'#4a5274',width:1},reuses:{color:'#7a8199',width:1,dashes:[3,5]}};
+const EDGE_LABEL={ja:{belongs_to:'所属',knows:'知っている',owns:'保有',sold_in:'販売',used_by:'採用',located_in:'所在',about:'対象',answers:'課題に答える',approved_in:'承認済み',governs:'統治/規制',reuses:'再利用',owns_knowledge:'部門が統治'},
+  en:{belongs_to:'belongs to',knows:'knows',owns:'owns',sold_in:'sold in',used_by:'used by',located_in:'located in',about:'about',answers:'answers',approved_in:'approved in',governs:'governs',reuses:'reuses',owns_knowledge:'owned by'}};
+const KEY_LABEL={ja:{kind:'種別',owner:'主担当',owner_dept:'統治部門',regions:'関連市場',unapproved_regions:'未承認の市場',sole_owner_retiring:'退職予定の唯一保有者',role:'役割',expertise:'専門',department:'部門',retiring:'退職予定',line:'製品ライン',region:'地域',segment:'業界'},
+  en:{kind:'Kind',owner:'Owner',owner_dept:'Governing dept',regions:'Markets',unapproved_regions:'Unapproved markets',sole_owner_retiring:'Sole owner retiring',role:'Role',expertise:'Expertise',department:'Department',retiring:'Retiring',line:'Product line',region:'Region',segment:'Segment'}};
+const UI={ja:{title:KG.meta.title,sub:'組織図やDBでなく、意味（誰が何を知り・どう繋がり・どう統治されるか）を所有する。',claim:'⚠️ 架空企業の合成データ。実在の企業・人物とは無関係。<b>ただしこの"形"は、私が実在のグローバル製造業で実際に構築したものに忠実です（本物は守秘でお見せできません）。</b>',lens:'意味レンズ',leg:'凡例',navh:'絞り込み（掛け算）',lb:'部門',lt:'地域',lf:'知識の種別・リスク',clr:'すべて解除',all:'すべて',zero:'該当 0 件 — 条件を緩めてください',products:'件',more:'ⓘ 詳しく',less:'閉じる',segG:'ターゲット層',insG:'洞察ストーリー',insightG:'💡 洞察ストーリー',capG:'統治・リスク',priceG:'価格',funcG:'種別',govH:'🔗 所有・統治',govL:'用語の市場別承認も、この形で統治する。commit=変化 / PR=レビュー / fork=自社版。',govO:'↗ 統治モデル (ONTOLOGY.md)',govP:'↗ 例：意味を統治した PR #1',foot:'Built by Dave Tanaka · 合成デモ（架空企業 Meridian・実在の企業/人物とは無関係） · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">意味の正本＝GitHub（commit/PR/forkで統治）</a><br>Enterprise OS — Proof demo（理論でなく、もう作っている）'},
+  en:{title:KG.meta.title_en||KG.meta.title,sub:'Own the meaning — who knows what, how it connects, how it’s governed — not an org chart or a database.',claim:'Synthetic data for a fictional company; any resemblance is coincidental. <b>The shape is faithful to one I actually built for a real enterprise (the real one is under NDA).</b>',lens:'Meaning lens',leg:'Node types',navh:'Filter (AND)',lb:'Department',lt:'Region',lf:'Knowledge type & risk',clr:'Clear all',all:'All',zero:'0 matches — loosen the filters',products:'items',more:'ⓘ More',less:'Close',segG:'User segments',insG:'Insight stories',insightG:'💡 Insight stories',capG:'Governance & Risk',priceG:'Price',funcG:'Kind',govH:'🔗 Owned & Governed',govL:'Per-market approval of meaning is governed here too. commit=change / PR=review / fork=your own version.',govO:'↗ Governance model (ONTOLOGY.md)',govP:'↗ Example: the governed-meaning PR #1',foot:'Built by Dave Tanaka · Synthetic demo (fictional company Meridian; any resemblance is coincidental) · <a href="https://github.com/davetanaka/enterprise-os/blob/main/ONTOLOGY.md" target="_blank" rel="noopener" style="color:#2a9d8f">Meaning owned on GitHub (governed via commit/PR/fork)</a><br>Enterprise OS — Proof demo (not theory — already built)'}};
+
+let LANG='ja',LENS=false,filterIds=null,stepIdx=0,autoTimer=null;
+let brandSel='All',themeSel='All',featSel='All';
+const idToNode={}; KG.nodes.forEach(n=>idToNode[n.id]=n);
+const products=KG.nodes.filter(n=>n.type==='Knowledge');
+const brands=KG.nodes.filter(n=>n.type==='Department');
+const segments=KG.nodes.filter(n=>n.type==='Region');
+const prodBrand={}; KG.edges.filter(e=>e.type==='owns_knowledge').forEach(e=>{prodBrand[e.to]=e.from;});
+const segProducts={}; segments.forEach(r=>segProducts[r.id]=new Set());
+products.forEach(k=>{(k.attrs.regions||[]).forEach(rl=>{const r=segments.find(s=>s.label_ja===rl||s.label_en===rl); if(r)segProducts[r.id].add(k.id);});});
+function num(v){return typeof v==='number'?v:null;}
+function pname(p){return (p.label_ja||'')+' '+(p.label_en||'');}
+const INSIGHT_SET={
+  insight_1:p=>p.attrs.sole_owner_retiring===true,
+  insight_2:p=>p.attrs.kind==='glossary_term'&&Array.isArray(p.attrs.unapproved_regions)&&p.attrs.unapproved_regions.length>0,
+  insight_3:p=>p.attrs.kind==='policy'
+};
+const INSIGHT_SHORT={ja:{insight_1:'⚠️ 退職で消える知',insight_2:'🌐 用語の承認gap',insight_3:'⚖️ コンプラ横断'},
+  en:{insight_1:'⚠️ Knowledge at risk',insight_2:'🌐 Approval gaps',insight_3:'⚖️ Compliance reach'}};
+const FEATURES=[
+  {id:'k_glossary',g:'funcG',ja:'用語 (Glossary)',en:'Glossary terms',pred:p=>p.attrs.kind==='glossary_term'},
+  {id:'k_doc',g:'funcG',ja:'仕様書 (Doc)',en:'Specs / Docs',pred:p=>p.attrs.kind==='doc'},
+  {id:'k_playbook',g:'funcG',ja:'プレイブック',en:'Playbooks',pred:p=>p.attrs.kind==='playbook'},
+  {id:'k_policy',g:'funcG',ja:'ポリシー/規制',en:'Policies',pred:p=>p.attrs.kind==='policy'},
+  {id:'k_campaign',g:'funcG',ja:'キャンペーン',en:'Campaigns',pred:p=>p.attrs.kind==='campaign'},
+  {id:'retire',g:'capG',ja:'⚠️ 退職で消えるリスク',en:'⚠️ At-risk (sole owner retiring)',pred:INSIGHT_SET.insight_1},
+  {id:'gap',g:'capG',ja:'🌐 用語の承認gapあり',en:'🌐 Has approval gaps',pred:INSIGHT_SET.insight_2},
+  {id:'compliance',g:'capG',ja:'⚖️ 規制/ポリシー',en:'⚖️ Compliance',pred:INSIGHT_SET.insight_3}
+];
+// 機能的特徴 → 対応する洞察ストーリー（選択時にⓘ詳しくで物語を出す）
+const FEAT_INSIGHT={retire:'insight_1',gap:'insight_2',compliance:'insight_3'};
+const featById={}; FEATURES.forEach(f=>featById[f.id]=f);
+
+function themeSet(key){
+  if(segProducts[key]) return segProducts[key];
+  return new Set();
+}
+function computeResult(){
+  let r=products.slice();
+  if(brandSel!=='All') r=r.filter(p=>prodBrand[p.id]===brandSel);
+  if(themeSel!=='All'){const s=themeSet(themeSel); r=r.filter(p=>s.has(p.id));}
+  if(featSel!=='All') r=r.filter(p=>featById[featSel].pred(p));
+  return r.map(p=>p.id);
+}
+function anyFilter(){return !(brandSel==='All'&&themeSel==='All'&&featSel==='All');}
+
+function nodeColor(t){return TYPE_COLOR[t]||'#888';}
+function hexA(hex,a){if(a>=1)return hex;const m=hex.replace('#','');return `rgba(${parseInt(m.slice(0,2),16)},${parseInt(m.slice(2,4),16)},${parseInt(m.slice(4,6),16)},${a})`;}
+function edgeBase(t){const b=EDGE_STYLE[t]||{color:'#444b66',width:1};return {color:b.color||'#444b66',width:b.width||1,dashes:b.dashes||false};}
+
+function buildNodes(){
+  const fs=filterIds?new Set(filterIds):null;
+  return KG.nodes.map(n=>{
+    const dim=fs&&!fs.has(n.id);
+    const hot=fs&&fs.has(n.id);
+    return {id:n.id,label:(LANG==='ja'?n.label_ja:n.label_en)||n.label_ja,
+      color:{background:dim?'#262c44':nodeColor(n.type),border:dim?'#262c44':nodeColor(n.type),highlight:{background:'#fff',border:nodeColor(n.type)}},
+      size:hot?TYPE_SIZE[n.type]+8:TYPE_SIZE[n.type],shape:'dot',
+      font:{color:dim?'rgba(150,160,180,.10)':'#dfe3ee',size:hot?15:13,face:'Inter, Noto Sans JP',strokeWidth:3,strokeColor:'#14172a'}};
+  });
+}
+function buildEdges(){
+  const fs=filterIds?new Set(filterIds):null;
+  return KG.edges.map((e,i)=>{
+    const s=edgeBase(e.type),meaning=MEANING.has(e.type); let w=s.width,a=1;
+    if(LENS){if(!meaning){a=.07;w=.6;}else w+=.8;}
+    if(fs){const touch=fs.has(e.from)||fs.has(e.to); if(!touch)a=Math.min(a,.05); else w+=.6;}
+    return {id:'e'+i,from:e.from,to:e.to,_idx:i,color:{color:hexA(s.color,a),highlight:s.color,hover:s.color},
+      width:w,dashes:s.dashes,smooth:{type:'continuous',roundness:.2},
+      arrows:{to:{enabled:e.type!=='competes_with',scaleFactor:.4}},title:KG.edges[i].rationale_ja||undefined};
+  });
+}
+
+const nodes=new vis.DataSet(buildNodes());
+const edges=new vis.DataSet(buildEdges());
+// Anker実証レシピ: DEFAULT(収束)とPULSE(バネ感)の二段。focus/選択時にPULSE再励起→周りがゆら！
+// Anker忠実レシピ: 弱い長距離反発＋強い重なり回避＋centralGravityで結束＝飛ばない＆局所うにうに
+const DEFAULT_PHYSICS={barnesHut:{gravitationalConstant:-2400,centralGravity:.06,springLength:125,springConstant:.03,damping:.5,avoidOverlap:.6},minVelocity:.01,timestep:.4,stabilization:{iterations:200,fit:true}};
+const PULSE_PHYSICS={barnesHut:{gravitationalConstant:-2800,centralGravity:.2,springLength:125,springConstant:.05,damping:.42,avoidOverlap:.45},minVelocity:.01,timestep:.4,stabilization:false};
+const network=new vis.Network(document.getElementById('net'),{nodes,edges},{
+  physics:DEFAULT_PHYSICS,
+  interaction:{hover:true,tooltipDelay:120},nodes:{borderWidth:2}});
+let pulseTimer=null;
+function pulse(){
+  network.setOptions({physics:{enabled:true,...PULSE_PHYSICS}});
+  network.startSimulation();
+  if(pulseTimer)clearTimeout(pulseTimer);
+  pulseTimer=setTimeout(()=>network.setOptions({physics:{enabled:true,...DEFAULT_PHYSICS,stabilization:false}}),1400);
+}
+
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function fmtVal(k,v){if(v===true)return LANG==='ja'?'✓ あり':'✓ Yes';if(v===false)return LANG==='ja'?'— なし':'— No';
+  if(v===null||v==='')return '—';if(Array.isArray(v))return v.map(esc).join('、');if(k==='price_jpy')return '¥'+Number(v).toLocaleString();return esc(v);}
+function klabel(k){return (KEY_LABEL[LANG]&&KEY_LABEL[LANG][k])||k;}
+function showNode(n){
+  pulse();
+  const p=document.getElementById('panel'),c=nodeColor(n.type);let kv='';
+  Object.entries(n.attrs||{}).forEach(([k,v])=>{if(v===undefined||v===false||v===null||v==='')return;
+    kv+=`<div class="k">${esc(klabel(k))}</div><div class="v">${fmtVal(k,v)}</div>`;});
+  const title=esc(LANG==='ja'?n.label_ja:n.label_en);
+  p.innerHTML=`<span class="x" onclick="hidePanel()">×</span><span class="badge" style="background:${c}">${esc(TYPE_LABEL[LANG][n.type]||n.type)}</span>`+
+    `<h3>${title}</h3><div class="sub2">${esc(LANG==='ja'?(n.label_en||''):(n.label_ja||''))}</div>`+(kv?`<div class="kv">${kv}</div>`:'');
+  p.classList.add('show');
+}
+function showEdge(e){const r=KG.edges[e._idx];if(!r)return;const p=document.getElementById('panel'),a=idToNode[r.from],b=idToNode[r.to];
+  const lbl=(EDGE_LABEL[LANG]&&EDGE_LABEL[LANG][r.type])||r.type;let src='';
+  if(r.sources&&r.sources.length)src='<div class="srch">'+(LANG==='ja'?'出典':'Sources')+'</div><div class="src">'+r.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,''))}</a>`).join('')+'</div>';
+  p.innerHTML=`<span class="x" onclick="hidePanel()">×</span><span class="badge" style="background:${MEANING.has(r.type)?'#2a9d8f':'#6b7280'}">${esc(lbl)}${r.confidence?' · '+esc(r.confidence):''}</span>`+
+    `<h3 style="font-size:14px">${esc(LANG==='ja'?a.label_ja:a.label_en)} <span style="color:#6b7280">→</span> ${esc(LANG==='ja'?b.label_ja:b.label_en)}</h3>`+(r.rationale_ja?`<div class="rat" style="margin-top:10px">${esc(r.rationale_ja)}</div>`:'')+src;
+  p.classList.add('show');
+}
+function hidePanel(){document.getElementById('panel').classList.remove('show');}
+window.hidePanel=hidePanel;
+network.on('click',p=>{stopAuto();if(p.nodes.length)showNode(idToNode[p.nodes[0]]);else if(p.edges.length)showEdge(edges.get(p.edges[0]));else hidePanel();});
+
+/* ---- selects ---- */
+function opt(v,label,sel){return `<option value="${v}"${v===sel?' selected':''}>${esc(label)}</option>`;}
+function fillSelects(){
+  const u=UI[LANG];
+  document.getElementById('sel-brand').innerHTML=opt('All',u.all,brandSel)+brands.map(b=>opt(b.id,LANG==='ja'?b.label_ja:b.label_en,brandSel)).join('');
+  let th=opt('All',u.all,themeSel)+segments.map(s=>opt(s.id,LANG==='ja'?s.label_ja:s.label_en,themeSel)).join('');
+  document.getElementById('sel-theme').innerHTML=th;
+  const groups={funcG:[],capG:[]};
+  FEATURES.forEach(f=>groups[f.g].push(f));
+  let ft=opt('All',u.all,featSel);
+  ['funcG','capG'].forEach(g=>{ft+=`<optgroup label="${esc(u[g])}">`+groups[g].map(f=>opt(f.id,LANG==='ja'?f.ja:f.en,featSel)).join('')+`</optgroup>`;});
+  document.getElementById('sel-feat').innerHTML=ft;
+}
+document.getElementById('sel-brand').onchange=e=>{brandSel=e.target.value;refresh(true);};
+document.getElementById('sel-theme').onchange=e=>{themeSel=e.target.value;refresh(true);};
+document.getElementById('sel-feat').onchange=e=>{featSel=e.target.value;refresh(true);};
+document.getElementById('clr').onclick=()=>{brandSel=themeSel=featSel='All';fillSelects();refresh(false);};
+
+/* ---- breadcrumb ---- */
+function crumbLabel(kind,val){
+  if(kind==='brand')return idToNode[val]?(LANG==='ja'?idToNode[val].label_ja:idToNode[val].label_en):val;
+  if(kind==='theme'){if(idToNode[val])return LANG==='ja'?idToNode[val].label_ja:idToNode[val].label_en;return INSIGHT_SHORT[LANG][val]||val;}
+  if(kind==='feat')return LANG==='ja'?featById[val].ja:featById[val].en;
+}
+function renderCrumb(count){
+  const c=document.getElementById('crumb'),u=UI[LANG];
+  if(!anyFilter()){c.classList.remove('show');c.innerHTML='';return;}
+  let h='';const parts=[];
+  if(brandSel!=='All')parts.push(['brand',brandSel]);
+  if(themeSel!=='All')parts.push(['theme',themeSel]);
+  if(featSel!=='All')parts.push(['feat',featSel]);
+  parts.forEach((p,i)=>{if(i)h+=`<span class="op">×</span>`;
+    h+=`<span class="cc">${esc(crumbLabel(p[0],p[1]))}<span class="x" data-k="${p[0]}">✕</span></span>`;});
+  h+=count>0?`<span class="cnt">${count} ${esc(u.products)}</span>`:`<span class="cnt zero">${esc(u.zero)}</span>`;
+  c.innerHTML=h;c.classList.add('show');
+  c.querySelectorAll('.x').forEach(x=>x.onclick=()=>{const k=x.dataset.k;if(k==='brand')brandSel='All';if(k==='theme')themeSel='All';if(k==='feat')featSel='All';fillSelects();refresh(true);});
+}
+
+/* ---- stepper ---- */
+function setupStepper(){
+  const el=document.getElementById('step');
+  if(!filterIds||!filterIds.length){el.classList.remove('show');stopAuto();renderInsightBox();return;}
+  el.classList.add('show');stepIdx=Math.min(stepIdx,filterIds.length-1);if(stepIdx<0)stepIdx=0;updateStep(false);showNode(idToNode[filterIds[stepIdx]]);renderInsightBox();
+}
+function updateStep(focus){
+  if(!filterIds||!filterIds.length)return;
+  if(stepIdx<0)stepIdx=filterIds.length-1;if(stepIdx>=filterIds.length)stepIdx=0;
+  const id=filterIds[stepIdx],n=idToNode[id];
+  document.getElementById('step-now').textContent=(LANG==='ja'?n.label_ja:n.label_en);
+  document.getElementById('step-c').textContent=(stepIdx+1)+' / '+filterIds.length;
+  if(focus){network.focus(id,{scale:1.05,animation:{duration:550},offset:{x:-130,y:0}});showNode(n);}
+}
+document.getElementById('step-prev').onclick=()=>{stopAuto();stepIdx--;updateStep(true);};
+document.getElementById('step-next').onclick=()=>{stopAuto();stepIdx++;updateStep(true);};
+document.getElementById('step-auto').onclick=()=>{ if(autoTimer)stopAuto(); else startAuto(); };
+function startAuto(){const b=document.getElementById('step-auto');b.classList.add('on');b.textContent='⏸';
+  autoTimer=setInterval(()=>{stepIdx++;updateStep(true);},3600);updateStep(true);}
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}const b=document.getElementById('step-auto');if(b){b.classList.remove('on');b.textContent='▶';}}
+
+/* ---- insight box (folded into theme) ---- */
+function renderInsightBox(){
+  const box=document.getElementById('ins');
+  const ins=(KG.insights||[]).find(o=>o.id===FEAT_INSIGHT[featSel]);
+  if(!ins){box.classList.remove('show','open');return;}
+  box.classList.add('show');
+  document.getElementById('ins-t').textContent=LANG==='ja'?(ins.title_ja||ins.title):(ins.title_en||ins.title_ja);
+  document.getElementById('ins-b').textContent=LANG==='ja'?(ins.body_ja||''):(ins.body_en||ins.body_ja||'');
+  document.getElementById('ins-more').textContent=UI[LANG].more;
+}
+document.getElementById('ins-more').onclick=()=>{const b=document.getElementById('ins');b.classList.toggle('open');
+  document.getElementById('ins-more').textContent=b.classList.contains('open')?UI[LANG].less:UI[LANG].more;};
+
+/* ---- refresh (recompute + repaint) ---- */
+function refresh(fit){
+  filterIds=anyFilter()?computeResult():null;
+  if(!filterIds||!filterIds.length)stepIdx=0;
+  nodes.update(buildNodes());edges.update(buildEdges());
+  renderCrumb(filterIds?filterIds.length:0);
+  setupStepper();
+  pulse();
+  if(fit&&filterIds&&filterIds.length)network.fit({nodes:filterIds,animation:{duration:650}});
+  if(fit&&!anyFilter())network.fit({animation:{duration:650}});
+}
+
+/* ---- legend / lang / lens ---- */
+function renderLegend(){document.getElementById('leg-row').innerHTML=Object.keys(TYPE_COLOR).map(t=>`<div class="it"><span class="dot" style="background:${TYPE_COLOR[t]}"></span>${esc(TYPE_LABEL[LANG][t])}</div>`).join('');}
+function setLang(l){LANG=l;document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.dataset.l===l));document.documentElement.lang=l;
+  const u=UI[l];document.getElementById('t-title').textContent=u.title;document.getElementById('t-sub').textContent=u.sub;document.getElementById('t-claim').innerHTML=u.claim;
+  document.getElementById('t-lens').textContent=u.lens;document.getElementById('t-leg').textContent=u.leg;
+  document.getElementById('t-govh').textContent=u.govH;document.getElementById('t-govl').textContent=u.govL;document.getElementById('t-govo').textContent=u.govO;document.getElementById('t-govp').textContent=u.govP;
+  document.getElementById('t-navh').textContent=u.navh;document.getElementById('t-lb').textContent=u.lb;
+  document.getElementById('t-lt').textContent=u.lt;document.getElementById('t-lf').textContent=u.lf;document.getElementById('t-clr').textContent=u.clr;
+  document.getElementById('t-foot').innerHTML=u.foot;
+  fillSelects();nodes.update(buildNodes());renderLegend();renderCrumb(filterIds?filterIds.length:0);setupStepper();}
+document.querySelectorAll('#lang span').forEach(s=>s.onclick=()=>setLang(s.dataset.l));
+document.getElementById('lens').onclick=()=>{LENS=!LENS;document.getElementById('lens').classList.toggle('on',LENS);edges.update(buildEdges());};
+
+fillSelects();renderLegend();setLang('ja');
+// うにうに継続：停止しかけたら再励起（Anker式パルス）＝止まらない
+setTimeout(()=>network.fit({animation:{duration:700}}),1100);
+// 永続うにうに：定期的に数ノードを微小に揺らして物理を生かし続ける（Anker的に止まらない）
+setInterval(()=>{
+  if(document.hidden)return;
+  const ids=nodes.getIds(),pos=network.getPositions();const upd=[];
+  for(let k=0;k<5;k++){const id=ids[Math.floor(Math.random()*ids.length)];if(!pos[id])continue;
+    upd.push({id,x:pos[id].x+(Math.random()*32-16),y:pos[id].y+(Math.random()*32-16)});}
+  if(upd.length){nodes.update(upd);network.startSimulation();}
+},1500);
+</script>
+</body>
+</html>

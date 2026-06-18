@@ -108,6 +108,13 @@
         "desc": "30 products × user segments × contexts × regulations. \"Light up everything for business travelers\" — one move in a graph. With a meaning lens, AND filters and guided tours.",
         "cta": "Explore",
         "href": "/demos/powerbank/"
+      },
+      {
+        "tag": "Enterprise / Synthetic",
+        "title": "Meridian Manufacturing (synthetic)",
+        "desc": "A fictional global manufacturer: departments × people × products × customers × knowledge × governed terminology — an enterprise map of meaning. The real one is under NDA; this is a faithful synthetic.",
+        "cta": "Explore",
+        "href": "/demos/enterprise/"
       }
     ],
     "note": "Both are live Entity Graphs that run entirely in the browser.",

@@ -14,7 +14,11 @@ type ProofCard = {
 };
 
 // カードのサムネ（index対応）
-const THUMBS = ["/images/proof-anker.png", "/images/proof-powerbank.png"];
+const THUMBS = [
+  "/images/proof-anker.png",
+  "/images/proof-powerbank.png",
+  "/images/proof-enterprise.png",
+];
 
 export default function Proof() {
   const t = useTranslations("proof");
@@ -48,7 +52,7 @@ export default function Proof() {
           {/* 2つのデモカード */}
           <motion.div
             variants={staggerItem}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {cards.map((card, i) => (
               <a

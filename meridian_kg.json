@@ -1,0 +1,1826 @@
+{
+  "meta": {
+    "title": "Meridian Manufacturing — 企業のインテリジェンス（合成デモ）",
+    "title_en": "Meridian Manufacturing — Enterprise Intelligence (synthetic demo)",
+    "company": "Meridian Manufacturing (fictional)",
+    "version": "1.0.0",
+    "synthetic": true,
+    "node_count": 69,
+    "edge_count": 155,
+    "insights": [
+      {
+        "id": "insight_1",
+        "title_ja": "退職で消える知 — 後継者のいない重要知識",
+        "title_en": "Knowledge Walking Out the Door",
+        "body_ja": "接着強度の定義(森田)・光学透過率(山本)・医療認証クラス(渡辺)は、いずれも2026年に退職予定の社員が【唯一の保有者】。後継者なしで退職すれば、その意味は永久に失われる。誰が何を知っているかをグラフで所有していれば、退職前に移管できる。",
+        "body_en": "Bond Strength (Morita), Optical Transmittance (Yamamoto) and Medical Cert Class (Watanabe) each have a single owner — all retiring in 2026. Without succession, the meaning is lost forever. Owning who-knows-what as a graph lets you transfer it before they leave."
+      },
+      {
+        "id": "insight_2",
+        "title_ja": "意味の統治 — 用語が市場ごとに未承認のまま",
+        "title_en": "Governing Meaning Across Markets",
+        "body_ja": "「医療認証クラス」は北米・日本でのみ承認済みで、欧州・APAC・中南米は未承認。用語(意味)の市場別承認は commit/PR で統治すべき作業。グラフが【どこで未承認か】を一発で示す。",
+        "body_en": "'Medical Cert Class' is approved only in North America and Japan — Europe, APAC and Latin America are not. Per-market approval of meaning is governed work (commit/PR). The graph shows exactly where the gaps are."
+      },
+      {
+        "id": "insight_3",
+        "title_ja": "コンプラ横断 — 規制の影響範囲と責任者が一発",
+        "title_en": "Compliance, End to End",
+        "body_ja": "架空のEU製品環境指令2026は、防護マスク・コーティング剤・接着フィルム・医療ドレッシングと欧州市場を規制対象とし、責任は法務のMüller。規制Xの影響製品と責任者をグラフで即特定できる。",
+        "body_en": "The (fictional) EU Eco Directive 2026 governs Respirator Mask, Coating Agent, Adhesive Film and Medical Dressing across Europe, owned by Müller in Legal. The graph instantly maps a regulation's blast radius and its owner."
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "reg_na",
+      "type": "Region",
+      "label_ja": "北米",
+      "label_en": "North America",
+      "attrs": {}
+    },
+    {
+      "id": "reg_eu",
+      "type": "Region",
+      "label_ja": "欧州",
+      "label_en": "Europe",
+      "attrs": {}
+    },
+    {
+      "id": "reg_apac",
+      "type": "Region",
+      "label_ja": "APAC",
+      "label_en": "APAC",
+      "attrs": {}
+    },
+    {
+      "id": "reg_jp",
+      "type": "Region",
+      "label_ja": "日本",
+      "label_en": "Japan",
+      "attrs": {}
+    },
+    {
+      "id": "reg_latam",
+      "type": "Region",
+      "label_ja": "中南米",
+      "label_en": "Latin America",
+      "attrs": {}
+    },
+    {
+      "id": "dept_rnd",
+      "type": "Department",
+      "label_ja": "研究開発 (R&D)",
+      "label_en": "R&D",
+      "attrs": {}
+    },
+    {
+      "id": "dept_mktg",
+      "type": "Department",
+      "label_ja": "マーケティング",
+      "label_en": "Marketing",
+      "attrs": {}
+    },
+    {
+      "id": "dept_sales",
+      "type": "Department",
+      "label_ja": "営業",
+      "label_en": "Sales",
+      "attrs": {}
+    },
+    {
+      "id": "dept_support",
+      "type": "Department",
+      "label_ja": "カスタマーサポート",
+      "label_en": "Support",
+      "attrs": {}
+    },
+    {
+      "id": "dept_legal",
+      "type": "Department",
+      "label_ja": "法務・コンプライアンス",
+      "label_en": "Legal & Compliance",
+      "attrs": {}
+    },
+    {
+      "id": "dept_ops",
+      "type": "Department",
+      "label_ja": "地域オペレーション",
+      "label_en": "Regional Ops",
+      "attrs": {}
+    },
+    {
+      "id": "p_morita",
+      "type": "Person",
+      "label_ja": "森田 (R&D リード)",
+      "label_en": "A. Morita (R&D Lead)",
+      "attrs": {
+        "role": "R&D Lead",
+        "expertise": "接着化学",
+        "department": "研究開発 (R&D)",
+        "retiring": 2026
+      }
+    },
+    {
+      "id": "p_chen",
+      "type": "Person",
+      "label_ja": "Chen (APAC 営業部長)",
+      "label_en": "M. Chen (APAC Sales Dir.)",
+      "attrs": {
+        "role": "APAC Sales Dir.",
+        "expertise": "半導体顧客",
+        "department": "営業",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_muller",
+      "type": "Person",
+      "label_ja": "Müller (欧州コンプラ)",
+      "label_en": "L. Müller (EU Compliance)",
+      "attrs": {
+        "role": "EU Compliance",
+        "expertise": "EU規制",
+        "department": "法務・コンプライアンス",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_sato",
+      "type": "Person",
+      "label_ja": "佐藤 (研磨材スペシャリスト)",
+      "label_en": "K. Sato (Abrasives SME)",
+      "attrs": {
+        "role": "Abrasives SME",
+        "expertise": "研磨材プロセス",
+        "department": "研究開発 (R&D)",
+        "retiring": 2027
+      }
+    },
+    {
+      "id": "p_dubois",
+      "type": "Person",
+      "label_ja": "Dubois (マーケ)",
+      "label_en": "C. Dubois (Marketing)",
+      "attrs": {
+        "role": "Marketing",
+        "expertise": "ブランド用語",
+        "department": "マーケティング",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_tanaka",
+      "type": "Person",
+      "label_ja": "田中 (サポート)",
+      "label_en": "H. Tanaka (Support)",
+      "attrs": {
+        "role": "Support",
+        "expertise": "医療顧客対応",
+        "department": "カスタマーサポート",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_okafor",
+      "type": "Person",
+      "label_ja": "Okafor (地域オペ NA)",
+      "label_en": "N. Okafor (Ops NA)",
+      "attrs": {
+        "role": "Ops NA",
+        "expertise": "北米物流",
+        "department": "地域オペレーション",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_yamamoto",
+      "type": "Person",
+      "label_ja": "山本 (光学 主任)",
+      "label_en": "T. Yamamoto (Optics Lead)",
+      "attrs": {
+        "role": "Optics Lead",
+        "expertise": "光学フィルター",
+        "department": "研究開発 (R&D)",
+        "retiring": 2026
+      }
+    },
+    {
+      "id": "p_rossi",
+      "type": "Person",
+      "label_ja": "Rossi (営業 EU)",
+      "label_en": "G. Rossi (Sales EU)",
+      "attrs": {
+        "role": "Sales EU",
+        "expertise": "自動車OEM",
+        "department": "営業",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_kim",
+      "type": "Person",
+      "label_ja": "Kim (R&D センサー)",
+      "label_en": "J. Kim (R&D Sensors)",
+      "attrs": {
+        "role": "R&D Sensors",
+        "expertise": "センサー",
+        "department": "研究開発 (R&D)",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_garcia",
+      "type": "Person",
+      "label_ja": "García (営業 中南米)",
+      "label_en": "P. García (Sales LATAM)",
+      "attrs": {
+        "role": "Sales LATAM",
+        "expertise": "建設業界",
+        "department": "営業",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_schmidt",
+      "type": "Person",
+      "label_ja": "Schmidt (品質保証)",
+      "label_en": "R. Schmidt (QA)",
+      "attrs": {
+        "role": "QA",
+        "expertise": "製品安全",
+        "department": "法務・コンプライアンス",
+        "retiring": 2028
+      }
+    },
+    {
+      "id": "p_nakamura",
+      "type": "Person",
+      "label_ja": "中村 (マーケ JP)",
+      "label_en": "S. Nakamura (Marketing JP)",
+      "attrs": {
+        "role": "Marketing JP",
+        "expertise": "日本市場",
+        "department": "マーケティング",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_brown",
+      "type": "Person",
+      "label_ja": "Brown (サポート NA)",
+      "label_en": "D. Brown (Support NA)",
+      "attrs": {
+        "role": "Support NA",
+        "expertise": "産業顧客",
+        "department": "カスタマーサポート",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_li",
+      "type": "Person",
+      "label_ja": "Li (R&D コーティング)",
+      "label_en": "W. Li (R&D Coatings)",
+      "attrs": {
+        "role": "R&D Coatings",
+        "expertise": "コーティング",
+        "department": "研究開発 (R&D)",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_andersson",
+      "type": "Person",
+      "label_ja": "Andersson (営業 北欧)",
+      "label_en": "E. Andersson (Sales Nordics)",
+      "attrs": {
+        "role": "Sales Nordics",
+        "expertise": "エネルギー",
+        "department": "営業",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_costa",
+      "type": "Person",
+      "label_ja": "Costa (地域オペ LATAM)",
+      "label_en": "F. Costa (Ops LATAM)",
+      "attrs": {
+        "role": "Ops LATAM",
+        "expertise": "中南米通関",
+        "department": "地域オペレーション",
+        "retiring": false
+      }
+    },
+    {
+      "id": "p_watanabe",
+      "type": "Person",
+      "label_ja": "渡辺 (医療RA)",
+      "label_en": "Y. Watanabe (Medical RA)",
+      "attrs": {
+        "role": "Medical RA",
+        "expertise": "医療認証",
+        "department": "カスタマーサポート",
+        "retiring": 2026
+      }
+    },
+    {
+      "id": "prod_film",
+      "type": "Product",
+      "label_ja": "高性能接着フィルム",
+      "label_en": "High-performance Adhesive Film",
+      "attrs": {
+        "line": "高性能接着フィルム"
+      }
+    },
+    {
+      "id": "prod_abrasive",
+      "type": "Product",
+      "label_ja": "産業用研磨材",
+      "label_en": "Industrial Abrasive",
+      "attrs": {
+        "line": "産業用研磨材"
+      }
+    },
+    {
+      "id": "prod_mask",
+      "type": "Product",
+      "label_ja": "防護マスク",
+      "label_en": "Respirator Mask",
+      "attrs": {
+        "line": "防護マスク"
+      }
+    },
+    {
+      "id": "prod_optical",
+      "type": "Product",
+      "label_ja": "光学フィルター",
+      "label_en": "Optical Filter",
+      "attrs": {
+        "line": "光学フィルター"
+      }
+    },
+    {
+      "id": "prod_tape",
+      "type": "Product",
+      "label_ja": "工業用テープ",
+      "label_en": "Industrial Tape",
+      "attrs": {
+        "line": "工業用テープ"
+      }
+    },
+    {
+      "id": "prod_insulation",
+      "type": "Product",
+      "label_ja": "断熱材",
+      "label_en": "Insulation Material",
+      "attrs": {
+        "line": "断熱材"
+      }
+    },
+    {
+      "id": "prod_sensor",
+      "type": "Product",
+      "label_ja": "センサーモジュール",
+      "label_en": "Sensor Module",
+      "attrs": {
+        "line": "センサーモジュール"
+      }
+    },
+    {
+      "id": "prod_coating",
+      "type": "Product",
+      "label_ja": "コーティング剤",
+      "label_en": "Coating Agent",
+      "attrs": {
+        "line": "コーティング剤"
+      }
+    },
+    {
+      "id": "prod_dressing",
+      "type": "Product",
+      "label_ja": "医療用ドレッシング",
+      "label_en": "Medical Dressing",
+      "attrs": {
+        "line": "医療用ドレッシング"
+      }
+    },
+    {
+      "id": "prod_bonding",
+      "type": "Product",
+      "label_ja": "電子部品接続材",
+      "label_en": "Electronic Bonding",
+      "attrs": {
+        "line": "電子部品接続材"
+      }
+    },
+    {
+      "id": "cust_auto",
+      "type": "Customer",
+      "label_ja": "アクメ自動車 (OEM)",
+      "label_en": "Acme Automotive (OEM)",
+      "attrs": {
+        "region": "欧州",
+        "segment": "自動車"
+      }
+    },
+    {
+      "id": "cust_elec",
+      "type": "Customer",
+      "label_ja": "Northwind Electronics",
+      "label_en": "Northwind Electronics",
+      "attrs": {
+        "region": "APAC",
+        "segment": "電子"
+      }
+    },
+    {
+      "id": "cust_hosp",
+      "type": "Customer",
+      "label_ja": "セントラル病院ネットワーク",
+      "label_en": "Central Hospital Network",
+      "attrs": {
+        "region": "北米",
+        "segment": "医療"
+      }
+    },
+    {
+      "id": "cust_constr",
+      "type": "Customer",
+      "label_ja": "BuildCorp 建設",
+      "label_en": "BuildCorp Construction",
+      "attrs": {
+        "region": "中南米",
+        "segment": "建設"
+      }
+    },
+    {
+      "id": "cust_aero",
+      "type": "Customer",
+      "label_ja": "Skyline Aerospace",
+      "label_en": "Skyline Aerospace",
+      "attrs": {
+        "region": "北米",
+        "segment": "航空宇宙"
+      }
+    },
+    {
+      "id": "cust_semi",
+      "type": "Customer",
+      "label_ja": "Quantum Fab (半導体)",
+      "label_en": "Quantum Fab",
+      "attrs": {
+        "region": "APAC",
+        "segment": "半導体"
+      }
+    },
+    {
+      "id": "cust_energy",
+      "type": "Customer",
+      "label_ja": "Nordic Energy",
+      "label_en": "Nordic Energy",
+      "attrs": {
+        "region": "欧州",
+        "segment": "エネルギー"
+      }
+    },
+    {
+      "id": "cust_appliance",
+      "type": "Customer",
+      "label_ja": "ホクト家電",
+      "label_en": "Hokuto Appliances",
+      "attrs": {
+        "region": "日本",
+        "segment": "家電"
+      }
+    },
+    {
+      "id": "cust_logi",
+      "type": "Customer",
+      "label_ja": "TransGlobal 物流",
+      "label_en": "TransGlobal Logistics",
+      "attrs": {
+        "region": "中南米",
+        "segment": "物流"
+      }
+    },
+    {
+      "id": "cust_consumer",
+      "type": "Customer",
+      "label_ja": "Maple Consumer Goods",
+      "label_en": "Maple Consumer Goods",
+      "attrs": {
+        "region": "北米",
+        "segment": "消費財"
+      }
+    },
+    {
+      "id": "k_grade",
+      "type": "Knowledge",
+      "label_ja": "用語: 製品グレード命名規則",
+      "label_en": "Glossary: Product Grade Naming",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "マーケティング",
+        "owner": "p_dubois",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "欧州",
+          "APAC",
+          "日本"
+        ],
+        "unapproved_regions": [
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_bond",
+      "type": "Knowledge",
+      "label_ja": "用語: 接着強度の定義",
+      "label_en": "Glossary: Bond Strength Definition",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_morita",
+        "sole_owner_retiring": true,
+        "regions": [
+          "北米",
+          "欧州",
+          "日本"
+        ],
+        "unapproved_regions": [
+          "APAC",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_medclass",
+      "type": "Knowledge",
+      "label_ja": "用語: 医療認証クラス",
+      "label_en": "Glossary: Medical Cert Class",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "カスタマーサポート",
+        "owner": "p_watanabe",
+        "sole_owner_retiring": true,
+        "regions": [
+          "北米",
+          "日本"
+        ],
+        "unapproved_regions": [
+          "欧州",
+          "APAC",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_abrgrit",
+      "type": "Knowledge",
+      "label_ja": "用語: 研磨グリット規格",
+      "label_en": "Glossary: Abrasive Grit Spec",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_sato",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "欧州",
+          "APAC",
+          "日本",
+          "中南米"
+        ],
+        "unapproved_regions": []
+      }
+    },
+    {
+      "id": "k_optspec",
+      "type": "Knowledge",
+      "label_ja": "用語: 光学透過率定義",
+      "label_en": "Glossary: Optical Transmittance",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_yamamoto",
+        "sole_owner_retiring": true,
+        "regions": [
+          "日本",
+          "APAC"
+        ],
+        "unapproved_regions": [
+          "北米",
+          "欧州",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_brandvoice",
+      "type": "Knowledge",
+      "label_ja": "用語: ブランドボイス指針",
+      "label_en": "Glossary: Brand Voice Guide",
+      "attrs": {
+        "kind": "glossary_term",
+        "owner_dept": "マーケティング",
+        "owner": "p_nakamura",
+        "sole_owner_retiring": false,
+        "regions": [
+          "日本"
+        ],
+        "unapproved_regions": [
+          "北米",
+          "欧州",
+          "APAC",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_filmspec",
+      "type": "Knowledge",
+      "label_ja": "仕様書: 接着フィルム技術仕様",
+      "label_en": "Doc: Adhesive Film Spec",
+      "attrs": {
+        "kind": "doc",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_morita",
+        "sole_owner_retiring": false,
+        "regions": [
+          "欧州",
+          "APAC",
+          "日本"
+        ]
+      }
+    },
+    {
+      "id": "k_sensorspec",
+      "type": "Knowledge",
+      "label_ja": "仕様書: センサー較正手順",
+      "label_en": "Doc: Sensor Calibration",
+      "attrs": {
+        "kind": "doc",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_kim",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "欧州",
+          "APAC",
+          "中南米",
+          "日本"
+        ]
+      }
+    },
+    {
+      "id": "k_coatspec",
+      "type": "Knowledge",
+      "label_ja": "仕様書: コーティング適用基準",
+      "label_en": "Doc: Coating Application",
+      "attrs": {
+        "kind": "doc",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_li",
+        "sole_owner_retiring": false,
+        "regions": [
+          "日本",
+          "APAC",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_maskspec",
+      "type": "Knowledge",
+      "label_ja": "仕様書: 防護マスク試験規格",
+      "label_en": "Doc: Respirator Test Std",
+      "attrs": {
+        "kind": "doc",
+        "owner_dept": "法務・コンプライアンス",
+        "owner": "p_schmidt",
+        "sole_owner_retiring": false,
+        "regions": [
+          "中南米",
+          "欧州",
+          "APAC",
+          "日本",
+          "北米"
+        ]
+      }
+    },
+    {
+      "id": "k_optsop",
+      "type": "Knowledge",
+      "label_ja": "仕様書: 光学検査SOP",
+      "label_en": "Doc: Optical Inspection SOP",
+      "attrs": {
+        "kind": "doc",
+        "owner_dept": "研究開発 (R&D)",
+        "owner": "p_yamamoto",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "APAC"
+        ]
+      }
+    },
+    {
+      "id": "k_salesplay",
+      "type": "Knowledge",
+      "label_ja": "プレイブック: 半導体顧客攻略",
+      "label_en": "Playbook: Semiconductor Accounts",
+      "attrs": {
+        "kind": "playbook",
+        "owner_dept": "営業",
+        "owner": "p_chen",
+        "sole_owner_retiring": false,
+        "regions": [
+          "APAC",
+          "北米",
+          "日本"
+        ]
+      }
+    },
+    {
+      "id": "k_supportplay",
+      "type": "Knowledge",
+      "label_ja": "プレイブック: 医療サポート対応",
+      "label_en": "Playbook: Medical Support",
+      "attrs": {
+        "kind": "playbook",
+        "owner_dept": "カスタマーサポート",
+        "owner": "p_tanaka",
+        "sole_owner_retiring": false,
+        "regions": [
+          "APAC",
+          "欧州",
+          "中南米",
+          "日本",
+          "北米"
+        ]
+      }
+    },
+    {
+      "id": "k_emeaplay",
+      "type": "Knowledge",
+      "label_ja": "プレイブック: 欧州自動車提案",
+      "label_en": "Playbook: EU Automotive Pitch",
+      "attrs": {
+        "kind": "playbook",
+        "owner_dept": "営業",
+        "owner": "p_rossi",
+        "sole_owner_retiring": false,
+        "regions": [
+          "日本",
+          "欧州",
+          "中南米",
+          "北米",
+          "APAC"
+        ]
+      }
+    },
+    {
+      "id": "k_eudir",
+      "type": "Knowledge",
+      "label_ja": "ポリシー: EU製品環境指令2026 (架空)",
+      "label_en": "Policy: EU Eco Directive 2026 (fictional)",
+      "attrs": {
+        "kind": "policy",
+        "owner_dept": "法務・コンプライアンス",
+        "owner": "p_muller",
+        "sole_owner_retiring": false,
+        "regions": [
+          "中南米",
+          "APAC",
+          "日本",
+          "欧州",
+          "北米"
+        ]
+      }
+    },
+    {
+      "id": "k_safety",
+      "type": "Knowledge",
+      "label_ja": "ポリシー: グローバル製品安全基準",
+      "label_en": "Policy: Global Product Safety",
+      "attrs": {
+        "kind": "policy",
+        "owner_dept": "法務・コンプライアンス",
+        "owner": "p_schmidt",
+        "sole_owner_retiring": false,
+        "regions": [
+          "欧州",
+          "中南米",
+          "APAC"
+        ]
+      }
+    },
+    {
+      "id": "k_dataprot",
+      "type": "Knowledge",
+      "label_ja": "ポリシー: 顧客データ保護",
+      "label_en": "Policy: Customer Data Protection",
+      "attrs": {
+        "kind": "policy",
+        "owner_dept": "法務・コンプライアンス",
+        "owner": "p_muller",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "中南米",
+          "日本"
+        ]
+      }
+    },
+    {
+      "id": "k_camp24",
+      "type": "Knowledge",
+      "label_ja": "キャンペーン: 2024 産業EXPO",
+      "label_en": "Campaign: 2024 Industrial Expo",
+      "attrs": {
+        "kind": "campaign",
+        "owner_dept": "マーケティング",
+        "owner": "p_dubois",
+        "sole_owner_retiring": false,
+        "regions": [
+          "欧州",
+          "日本"
+        ]
+      }
+    },
+    {
+      "id": "k_camp25",
+      "type": "Knowledge",
+      "label_ja": "キャンペーン: 2025 医療フォーラム",
+      "label_en": "Campaign: 2025 Medical Forum",
+      "attrs": {
+        "kind": "campaign",
+        "owner_dept": "マーケティング",
+        "owner": "p_nakamura",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "日本",
+          "欧州",
+          "APAC",
+          "中南米"
+        ]
+      }
+    },
+    {
+      "id": "k_camp23",
+      "type": "Knowledge",
+      "label_ja": "キャンペーン: 2023 接着技術ローンチ",
+      "label_en": "Campaign: 2023 Adhesive Launch",
+      "attrs": {
+        "kind": "campaign",
+        "owner_dept": "マーケティング",
+        "owner": "p_dubois",
+        "sole_owner_retiring": false,
+        "regions": [
+          "北米",
+          "中南米",
+          "APAC",
+          "欧州",
+          "日本"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "p_morita",
+      "to": "dept_rnd",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_chen",
+      "to": "dept_sales",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_muller",
+      "to": "dept_legal",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_sato",
+      "to": "dept_rnd",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_dubois",
+      "to": "dept_mktg",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_tanaka",
+      "to": "dept_support",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_okafor",
+      "to": "dept_ops",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_yamamoto",
+      "to": "dept_rnd",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_rossi",
+      "to": "dept_sales",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_kim",
+      "to": "dept_rnd",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_garcia",
+      "to": "dept_sales",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_schmidt",
+      "to": "dept_legal",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_nakamura",
+      "to": "dept_mktg",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_brown",
+      "to": "dept_support",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_li",
+      "to": "dept_rnd",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_andersson",
+      "to": "dept_sales",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_costa",
+      "to": "dept_ops",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "p_watanabe",
+      "to": "dept_support",
+      "type": "belongs_to",
+      "rationale_ja": "所属部門"
+    },
+    {
+      "from": "prod_film",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_film",
+      "to": "reg_apac",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_abrasive",
+      "to": "reg_eu",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_abrasive",
+      "to": "reg_latam",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_mask",
+      "to": "reg_latam",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_mask",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_optical",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_optical",
+      "to": "reg_latam",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_optical",
+      "to": "reg_jp",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_tape",
+      "to": "reg_eu",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_tape",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_insulation",
+      "to": "reg_latam",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_insulation",
+      "to": "reg_jp",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_sensor",
+      "to": "reg_jp",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_sensor",
+      "to": "reg_apac",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_coating",
+      "to": "reg_eu",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_coating",
+      "to": "reg_jp",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_dressing",
+      "to": "reg_apac",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_dressing",
+      "to": "reg_eu",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_dressing",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_bonding",
+      "to": "reg_na",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_bonding",
+      "to": "reg_latam",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "prod_bonding",
+      "to": "reg_eu",
+      "type": "sold_in",
+      "rationale_ja": "販売市場"
+    },
+    {
+      "from": "cust_auto",
+      "to": "reg_eu",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_elec",
+      "to": "reg_apac",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_hosp",
+      "to": "reg_na",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_constr",
+      "to": "reg_latam",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_aero",
+      "to": "reg_na",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_semi",
+      "to": "reg_apac",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_energy",
+      "to": "reg_eu",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_appliance",
+      "to": "reg_jp",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_logi",
+      "to": "reg_latam",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "cust_consumer",
+      "to": "reg_na",
+      "type": "located_in",
+      "rationale_ja": "所在地域"
+    },
+    {
+      "from": "prod_film",
+      "to": "cust_semi",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_abrasive",
+      "to": "cust_consumer",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_abrasive",
+      "to": "cust_aero",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_mask",
+      "to": "cust_appliance",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_optical",
+      "to": "cust_elec",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_optical",
+      "to": "cust_energy",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_optical",
+      "to": "cust_consumer",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_tape",
+      "to": "cust_aero",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_tape",
+      "to": "cust_semi",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_tape",
+      "to": "cust_constr",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_insulation",
+      "to": "cust_elec",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_insulation",
+      "to": "cust_auto",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_insulation",
+      "to": "cust_constr",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_sensor",
+      "to": "cust_elec",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_sensor",
+      "to": "cust_constr",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_coating",
+      "to": "cust_energy",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_dressing",
+      "to": "cust_appliance",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_dressing",
+      "to": "cust_semi",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "prod_bonding",
+      "to": "cust_semi",
+      "type": "used_by",
+      "rationale_ja": "採用顧客"
+    },
+    {
+      "from": "dept_mktg",
+      "to": "k_grade",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_dubois",
+      "to": "k_grade",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_bond",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_morita",
+      "to": "k_bond",
+      "type": "knows",
+      "rationale_ja": "主担当として知る"
+    },
+    {
+      "from": "dept_support",
+      "to": "k_medclass",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_watanabe",
+      "to": "k_medclass",
+      "type": "knows",
+      "rationale_ja": "主担当として知る"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_abrgrit",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_sato",
+      "to": "k_abrgrit",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_optspec",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_yamamoto",
+      "to": "k_optspec",
+      "type": "knows",
+      "rationale_ja": "主担当として知る"
+    },
+    {
+      "from": "dept_mktg",
+      "to": "k_brandvoice",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_nakamura",
+      "to": "k_brandvoice",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_filmspec",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_morita",
+      "to": "k_filmspec",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "k_filmspec",
+      "to": "prod_film",
+      "type": "about",
+      "rationale_ja": "対象製品"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_sensorspec",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_kim",
+      "to": "k_sensorspec",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "k_sensorspec",
+      "to": "prod_sensor",
+      "type": "about",
+      "rationale_ja": "対象製品"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_coatspec",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_li",
+      "to": "k_coatspec",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "k_coatspec",
+      "to": "prod_coating",
+      "type": "about",
+      "rationale_ja": "対象製品"
+    },
+    {
+      "from": "dept_legal",
+      "to": "k_maskspec",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_schmidt",
+      "to": "k_maskspec",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "k_maskspec",
+      "to": "prod_mask",
+      "type": "about",
+      "rationale_ja": "対象製品"
+    },
+    {
+      "from": "dept_rnd",
+      "to": "k_optsop",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_yamamoto",
+      "to": "k_optsop",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "k_optsop",
+      "to": "prod_optical",
+      "type": "about",
+      "rationale_ja": "対象製品"
+    },
+    {
+      "from": "dept_sales",
+      "to": "k_salesplay",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_chen",
+      "to": "k_salesplay",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_support",
+      "to": "k_supportplay",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_tanaka",
+      "to": "k_supportplay",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_sales",
+      "to": "k_emeaplay",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_rossi",
+      "to": "k_emeaplay",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_legal",
+      "to": "k_eudir",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_muller",
+      "to": "k_eudir",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_legal",
+      "to": "k_safety",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_schmidt",
+      "to": "k_safety",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_legal",
+      "to": "k_dataprot",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_muller",
+      "to": "k_dataprot",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_mktg",
+      "to": "k_camp24",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_dubois",
+      "to": "k_camp24",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_mktg",
+      "to": "k_camp25",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_nakamura",
+      "to": "k_camp25",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "dept_mktg",
+      "to": "k_camp23",
+      "type": "owns_knowledge",
+      "rationale_ja": "部門が統治"
+    },
+    {
+      "from": "p_dubois",
+      "to": "k_camp23",
+      "type": "knows",
+      "rationale_ja": "知る"
+    },
+    {
+      "from": "p_brown",
+      "to": "k_filmspec",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_rossi",
+      "to": "k_salesplay",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_garcia",
+      "to": "k_emeaplay",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_kim",
+      "to": "k_sensorspec",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_li",
+      "to": "k_coatspec",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_schmidt",
+      "to": "k_safety",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "p_andersson",
+      "to": "k_salesplay",
+      "type": "knows",
+      "rationale_ja": "副次的に知る"
+    },
+    {
+      "from": "k_grade",
+      "to": "reg_na",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_grade",
+      "to": "reg_eu",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_grade",
+      "to": "reg_apac",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_grade",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_bond",
+      "to": "reg_na",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_bond",
+      "to": "reg_eu",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_bond",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_medclass",
+      "to": "reg_na",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_medclass",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_abrgrit",
+      "to": "reg_na",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_abrgrit",
+      "to": "reg_eu",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_abrgrit",
+      "to": "reg_apac",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_abrgrit",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_abrgrit",
+      "to": "reg_latam",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_optspec",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_optspec",
+      "to": "reg_apac",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_brandvoice",
+      "to": "reg_jp",
+      "type": "approved_in",
+      "rationale_ja": "承認済み市場"
+    },
+    {
+      "from": "k_eudir",
+      "to": "prod_mask",
+      "type": "governs",
+      "rationale_ja": "EU指令の規制対象"
+    },
+    {
+      "from": "k_eudir",
+      "to": "prod_coating",
+      "type": "governs",
+      "rationale_ja": "EU指令の規制対象"
+    },
+    {
+      "from": "k_eudir",
+      "to": "prod_film",
+      "type": "governs",
+      "rationale_ja": "EU指令の規制対象"
+    },
+    {
+      "from": "k_eudir",
+      "to": "prod_dressing",
+      "type": "governs",
+      "rationale_ja": "EU指令の規制対象"
+    },
+    {
+      "from": "k_eudir",
+      "to": "reg_eu",
+      "type": "governs",
+      "rationale_ja": "適用市場"
+    },
+    {
+      "from": "k_safety",
+      "to": "prod_mask",
+      "type": "governs",
+      "rationale_ja": "安全基準の対象"
+    },
+    {
+      "from": "k_safety",
+      "to": "prod_dressing",
+      "type": "governs",
+      "rationale_ja": "安全基準の対象"
+    },
+    {
+      "from": "k_safety",
+      "to": "prod_abrasive",
+      "type": "governs",
+      "rationale_ja": "安全基準の対象"
+    },
+    {
+      "from": "k_salesplay",
+      "to": "cust_semi",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_supportplay",
+      "to": "cust_hosp",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_emeaplay",
+      "to": "cust_auto",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_medclass",
+      "to": "cust_hosp",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_filmspec",
+      "to": "cust_auto",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_camp25",
+      "to": "cust_hosp",
+      "type": "answers",
+      "rationale_ja": "この顧客の課題に答える"
+    },
+    {
+      "from": "k_camp25",
+      "to": "k_camp23",
+      "type": "reuses",
+      "rationale_ja": "過去キャンペーンを再利用"
+    },
+    {
+      "from": "k_camp24",
+      "to": "k_camp23",
+      "type": "reuses",
+      "rationale_ja": "過去キャンペーンを再利用"
+    }
+  ]
+}
